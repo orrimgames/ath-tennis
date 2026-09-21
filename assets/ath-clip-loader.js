@@ -1,6 +1,6 @@
 (async function () {
   try {
-    const res = await fetch("./assets/ath_h12_balanced_forehand.json");
+    const res = await fetch("./assets/ath_h12_balanced_forehand_noclip.json");
     const clip = await res.json();
     if (!clip || !clip.frames || !clip.frames.length) return;
     window.__ATH_FRAMES = clip.frames;
