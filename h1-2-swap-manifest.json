@@ -1,0 +1,201 @@
+{
+  "package": "latent-tennis H1-2 swap",
+  "source_repo": "https://github.com/orrimgames/latent-tennis",
+  "base_commit": "f44b6ec20185c9a0f052b142ca4fd20f7acd6d2a",
+  "unitree_source": "https://github.com/unitreerobotics/unitree_ros/tree/ccfc6fd8430a17ba3dacef9a1e2faf64ff3b0aee/robots/h1_2_description",
+  "unitree_license": "BSD-3-Clause",
+  "mobile_mesh_payload_bytes": 7886322,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 5045,
+      "md5": "c63ba7215c311ac305ea5ce5ec893383"
+    },
+    {
+      "path": "assets/index-H12-modelgeom.js",
+      "bytes": 886170,
+      "md5": "13f025ba4cc39aef2c649d6574c6c319"
+    },
+    {
+      "path": "assets/mujoco.wasm",
+      "bytes": 10175239,
+      "md5": "37bbbaaeaee9ee455e7c174bdcd7b82b"
+    },
+    {
+      "path": "H1_2_COLLISION_VALIDATION.json",
+      "bytes": 992,
+      "md5": "7aa4c8f569fd88d2afe3074fe64095a8"
+    },
+    {
+      "path": "assets/unitree_h1_2/ATTRIBUTION.md",
+      "bytes": 641,
+      "md5": "be8fc12cecdd99966244c00995382fec"
+    },
+    {
+      "path": "assets/unitree_h1_2/LICENSE",
+      "bytes": 1558,
+      "md5": "148f740fa039553edc326ac693b6e1ee"
+    },
+    {
+      "path": "assets/unitree_h1_2/UPSTREAM_README.md",
+      "bytes": 563,
+      "md5": "c7450adcb319324de4914b05f4a7a1ff"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_ankle_pitch_link.STL",
+      "bytes": 9084,
+      "md5": "42e42f3da1bd24323934d97409f3a62c"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_ankle_roll_link.STL",
+      "bytes": 44984,
+      "md5": "0f98ebd951e27f541343260793f032d6"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_elbow_link.STL",
+      "bytes": 288784,
+      "md5": "2d4da60d56cc927006fdc68b8bc44da7"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_hip_pitch_link.STL",
+      "bytes": 284884,
+      "md5": "24ae0c6a4e3812fe665670cd2bac70e0"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_hip_roll_link.STL",
+      "bytes": 85984,
+      "md5": "7e21028f7bc86b054bb9a6eff661ec98"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_hip_yaw_link.STL",
+      "bytes": 187284,
+      "md5": "aca07c812092ac2cd679ed9ad5cc80ec"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_knee_link.STL",
+      "bytes": 47684,
+      "md5": "4fb293a597939ceb7cf89abe56d30c70"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_shoulder_pitch_link.STL",
+      "bytes": 441584,
+      "md5": "2e63e94df6e2612dcc328d1512159643"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_shoulder_roll_link.STL",
+      "bytes": 447134,
+      "md5": "c2bcea343938635fe1afcce3382409be"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_shoulder_yaw_link.STL",
+      "bytes": 479384,
+      "md5": "c01235c2f543c2e11de42982deba6bfc"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_wrist_pitch_link.STL",
+      "bytes": 141384,
+      "md5": "33cdd62a1076ce3b48302cabe85fb660"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/left_wrist_roll_link.STL",
+      "bytes": 278784,
+      "md5": "5052a8d2c1a59c1d7c3281e372d68e4d"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/logo_link.STL",
+      "bytes": 32684,
+      "md5": "aeba0b090d029e755b1597804fa1f686"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/pelvis.STL",
+      "bytes": 150884,
+      "md5": "0360d4ff91e7dc74ce947e440f315890"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_ankle_pitch_link.STL",
+      "bytes": 9084,
+      "md5": "42e42f3da1bd24323934d97409f3a62c"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_ankle_roll_link.STL",
+      "bytes": 44984,
+      "md5": "0f98ebd951e27f541343260793f032d6"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_elbow_link.STL",
+      "bytes": 288584,
+      "md5": "6fc8786625f60e3e153e89642c601b67"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_hip_pitch_link.STL",
+      "bytes": 283584,
+      "md5": "4d18c37f67f2dd8153ec296a65be95ed"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_hip_roll_link.STL",
+      "bytes": 86684,
+      "md5": "99a0250eb34a6df77ef56e881d264221"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_hip_yaw_link.STL",
+      "bytes": 188484,
+      "md5": "b3b4ab597d357dcda8a660a58579f637"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_knee_link.STL",
+      "bytes": 47684,
+      "md5": "4fb293a597939ceb7cf89abe56d30c70"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_shoulder_pitch_link.STL",
+      "bytes": 440884,
+      "md5": "2ff90ff2da46b4f9b4229b485d71f973"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_shoulder_roll_link.STL",
+      "bytes": 451884,
+      "md5": "49cc099362279dd1e4a42ad19875ec3a"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_shoulder_yaw_link.STL",
+      "bytes": 484084,
+      "md5": "767d83d5e8b0524298b077759cad5068"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_wrist_pitch_link.STL",
+      "bytes": 141384,
+      "md5": "61c20d49b64a7a7b64462ecb82be6c8d"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/right_wrist_roll_link.STL",
+      "bytes": 278784,
+      "md5": "a8f8e44525f743e681fca70085088183"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/tennis/entire_visual.STL",
+      "bytes": 92434,
+      "md5": "e4ec315e3aa0d9acbb6f484debbb9989"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/tennis/tennis_court_red_blue.png",
+      "bytes": 1639386,
+      "md5": "e8489349dc777418ebf9cf14496e7e38"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/torso_link.STL",
+      "bytes": 475884,
+      "md5": "23f754c7dc823db195bbf42e20054fbd"
+    },
+    {
+      "path": "assets/unitree_h1_2/assets/wrist_yaw_link.STL",
+      "bytes": 11984,
+      "md5": "fcb7653f880465b70894ab6797151095"
+    },
+    {
+      "path": "assets/unitree_h1_2/h1_2_handless_tennis.xml",
+      "bytes": 21878,
+      "md5": "88b45c21ebe8d02372ccc470a664c3cf"
+    }
+  ],
+  "total_bytes": 18978408
+}

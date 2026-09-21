@@ -1,0 +1,27 @@
+{
+  "model": "Unitree H1-2 handless",
+  "source_commit": "ccfc6fd8430a17ba3dacef9a1e2faf64ff3b0aee",
+  "physics_timestep_seconds": 0.002,
+  "actuators": 27,
+  "collision_configuration": {
+    "default_contype": 1,
+    "default_conaffinity": 1,
+    "robot_collision_geoms": "upstream H1-2 group-0 collision geoms retained and active",
+    "racket_collision_geoms": [
+      "capsule handle",
+      "cylinder head"
+    ],
+    "visual_geoms": "group 1, contype=0, conaffinity=0",
+    "solver": "implicitfast, elliptic cone, 8 iterations, 8 line-search iterations"
+  },
+  "pose_validation": {
+    "sampled_frames": 1442,
+    "robots_tested": 2,
+    "full_swing_period_sampled": true,
+    "robot_self_penetrations": 0,
+    "racket_body_penetrations": 0,
+    "any_penetrations": 0,
+    "sample_spacing_seconds_approx": 0.00388
+  },
+  "note": "Animation is kinematic; every sampled replay pose was passed through mj_forward and MuJoCo contact generation. No negative-distance contacts were found."
+}
