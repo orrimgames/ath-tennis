@@ -1,0 +1,288 @@
+{
+  "summary": {
+    "stl_bytes": 7392918,
+    "total_asset_bytes": 31485517
+  },
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 4587,
+      "md5": "b1e6aa69e0b1900569695ba8138e823b"
+    },
+    {
+      "path": "assets/index-CiZbQ7gM-modelgeom.js",
+      "bytes": 619434,
+      "md5": "b795a76e20adc42633e7ae5c031076b8"
+    },
+    {
+      "path": "assets/mujoco.wasm",
+      "bytes": 10175239,
+      "md5": "37bbbaaeaee9ee455e7c174bdcd7b82b"
+    },
+    {
+      "path": "assets/unitree_g1/assets/head_link.STL",
+      "bytes": 167884,
+      "md5": "45e569d09892388a48591c7a20ad44b5"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_ankle_pitch_link.STL",
+      "bytes": 71184,
+      "md5": "538276bda4c27614d8954ffcd40458fb"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_ankle_roll_link.STL",
+      "bytes": 117634,
+      "md5": "ea53be15e30abce0a2689a23b356513d"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_elbow_link.STL",
+      "bytes": 88784,
+      "md5": "eb4220eea16a8f7e20c7a38222ae305f"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_index_0_link.STL",
+      "bytes": 85684,
+      "md5": "320ffdb0423ac2b23a8da1a367a0e329"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_index_1_link.STL",
+      "bytes": 273984,
+      "md5": "4bed13b39dbb4518c118660d3748987a"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_middle_0_link.STL",
+      "bytes": 85684,
+      "md5": "320ffdb0423ac2b23a8da1a367a0e329"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_middle_1_link.STL",
+      "bytes": 273984,
+      "md5": "4bed13b39dbb4518c118660d3748987a"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_palm_link.STL",
+      "bytes": 385284,
+      "md5": "24b4014fe3a74c900c144d5e7deda688"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_thumb_0_link.STL",
+      "bytes": 8884,
+      "md5": "b68d6b1325e0ec9c4135a5f951fdae65"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_thumb_1_link.STL",
+      "bytes": 85684,
+      "md5": "35d2bd16f942f9fb655b76c7ccc789b7"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hand_thumb_2_link.STL",
+      "bytes": 273984,
+      "md5": "a379f789eb2b549756e5cd7b8e5ba139"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hip_pitch_link.STL",
+      "bytes": 60084,
+      "md5": "f42f6262ac39fb655113767c0455a1ff"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hip_roll_link.STL",
+      "bytes": 60084,
+      "md5": "45bb8ffeffe90f3a12656fe8ccbd6937"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_hip_yaw_link.STL",
+      "bytes": 60084,
+      "md5": "cd6c13805e2896824f322c0ef825ad74"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_knee_link.STL",
+      "bytes": 153884,
+      "md5": "917ef3ff3235f9653342723a9f11c27c"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_rubber_hand.STL",
+      "bytes": 411784,
+      "md5": "db2c6e61a61ce6e44546a56efeb2ca08"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_shoulder_pitch_link.STL",
+      "bytes": 60084,
+      "md5": "a607abe99d957834125efffdc48e6803"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_shoulder_roll_link.STL",
+      "bytes": 72084,
+      "md5": "c92e0ac050b8bc704966a851c21fc2ba"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_shoulder_yaw_link.STL",
+      "bytes": 60084,
+      "md5": "ae264cf46fa5daf793392b4349d5cd65"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_wrist_pitch_link.STL",
+      "bytes": 85984,
+      "md5": "901bbed5ead2927a1dd55a0c594b3e7c"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_wrist_roll_link.STL",
+      "bytes": 64084,
+      "md5": "b4d74db5ef744307d715ee32cd7429c7"
+    },
+    {
+      "path": "assets/unitree_g1/assets/left_wrist_yaw_link.STL",
+      "bytes": 60084,
+      "md5": "92c2b86419547bbaa1b6196a9b332c0b"
+    },
+    {
+      "path": "assets/unitree_g1/assets/logo_link.STL",
+      "bytes": 60084,
+      "md5": "e3ce595fe2329f2d7fd7ebd89a042675"
+    },
+    {
+      "path": "assets/unitree_g1/assets/pelvis.STL",
+      "bytes": 190984,
+      "md5": "4ebd0f5f9ae98687df94690af181da59"
+    },
+    {
+      "path": "assets/unitree_g1/assets/pelvis_contour_link.STL",
+      "bytes": 445384,
+      "md5": "96b7e3653999d64e4044b212c65c9168"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_ankle_pitch_link.STL",
+      "bytes": 71184,
+      "md5": "7bf859a089c15742d74287db8d32529c"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_ankle_roll_link.STL",
+      "bytes": 117684,
+      "md5": "0d4fca2d5fe0575dfe7aa81dd197c3a6"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_elbow_link.STL",
+      "bytes": 88784,
+      "md5": "48fad1bca029a51b5a77bf75f4482b26"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_index_0_link.STL",
+      "bytes": 85684,
+      "md5": "df28e752082b846733d3714701d7ea4e"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_index_1_link.STL",
+      "bytes": 273984,
+      "md5": "719b22b2ce9ac9b8f7d0241e75ac1e84"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_middle_0_link.STL",
+      "bytes": 85684,
+      "md5": "df28e752082b846733d3714701d7ea4e"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_middle_1_link.STL",
+      "bytes": 273984,
+      "md5": "719b22b2ce9ac9b8f7d0241e75ac1e84"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_palm_link.STL",
+      "bytes": 385284,
+      "md5": "d0b02c9876f8e267ec5499c09695573d"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_thumb_0_link.STL",
+      "bytes": 8884,
+      "md5": "573f46353b2d982d54af116695c436af"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_thumb_1_link.STL",
+      "bytes": 85684,
+      "md5": "7ccb4f7a0b3cdb89fb1d3ee62b481cb8"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hand_thumb_2_link.STL",
+      "bytes": 273984,
+      "md5": "95cbc6231414a3348f95dd53fb844df6"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hip_pitch_link.STL",
+      "bytes": 60084,
+      "md5": "7c107884f41dc40535454f4a55accad9"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hip_roll_link.STL",
+      "bytes": 60084,
+      "md5": "e8f7a88d01e3a1a78cd1b126eb3b6ed5"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_hip_yaw_link.STL",
+      "bytes": 60084,
+      "md5": "7d182277398e49d7132f5b3ceb7a5072"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_knee_link.STL",
+      "bytes": 153384,
+      "md5": "e69c668a02413815fa510e416a03b4e4"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_rubber_hand.STL",
+      "bytes": 394684,
+      "md5": "6f8df06579ec948fd94ac024e42f83d0"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_shoulder_pitch_link.STL",
+      "bytes": 60084,
+      "md5": "a42134d0b9e44485d2443eda9a344658"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_shoulder_roll_link.STL",
+      "bytes": 72384,
+      "md5": "ec3c72e23ff1ffdea92135a40c849376"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_shoulder_yaw_link.STL",
+      "bytes": 60034,
+      "md5": "460966b0c642f6558f72833d492cf8a0"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_wrist_pitch_link.STL",
+      "bytes": 79584,
+      "md5": "c9d9968ce6e3cafaf60ee91a36c7ff7c"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_wrist_roll_link.STL",
+      "bytes": 64084,
+      "md5": "547a534f51020cbaee8917c3bb9cedf8"
+    },
+    {
+      "path": "assets/unitree_g1/assets/right_wrist_yaw_link.STL",
+      "bytes": 61534,
+      "md5": "ff8dd27a1cfd2e0ec0d4aa2547c0b894"
+    },
+    {
+      "path": "assets/unitree_g1/assets/tennis/entire_visual.STL",
+      "bytes": 92434,
+      "md5": "e4ec315e3aa0d9acbb6f484debbb9989"
+    },
+    {
+      "path": "assets/unitree_g1/assets/torso_link_rev_1_0.STL",
+      "bytes": 462734,
+      "md5": "deae8d7386a48e76702ff5a79e4d8717"
+    },
+    {
+      "path": "assets/unitree_g1/assets/waist_roll_link_rev_1_0.STL",
+      "bytes": 85884,
+      "md5": "a56d98c195c435ef6ef1aae4a1f4f6c4"
+    },
+    {
+      "path": "assets/unitree_g1/assets/waist_yaw_link_rev_1_0.STL",
+      "bytes": 111584,
+      "md5": "5532a9dbd082b9dec2e765f7bc932e02"
+    },
+    {
+      "path": "assets/unitree_g1/assets/tennis/tennis_court_red_blue.png",
+      "bytes": 1639386,
+      "md5": "e8489349dc777418ebf9cf14496e7e38"
+    }
+  ]
+}
