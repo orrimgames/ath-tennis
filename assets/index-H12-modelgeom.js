@@ -29888,7 +29888,7 @@ async function ZE() {
           (ie.qpos[Ke + 24] = 0.34), (ie.qpos[Ke + 25] = -0.12), (ie.qpos[Ke + 26] = -0.18));
       },
       he = function (ie, Q) {
-        (te(U[ie], ie ? C : q, Q, ie ? 1 : -1), r.mj_forward(N[ie], U[ie]));
+        ((window.__ATH_TE||te)(U[ie], ie ? C : q, Q, ie ? 1 : -1, te, ie), r.mj_forward(N[ie], U[ie]));
         const Ee = N[ie],
           we = U[ie],
           Re = Number(Ee.ngeom);
