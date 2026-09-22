@@ -29795,7 +29795,8 @@ const Da = "./assets/unitree_h2/",
     "right_knee_link.stl",
     "right_ankle_roll_link.stl",
     "right_ankle_pitch_link.stl",
-    "tennis/entire_visual.STL"
+    "tennis/entire_visual.STL",
+    "tennis/tennis_court_red_blue.png"
   ];
 async function $E(r) {
   const e = await fetch(r);
