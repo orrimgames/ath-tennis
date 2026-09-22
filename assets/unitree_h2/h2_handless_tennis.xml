@@ -49,7 +49,7 @@
     <mesh name="right_knee_link" file="right_knee_link.stl" />
     <mesh name="right_ankle_roll_link" file="right_ankle_roll_link.stl" />
     <mesh name="right_ankle_pitch_link" file="right_ankle_pitch_link.stl" />
-  <texture name="court_tex" type="2d" file="tennis/tennis_court_red_blue.png" /><material name="court_mat" texture="court_tex" texrepeat="1 1" texuniform="true" reflectance="0.08" specular="0.05" shininess="0.1" /><mesh name="tennis_racket" file="tennis/entire_visual.STL" scale="0.001 0.001 0.001" /></asset>
+  <texture name="court_tex" type="2d" file="tennis/tennis_court_red_blue.png" /><material name="court_mat" texture="court_tex" texrepeat="1 1" texuniform="true" reflectance="0.08" specular="0.05" shininess="0.1" /><mesh name="tennis_racket" file="tennis/entire_visual.STL" scale="1 1 1" /></asset>
 
   <worldbody>
     <body name="pelvis" pos="0 0 1.03" childclass="h2">

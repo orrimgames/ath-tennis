@@ -29864,8 +29864,9 @@ function YE(r, e) {
 function KE(r) {
   const e = new O_().load(r);
   e.colorSpace = on;
+  e.anisotropy = 8;
   const t = new ln(new Di(23.77, 10.97), new xr({ map: e, roughness: 0.85 }));
-  ((t.receiveShadow = !0), Fn.add(t));
+  ((t.position.z = 0.002), (t.receiveShadow = !0), Fn.add(t));
   const n = new xr({
       color: 15134452,
       wireframe: !0,
