@@ -25,7 +25,7 @@
     var f0 = F[i0], f1 = F[i1];
     for (var j = 0; j < 27; j++) q[7 + j] = f0[j] + (f1[j] - f0[j]) * a;
   };
-  document.addEventListener("DOMContentLoaded", function () {
+  function __athAddToggle() {
     var c = document.querySelector(".controls");
     if (!c || Object.keys(window.__ATH_CLIPS).length < 2) return;
     var b = document.createElement("button");
@@ -36,5 +36,7 @@
     });
     label();
     c.appendChild(b);
-  });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", __athAddToggle);
+  else __athAddToggle();
 })();
