@@ -30219,8 +30219,8 @@ async function ZE() {
           const __lx = -12.6 + 1.0 * __h(1), __ly = -3.5 + 7.0 * __h(2);
           const __tx = 5.5 + 3.0 * __h(3), __ty = -3.0 + 6.0 * __h(4);
           const __A = Math.atan2(__ty - __ly, __tx - __lx);
-          const el = 0.16 + 0.08 * __h(5), az = __A + 0.10 * (__h(6) - 0.5);
-          const v = 30 + 5 * __h(8), rpm = 800 + 1200 * __h(9);
+          const el = 0.86 + 0.08 * __h(5), az = __A + 0.10 * (__h(6) - 0.5);
+          const v = 16 + 2 * __h(8), rpm = 2950 + 100 * __h(9);
           try {
             a.body_pos[__MACHB * 3] = __lx; a.body_pos[__MACHB * 3 + 1] = __ly; a.body_pos[__MACHB * 3 + 2] = 0;
             a.body_quat[__MACHB * 4] = Math.cos(__A / 2); a.body_quat[__MACHB * 4 + 1] = 0; a.body_quat[__MACHB * 4 + 2] = 0; a.body_quat[__MACHB * 4 + 3] = Math.sin(__A / 2);
