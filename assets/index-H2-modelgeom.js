@@ -29760,6 +29760,7 @@ const Ls = new H_(16777215, 3.4);
 Ls.position.set(-7, -10, 16);
 Ls.castShadow = !0;
 Ls.shadow.mapSize.set(2048, 2048);
+Ls.shadow.bias = -0.00035; Ls.shadow.normalBias = 0.04; Ls.shadow.camera.left = -16; Ls.shadow.camera.right = 16; Ls.shadow.camera.top = 16; Ls.shadow.camera.bottom = -16; Ls.shadow.camera.near = 1; Ls.shadow.camera.far = 60;
 Fn.add(Ls);
 const Da = "./assets/unitree_h2/",
   Ac = [
@@ -29900,6 +29901,8 @@ async function ZE() {
         ie.qpos[0] = 3.65;
         ie.qpos[1] = 0;
         ie.qpos[2] = 1.06;
+        var _qw=ie.qpos[3],_qx=ie.qpos[4],_qy=ie.qpos[5],_qz=ie.qpos[6];
+        ie.qpos[3]=-_qz; ie.qpos[4]=-_qy; ie.qpos[5]=_qx; ie.qpos[6]=_qw;
         const phase = ((Ee % 4.0) + 4.0) % 4.0 / 4.0;
         const hit = Math.exp(-Math.pow((phase - 0.925) / 0.075, 2));
         const recover = Math.exp(-Math.pow((phase - 0.08) / 0.12, 2));
