@@ -30174,7 +30174,7 @@ async function ZE() {
       try { u.qvel.fill(0); } catch (e) {}
       try { const xf = u.xfrc_applied; if (xf && xf.fill) xf.fill(0); } catch (e) {}
       for (let i = 0; i < __NA; i++) u.ctrl[i] = __MID[i];
-      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++;
+      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; __lastCy = -1; try { u.qpos[__BALLQ] = 0; u.qpos[__BALLQ+1] = 0; u.qpos[__BALLQ+2] = -2; u.qpos[__BALLQ+3] = 1; u.qpos[__BALLQ+4] = 0; u.qpos[__BALLQ+5] = 0; u.qpos[__BALLQ+6] = 0; } catch (e) {} try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
       r.mj_forward(a, u);
     }
     window.__PHYS_STATE = function () {
