@@ -1,0 +1,204 @@
+{
+  "package": "ATH official H2 site swap",
+  "built_at": "2026-09-22T00:31:00-05:00",
+  "default_camera": "ATP high behind baseline",
+  "ball_machine": "orange physical launcher at far baseline",
+  "clip_policy": "procedural H2 fallback; old H1-2 qpos clips prohibited",
+  "files": [
+    {
+      "path": "H2_COLLISION_VALIDATION.json",
+      "bytes": 1844,
+      "sha256": "199cdff74279fa3093336f6b4c5ba58d8f9d439a6840988072ec1992034abd88"
+    },
+    {
+      "path": "README.md",
+      "bytes": 912,
+      "sha256": "34031639125727ad91eb1ea5cfefc83ceab4f00af9d9c304fbfb35a444341c5a"
+    },
+    {
+      "path": "assets/index-H2-modelgeom.js",
+      "bytes": 886384,
+      "sha256": "592ec6ac133534e3854c4088cc6d63cb85917a62476ffebe83e9f87d67ed12c6"
+    },
+    {
+      "path": "assets/unitree_h2/assets/head_pitch_link.stl",
+      "bytes": 39484,
+      "sha256": "b9f084dc3c6dfa647de1d2256e015a90b6e4802897a946bdaf7fb8bc95b9808b"
+    },
+    {
+      "path": "assets/unitree_h2/assets/head_yaw_link.stl",
+      "bytes": 1122984,
+      "sha256": "7f9ad04b2061e7ec34881a6c38b35c41844ea5733b5f9097395c0fe4611a2104"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_ankle_pitch_link.stl",
+      "bytes": 331484,
+      "sha256": "89694804959f8ba529f139815a16a3e965b71f58c732a5fb73df591af7fce529"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_ankle_roll_link.stl",
+      "bytes": 36284,
+      "sha256": "74ac986409514a7a64b2075b9bea9b3ea535be4a0afddb7f5469474a56a24c09"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_elbow_link.stl",
+      "bytes": 472684,
+      "sha256": "3da8b8c0a387fd91911a3fb3dda3ce6a0c56903490d9e08b4536216066211b5f"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_hip_pitch_link.stl",
+      "bytes": 196284,
+      "sha256": "92940bf80ab039c73deee7efe5544cd1be2c838f31014f85df6a8118ba65bf79"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_hip_roll_link.stl",
+      "bytes": 1217384,
+      "sha256": "b17ddc42849a741783de089bcfa9366a0dbac2d412b0b7d9765c8f1b4c897bc1"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_hip_yaw_link.stl",
+      "bytes": 300884,
+      "sha256": "4db0dc55a3216daf23098b3cd0fcd0f493ee6834de19ba30c9b9b9105ca73a76"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_knee_link.stl",
+      "bytes": 698284,
+      "sha256": "bcf1bcb72b13e3890d81ea901c4b76a54a8ec402e98cea179a26afa42e35ae19"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_shoulder_pitch_link.stl",
+      "bytes": 266384,
+      "sha256": "8002706d5dea52c81218a4f8a263a8946aa7bd7bfd63519067560bb24a4a6a43"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_shoulder_roll_link.stl",
+      "bytes": 304084,
+      "sha256": "72c95d87a523b7345beb9c27b6d1286fa2722a0780c3f35d8a296ca923a400ff"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_shoulder_yaw_link.stl",
+      "bytes": 289984,
+      "sha256": "0359487eabd083e8af22f39ee480582d67d721db1b423a3b6e4ec27b89e4af45"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_wrist_pitch_link.stl",
+      "bytes": 26584,
+      "sha256": "aeca94fc8df7212899d0b925ab6084b3a800cfabb51a9a0c748cbddcc3259340"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_wrist_roll_link.stl",
+      "bytes": 200484,
+      "sha256": "1e65c4ab8980228731e2a7aa03536ed37e467903545a099d2dc1761fa8165015"
+    },
+    {
+      "path": "assets/unitree_h2/assets/left_wrist_yaw_link.stl",
+      "bytes": 964184,
+      "sha256": "c33ace683db11d4f471e075730a2fef6994dff25f2eaf8d8d2dd1cc1b73fcf76"
+    },
+    {
+      "path": "assets/unitree_h2/assets/pelvis.stl",
+      "bytes": 689984,
+      "sha256": "d22a3f5b7223c947e4f12b3632e0cc9697cdb23b014e2cd7122e1b639cd5dfd9"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_ankle_pitch_link.stl",
+      "bytes": 330084,
+      "sha256": "3cf7609e41ba5e68828ece413dcf094e53ce5e7cb0d4a367711a82f161bd4a67"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_ankle_roll_link.stl",
+      "bytes": 36284,
+      "sha256": "b154a7cc719db8866c4e9592afc75f1225c6d40f51b4940022ce07ce0940dfb1"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_elbow_link.stl",
+      "bytes": 476884,
+      "sha256": "ebdb0944c76fe93163a0043ba3639174ee1bd4561b3c3212f35adb64a45f8718"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_hip_pitch_link.stl",
+      "bytes": 198484,
+      "sha256": "8dc3813d21c902d0414106c56cc8ea399cf9b50f53cccff817ffa84de700ac97"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_hip_roll_link.stl",
+      "bytes": 1223884,
+      "sha256": "e015681899a7fcebf7e768d25f1a9896dded2f610d8d846d23a9f15cf4599892"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_hip_yaw_link.stl",
+      "bytes": 297484,
+      "sha256": "79c9259351b63634b6d920cfb4e604fb912afcab74d2950ffdb08e9d1a55fe86"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_knee_link.stl",
+      "bytes": 700884,
+      "sha256": "541db1cd593ab4b49f7707fdee28383a502a28ddc2b0782db233ac9c2102277a"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_shoulder_pitch_link.stl",
+      "bytes": 266584,
+      "sha256": "def627c008549a8d01506b2f9a45358e4eacef3dfe0e41db3a3f376984f42f12"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_shoulder_roll_link.stl",
+      "bytes": 304084,
+      "sha256": "57f6709e2f4ed83f190c48e8d8358c6c082f04676798f5520bb8e5046dd939be"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_shoulder_yaw_link.stl",
+      "bytes": 289484,
+      "sha256": "a0887440ace338736d5aa1ca6cfd16225a3c7e833be404d7c2b7ebc2180a146d"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_wrist_pitch_link.stl",
+      "bytes": 26584,
+      "sha256": "a7a4bdc4ed718102b9d0b7b664bd0b4b21e32ab461ae9e5c0f24e7e1daf94590"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_wrist_roll_link.stl",
+      "bytes": 200484,
+      "sha256": "cbfc8715bc87bd1ac29ef0ca4aa2c9f2056a25367e5402deed04deea327583a4"
+    },
+    {
+      "path": "assets/unitree_h2/assets/right_wrist_yaw_link.stl",
+      "bytes": 964184,
+      "sha256": "3fb5391ed692447d273bbc0c766a2d8a816753a4912e277d5bfe692647fc2cfb"
+    },
+    {
+      "path": "assets/unitree_h2/assets/tennis/entire_visual.STL",
+      "bytes": 92434,
+      "sha256": "e25e59d0682d1c2a23b9025e142dc2066ee096cdab9af951842c0af68f94119d"
+    },
+    {
+      "path": "assets/unitree_h2/assets/tennis/tennis_court_red_blue.png",
+      "bytes": 1639386,
+      "sha256": "69b85e1652d74917fc1ba28bb693422c2ad3834128bc3958dedff762c5f499da"
+    },
+    {
+      "path": "assets/unitree_h2/assets/torso_link.stl",
+      "bytes": 526884,
+      "sha256": "140e5c368b8581507ba178e0417f034611efea9b49359372ef392565c671631f"
+    },
+    {
+      "path": "assets/unitree_h2/assets/waist_roll_link.stl",
+      "bytes": 13084,
+      "sha256": "0a49a541585cfdab14ac0627a7c7c1a5d980f1f2f9fae69c5fe9c28461bc8d58"
+    },
+    {
+      "path": "assets/unitree_h2/assets/waist_yaw_link.stl",
+      "bytes": 20684,
+      "sha256": "5a6f78ad483044c456a7744d57a912779afbc232876fa05a7bb5106fc47de981"
+    },
+    {
+      "path": "assets/unitree_h2/h2_handless_tennis.xml",
+      "bytes": 24831,
+      "sha256": "5600fdb08eeb22212de61de318852b340846135c970ee4ddc98e7605c3cc0f40"
+    },
+    {
+      "path": "h2_site_swap_atp_high_validation.png",
+      "bytes": 43599,
+      "sha256": "33a8d4a7ea9c935d099b50ad26cfe3fca77767ebe31952aae12c61be25f25116"
+    }
+  ]
+}
