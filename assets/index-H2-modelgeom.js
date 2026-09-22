@@ -29901,9 +29901,22 @@ async function ZE() {
         ie.qpos.set(Q);
         var __cy = Math.floor(Ee / 4.0);
         var __h = function (n) { var x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
-        var __lx = -8.6 + 1.6 * __h(1), __ly = -3.2 + 6.4 * __h(2);
-        var __rx = 2.8 + 2.0 * __h(3), __ry = -2.5 + 5.0 * __h(4);
-        window.__CP = { lx: __lx, ly: __ly, rx: __rx, ry: __ry, apex: 1.4 + 1.6 * __h(5), curve: -0.3 + 0.6 * __h(6), zc: 0.9 + 0.4 * __h(7), tf: 0.38 + 0.05 * __h(8), rarc: 1.5 + 0.7 * __h(9) };
+        var __lx = -12.6 + 1.0 * __h(1), __ly = -3.5 + 7.0 * __h(2);
+        var __bx = 5.5 + 3.0 * __h(3), __by = -3.0 + 6.0 * __h(4);
+        var __A = Math.atan2(__by - __ly, __bx - __lx);
+        var __cx = __bx + 2.2 * Math.cos(__A), __cyy = __by + 2.2 * Math.sin(__A);
+        var __zc = 0.9 + 0.4 * __h(7);
+        var __sx2 = 10.8 + 1.2 * __h(5), __sy2 = -3.0 + 6.0 * __h(6);
+        var __v1 = 33 + 3 * __h(8);
+        var __d1 = Math.sqrt(Math.pow(__bx - __lx - 0.9 * Math.cos(__A), 2) + Math.pow(__by - __ly - 0.9 * Math.sin(__A), 2));
+        var __tf1 = __d1 / __v1;
+        var __tf2 = 2.2 / (15 + 3 * __h(9));
+        var __tc = __tf1 + __tf2;
+        var __ix = __cx + 0.45, __iy = __cyy;
+        var __u = Math.min(1, Math.max(0, (Ee - 0.15) / Math.max(0.2, __tc - 0.2)));
+        __u = __u * __u * (3 - 2 * __u);
+        var __rx = __sx2 + (__ix - __sx2) * __u, __ry = __sy2 + (__iy - __sy2) * __u;
+        window.__CP = { lx: __lx, ly: __ly, bx: __bx, by: __by, cx: __cx, cy: __cyy, zc: __zc, A: __A, tf1: __tf1, tf2: __tf2, curve: -0.3 + 0.6 * __h(10), rarc: 1.5 + 0.7 * __h(11) };
         ie.qpos[0] = __rx;
         ie.qpos[1] = __ry;
         ie.qpos[2] = 1.06;
@@ -29916,13 +29929,13 @@ async function ZE() {
         ie.qpos[6] = __c * _qz + __s * _qw;
         try {
           var __M0 = N[0], __nb = Number(__M0.nbody) - 1;
-          var __la = Math.atan2(__ry - __ly, __rx - __lx);
+          var __la = Math.atan2(__by - __ly, __bx - __lx);
           __M0.body_pos[__nb * 3] = __lx; __M0.body_pos[__nb * 3 + 1] = __ly; __M0.body_pos[__nb * 3 + 2] = 0;
           __M0.body_quat[__nb * 4] = Math.cos(__la / 2); __M0.body_quat[__nb * 4 + 1] = 0; __M0.body_quat[__nb * 4 + 2] = 0; __M0.body_quat[__nb * 4 + 3] = Math.sin(__la / 2);
         } catch (e) {}
         const phase = ((Ee % 4.0) + 4.0) % 4.0 / 4.0;
-        const hit = Math.exp(-Math.pow((phase - 0.10) / 0.075, 2));
-        const recover = Math.exp(-Math.pow((phase - 0.22) / 0.12, 2));
+        const hit = Math.exp(-Math.pow((phase - (__tc / 4 + 0.01)) / 0.075, 2));
+        const recover = Math.exp(-Math.pow((phase - (__tc / 4 + 0.14)) / 0.12, 2));
         const ready = 1 - Math.min(1, hit + recover);
         // H2 qpos after free base: legs 7..18, waist 19..21, left arm 22..28, right arm 29..35.
         ie.qpos[8] = 0.05; ie.qpos[10] = 0.18; ie.qpos[14] = -0.05; ie.qpos[16] = 0.18;
@@ -30013,21 +30026,37 @@ async function ZE() {
           const Q = (ie - z) / 1e3;
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
-          const __p = window.__CP || { lx: -7.8, ly: 3.0, rx: 3.65, ry: 0, apex: 2.7, curve: 0.18, zc: 1.0, tf: 0.4, rarc: 1.8 };
-          const __A = Math.atan2(__p.ry - __p.ly, __p.rx - __p.lx);
-          const __sx = __p.lx + 0.9 * Math.cos(__A), __sy = __p.ly + 0.9 * Math.sin(__A);
-          const __B = Math.atan2(__p.ly - __p.ry, __p.lx - __p.rx);
-          const __cx = __p.rx + 0.35 * Math.cos(__B), __cy2 = __p.ry + 0.35 * Math.sin(__B);
-          const __tf = __p.tf || 0.4;
+          const __p = window.__CP || { lx: -11.9, ly: 0, bx: 7, by: 0, cx: 9.2, cy: 0, zc: 1.0, A: 0, tf1: 0.55, tf2: 0.14, curve: 0.1, rarc: 1.8 };
+          const __sx = __p.lx + 0.9 * Math.cos(__p.A), __sy = __p.ly + 0.9 * Math.sin(__p.A);
           const __t = Ee * 4.0;
-          if (__t < __tf) {
-            const __u = __t / __tf;
-            const __vz = (__p.zc - 0.82 + 4.905 * __tf * __tf) / __tf;
+          if (__t < __p.tf1) {
+            // feed flight: muzzle -> mid-court bounce, true projectile ~80mph
+            const __u = __t / __p.tf1;
+            const __vz = (0.065 - 0.82 + 4.905 * __p.tf1 * __p.tf1) / __p.tf1;
             J.position.set(
-              __sx + (__cx - __sx) * __u - Math.sin(__A) * __p.curve * Math.sin(__u * Math.PI),
-              __sy + (__cy2 - __sy) * __u + Math.cos(__A) * __p.curve * Math.sin(__u * Math.PI),
+              __sx + (__p.bx - __sx) * __u - Math.sin(__p.A) * __p.curve * Math.sin(__u * Math.PI),
+              __sy + (__p.by - __sy) * __u + Math.cos(__p.A) * __p.curve * Math.sin(__u * Math.PI),
               0.82 + __vz * __t - 4.905 * __t * __t
             );
+          } else if (__t < __p.tf1 + __p.tf2) {
+            // post-bounce rise to contact
+            const __t2 = __t - __p.tf1, __u = __t2 / __p.tf2;
+            const __vz2 = (__p.zc - 0.065 + 4.905 * __p.tf2 * __p.tf2) / __p.tf2;
+            J.position.set(
+              __p.bx + (__p.cx - __p.bx) * __u,
+              __p.by + (__p.cy - __p.by) * __u,
+              0.065 + __vz2 * __t2 - 4.905 * __t2 * __t2
+            );
+          } else if (__t < __p.tf1 + __p.tf2 + 0.55) {
+            // return arc back toward the machine
+            const __u = (__t - __p.tf1 - __p.tf2) / 0.55;
+            J.position.set(
+              __p.cx + (__sx + 0.6 * Math.cos(__p.A) - __p.cx) * __u,
+              __p.cy + (__sy + 0.6 * Math.sin(__p.A) - __p.cy) * __u,
+              __p.zc + (0.065 - __p.zc) * __u + __p.rarc * 4 * __u * (1 - __u)
+            );
+          } else {
+            J.position.set(__sx + 0.6 * Math.cos(__p.A), __sy + 0.6 * Math.sin(__p.A), 0.065);
           } else if (__t < __tf + 0.55) {
             const __u = (__t - __tf) / 0.55;
             J.position.set(
