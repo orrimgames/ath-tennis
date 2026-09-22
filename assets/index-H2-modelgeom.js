@@ -30356,7 +30356,7 @@ async function ZE() {
     }
 
     const J = new ln(
-      new br(0.065, 20, 14),
+      new br(0.033, 20, 14),
       new xr({ color: 13106991, emissive: 3359744 }),
     );
     ((J.castShadow = !0),
