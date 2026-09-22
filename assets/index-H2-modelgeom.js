@@ -29874,7 +29874,7 @@ function KE(r) {
       opacity: 0.6,
     }),
     a = new ln(new Di(12.8, 0.92, 32, 5), n);
-  ((a.rotation.x = Math.PI / 2), (a.position.z = 0.46), Fn.add(a));
+  ((a.rotation.set(0, Math.PI / 2, Math.PI / 2)), (a.position.z = 0.46), Fn.add(a));
   for (const o of [-6.4, 6.4]) {
     const u = new ln(
       new Ps(0.035, 0.035, 1.07, 12),
@@ -29903,7 +29903,7 @@ async function ZE() {
         var __h = function (n) { var x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
         var __lx = -8.6 + 1.6 * __h(1), __ly = -3.2 + 6.4 * __h(2);
         var __rx = 2.8 + 2.0 * __h(3), __ry = -2.5 + 5.0 * __h(4);
-        window.__CP = { lx: __lx, ly: __ly, rx: __rx, ry: __ry, apex: 1.4 + 1.6 * __h(5), curve: -0.3 + 0.6 * __h(6), zc: 0.9 + 0.4 * __h(7) };
+        window.__CP = { lx: __lx, ly: __ly, rx: __rx, ry: __ry, apex: 1.4 + 1.6 * __h(5), curve: -0.3 + 0.6 * __h(6), zc: 0.9 + 0.4 * __h(7), tf: 0.38 + 0.05 * __h(8), rarc: 1.5 + 0.7 * __h(9) };
         ie.qpos[0] = __rx;
         ie.qpos[1] = __ry;
         ie.qpos[2] = 1.06;
@@ -29921,8 +29921,8 @@ async function ZE() {
           __M0.body_quat[__nb * 4] = Math.cos(__la / 2); __M0.body_quat[__nb * 4 + 1] = 0; __M0.body_quat[__nb * 4 + 2] = 0; __M0.body_quat[__nb * 4 + 3] = Math.sin(__la / 2);
         } catch (e) {}
         const phase = ((Ee % 4.0) + 4.0) % 4.0 / 4.0;
-        const hit = Math.exp(-Math.pow((phase - 0.925) / 0.075, 2));
-        const recover = Math.exp(-Math.pow((phase - 0.08) / 0.12, 2));
+        const hit = Math.exp(-Math.pow((phase - 0.10) / 0.075, 2));
+        const recover = Math.exp(-Math.pow((phase - 0.22) / 0.12, 2));
         const ready = 1 - Math.min(1, hit + recover);
         // H2 qpos after free base: legs 7..18, waist 19..21, left arm 22..28, right arm 29..35.
         ie.qpos[8] = 0.05; ie.qpos[10] = 0.18; ie.qpos[14] = -0.05; ie.qpos[16] = 0.18;
@@ -30013,16 +30013,31 @@ async function ZE() {
           const Q = (ie - z) / 1e3;
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
-          const __p = window.__CP || { lx: -7.8, ly: 3.0, rx: 3.65, ry: 0, apex: 2.7, curve: 0.18, zc: 1.0 };
+          const __p = window.__CP || { lx: -7.8, ly: 3.0, rx: 3.65, ry: 0, apex: 2.7, curve: 0.18, zc: 1.0, tf: 0.4, rarc: 1.8 };
           const __A = Math.atan2(__p.ry - __p.ly, __p.rx - __p.lx);
           const __sx = __p.lx + 0.9 * Math.cos(__A), __sy = __p.ly + 0.9 * Math.sin(__A);
           const __B = Math.atan2(__p.ly - __p.ry, __p.lx - __p.rx);
-          const __ex = __p.rx + 0.35 * Math.cos(__B), __ey = __p.ry + 0.35 * Math.sin(__B);
-          J.position.set(
-            __sx + (__ex - __sx) * Ee - Math.sin(__A) * __p.curve * Math.sin(Ee * Math.PI),
-            __sy + (__ey - __sy) * Ee + Math.cos(__A) * __p.curve * Math.sin(Ee * Math.PI),
-            0.82 + (__p.zc - 0.82) * Ee + __p.apex * 4 * Ee * (1 - Ee),
-          );
+          const __cx = __p.rx + 0.35 * Math.cos(__B), __cy2 = __p.ry + 0.35 * Math.sin(__B);
+          const __tf = __p.tf || 0.4;
+          const __t = Ee * 4.0;
+          if (__t < __tf) {
+            const __u = __t / __tf;
+            const __vz = (__p.zc - 0.82 + 4.905 * __tf * __tf) / __tf;
+            J.position.set(
+              __sx + (__cx - __sx) * __u - Math.sin(__A) * __p.curve * Math.sin(__u * Math.PI),
+              __sy + (__cy2 - __sy) * __u + Math.cos(__A) * __p.curve * Math.sin(__u * Math.PI),
+              0.82 + __vz * __t - 4.905 * __t * __t
+            );
+          } else if (__t < __tf + 0.55) {
+            const __u = (__t - __tf) / 0.55;
+            J.position.set(
+              __cx + (__sx + 0.6 * Math.cos(__A) - __cx) * __u,
+              __cy2 + (__sy + 0.6 * Math.sin(__A) - __cy2) * __u,
+              __p.zc + (0.065 - __p.zc) * __u + __p.rarc * 4 * __u * (1 - __u)
+            );
+          } else {
+            J.position.set(__sx + 0.6 * Math.cos(__A), __sy + 0.6 * Math.sin(__A), 0.065);
+          }
         }
         Yn.render(Fn, sr);
       };
