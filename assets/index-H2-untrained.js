@@ -30166,18 +30166,19 @@ async function ZE() {
       return [lx - kd * vx, ly - kd * vy, lz - kd * vz];
     }
 
-    function __simFlight(x0, y0, z0, az, el, v, w) {
+    function __simFlight(x0, y0, z0, az, el, v, w, ws) {
       const RB = 0.033;
+      ws = ws || 0;
       let px = x0, py = y0, pz = z0;
       let vx = v * Math.cos(el) * Math.cos(az), vy = v * Math.cos(el) * Math.sin(az), vz = v * Math.sin(el);
-      const ox = -w * Math.sin(az), oy = w * Math.cos(az), oz = 0;
+      const ox = -w * Math.sin(az), oy = w * Math.cos(az), oz = ws;
       let apex = z0, znet = null, t = 0;
       const dt = 0.001, AR = Math.PI * RB * RB;
       while (t < 8) {
         const sp = Math.hypot(vx, vy, vz);
         let ax = 0, ay = 0, az2 = -9.81;
         if (sp > 1e-9) {
-          const S = RB * Math.abs(w) / sp;
+          const S = RB * Math.hypot(w, ws) / sp;
           let cl; if (S <= 0) cl = 0; else if (S >= 0.53) cl = 0.30; else if (S <= 0.14) cl = 0.10 * (S / 0.14); else cl = 0.10 + 0.20 * ((S - 0.14) / 0.39);
           const qd = 0.5 * 1.21 * AR * sp * sp;
           const cx = oy * vz - oz * vy, cy = oz * vx - ox * vz, cz = ox * vy - oy * vx;
@@ -30192,28 +30193,30 @@ async function ZE() {
         if (znet === null && px >= 0) znet = pz;
         if (pz <= RB && t > 0.15) break;
       }
-      return { land: px, apex: apex, znet: znet, t: t };
+      return { land: px, yland: py, apex: apex, znet: znet, t: t };
     }
-    function __solveLaunch(x0, y0, z0, az, v, w, clear) {
+    function __solveLaunch(x0, y0, z0, az, v, w, clear, ws) {
       const tgt = 0.914 + clear;
+      ws = ws || 0;
       let lo = 0.02, hi = 1.35;
       for (let i = 0; i < 24; i++) {
         const mid = 0.5 * (lo + hi);
-        const r = __simFlight(x0, y0, z0, az, mid, v, w);
+        const r = __simFlight(x0, y0, z0, az, mid, v, w, ws);
         const zn = (r.znet === null) ? -1 : r.znet;
         if (zn < tgt) lo = mid; else hi = mid;
       }
       return 0.5 * (lo + hi);
     }
-    function __maxPace(x0, y0, z0, az, w, clear) {
+    function __maxPace(x0, y0, z0, az, w, clear, ws) {
+      ws = ws || 0;
       for (let v = 34; v >= 12; v -= 0.5) {
-        const el = __solveLaunch(x0, y0, z0, az, v, w, clear);
-        const r = __simFlight(x0, y0, z0, az, el, v, w);
-        if (r.znet !== null && r.land <= 11.3 && r.land >= 0.5) return v;
+        const el = __solveLaunch(x0, y0, z0, az, v, w, clear, ws);
+        const r = __simFlight(x0, y0, z0, az, el, v, w, ws);
+        if (r.znet !== null && r.land <= 11.3 && r.land >= 0.5 && Math.abs(r.yland) <= 5.6) return v;
       }
       return 12;
     }
-    const __FEED = { clear: 2.5, rpm: 3000, speed: 23, auto: true };
+    const __FEED = { clear: 2.5, rpm: 3000, speed: 23, side: 0, auto: true };
     function __buildFeedUI() {
       try {
         const wrap = document.createElement("div");
@@ -30222,6 +30225,7 @@ async function ZE() {
           '<div id="feedpanel">' +
           '<label>Net clearance <span id="fv_clear"></span></label><input id="fs_clear" type="range" min="0.01" max="8" step="0.01" value="2.5">' +
           '<label>Spin <span id="fv_spin"></span></label><input id="fs_spin" type="range" min="-4000" max="4000" step="250" value="3000">' +
+          '<label>Sidespin <span id="fv_side"></span></label><input id="fs_side" type="range" min="-4000" max="4000" step="250" value="0">' +
           '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button></label><input id="fs_speed" type="range" min="12" max="62.6" step="0.5" value="23">' +
           '</div>';
         const st = document.createElement("style");
@@ -30243,11 +30247,13 @@ async function ZE() {
         const show = () => {
           $("fv_clear").textContent = __FEED.clear.toFixed(2) + " m";
           $("fv_spin").textContent = (__FEED.rpm >= 0 ? "+" : "") + __FEED.rpm + " rpm " + (__FEED.rpm >= 0 ? "(topspin)" : "(slice)");
+          $("fv_side").textContent = (__FEED.side >= 0 ? "+" : "") + __FEED.side + " rpm " + (__FEED.side === 0 ? "(none)" : "(sidespin)");
           $("fv_speed").textContent = __FEED.speed.toFixed(1) + " m/s (" + Math.round(__FEED.speed * 2.23694) + " mph)";
           $("fs_auto").classList.toggle("off", !__FEED.auto);
         };
         $("fs_clear").oninput = (e) => { __FEED.clear = Number(e.target.value); show(); };
         $("fs_spin").oninput = (e) => { __FEED.rpm = Number(e.target.value); show(); };
+        $("fs_side").oninput = (e) => { __FEED.side = Number(e.target.value); show(); };
         $("fs_speed").oninput = (e) => { __FEED.speed = Number(e.target.value); __FEED.auto = false; show(); };
         $("fs_auto").onclick = () => { __FEED.auto = !__FEED.auto; show(); };
         show();
@@ -30318,9 +30324,10 @@ async function ZE() {
           const __A = Math.atan2(__ty - __ly, __tx - __lx);
           const az = __A + 0.10 * (__h(6) - 0.5);
           const w = __FEED.rpm * 2 * Math.PI / 60;
+          const ws = __FEED.side * 2 * Math.PI / 60;
           const __sx = __lx + 0.9 * Math.cos(__A), __sy = __ly + 0.9 * Math.sin(__A);
-          const v = __FEED.auto ? __maxPace(__sx, __sy, 0.82, az, w, __FEED.clear) : __FEED.speed;
-          const el = __solveLaunch(__sx, __sy, 0.82, az, v, w, __FEED.clear);
+          const v = __FEED.auto ? __maxPace(__sx, __sy, 0.82, az, w, __FEED.clear, ws) : __FEED.speed;
+          const el = __solveLaunch(__sx, __sy, 0.82, az, v, w, __FEED.clear, ws);
           try {
             a.body_pos[__MACHB * 3] = __lx; a.body_pos[__MACHB * 3 + 1] = __ly; a.body_pos[__MACHB * 3 + 2] = 0;
             a.body_quat[__MACHB * 4] = Math.cos(__A / 2); a.body_quat[__MACHB * 4 + 1] = 0; a.body_quat[__MACHB * 4 + 2] = 0; a.body_quat[__MACHB * 4 + 3] = Math.sin(__A / 2);
@@ -30329,7 +30336,7 @@ async function ZE() {
           u.qpos[__BALLQ + 3] = 1; u.qpos[__BALLQ + 4] = 0; u.qpos[__BALLQ + 5] = 0; u.qpos[__BALLQ + 6] = 0;
           u.qvel[__BALLV] = v * Math.cos(el) * Math.cos(az); u.qvel[__BALLV + 1] = v * Math.cos(el) * Math.sin(az); u.qvel[__BALLV + 2] = v * Math.sin(el);
           u.qvel[__BALLV + 3] = 0; u.qvel[__BALLV + 4] = 0; u.qvel[__BALLV + 5] = 0;
-          __omg = [-w * Math.sin(az), w * Math.cos(az), 0]; // topspin axis = z x flight_dir (signed: negative = slice)
+          __omg = [-w * Math.sin(az), w * Math.cos(az), ws]; // topspin axis = z x flight_dir (signed: negative = slice); z-comp = sidespin (vertical axis)
           u.qvel[__BALLV + 3] = __omg[0]; u.qvel[__BALLV + 4] = __omg[1]; u.qvel[__BALLV + 5] = __omg[2];
         }
         try {
