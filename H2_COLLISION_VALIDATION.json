@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "source": "official Unitree H2 MJCF used by ATH training, with site-only court/net/launcher and non-colliding racket visual appended",
-  "model_sha256": "5600fdb08eeb22212de61de318852b340846135c970ee4ddc98e7605c3cc0f40",
+  "model_sha256": "9e3a8f9011b617f12cd23b933e784ae680da2204b14d57bc20f15f4181866420",
   "nq": 36,
   "nv": 35,
   "nu": 0,
@@ -48,5 +48,12 @@
     "result": "PASS_FOR_SITE_STAGING",
     "checked": "ATP-high behind baseline shows court, net, official H2, and orange launcher together; launcher remains readable at far baseline",
     "limitations": "Site visualization model has no actuators; movement is procedural fallback only. Robot appears small at full-court framing by design."
+  },
+  "browser_validation": {
+    "status": "PASS",
+    "route": "actual Chrome/WebGL page, exact bundle injected into live site HTML",
+    "screenshot": "cloud-browser-20260922-054711.png",
+    "verified": "one official H2, orange physical launcher, court, net, feed ball all visible from ATP-high behind-baseline default; loading cleared; REAL MUJOCO LIVE; no JS error",
+    "motion": "procedural swing/recovery attempt synchronized to 4-second launcher feed; policy in training"
   }
 }

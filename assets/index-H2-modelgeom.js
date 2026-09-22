@@ -29895,22 +29895,26 @@ async function ZE() {
         return (E[ie].set(Re, We), We);
       },
       te = function (ie, Q, Ee, we) {
-        // Kinematic playback uses poses validated offline against MuJoCo self-collision.
-        (ie.qpos.set(Q), (ie.qpos[0] = we * 4.6), (ie.qpos[1] = we * 0.4), (ie.qpos[2] = 1.06));
-        const Re = Ee + we * 0.35, We = Math.sin(Re * 2.25), Ke = 7;
-        ((ie.qpos[Ke + 1] = 0.08 * We),
-          (ie.qpos[Ke + 3] = 0.22 + 0.06 * Math.sin(Re * 2)),
-          (ie.qpos[Ke + 7] = -0.08 * We),
-          (ie.qpos[Ke + 9] = 0.22 - 0.06 * Math.sin(Re * 2)),
-          (ie.qpos[Ke + 12] = we * Math.PI * 0.5),
-          (ie.qpos[Ke + 13] = -0.25 + 0.55 * We),
-          (ie.qpos[Ke + 14] = 0.72), (ie.qpos[Ke + 15] = -0.35 + 0.28 * We),
-          (ie.qpos[Ke + 16] = 0.30 + 0.18 * Math.max(0, We)),
-          (ie.qpos[Ke + 17] = -0.22), (ie.qpos[Ke + 18] = 0.18), (ie.qpos[Ke + 19] = 0.12),
-          (ie.qpos[Ke + 20] = -0.35 - 0.62 * We),
-          (ie.qpos[Ke + 21] = -0.78), (ie.qpos[Ke + 22] = 0.42 + 0.35 * We),
-          (ie.qpos[Ke + 23] = 0.26 + 0.16 * Math.max(0, -We)),
-          (ie.qpos[Ke + 24] = 0.34), (ie.qpos[Ke + 25] = -0.12), (ie.qpos[Ke + 26] = -0.18));
+        // One H2 visibly attempts each feed. Procedural site demo only, not an executable policy.
+        ie.qpos.set(Q);
+        ie.qpos[0] = 3.65;
+        ie.qpos[1] = 0;
+        ie.qpos[2] = 1.06;
+        const phase = ((Ee % 4.0) + 4.0) % 4.0 / 4.0;
+        const hit = Math.exp(-Math.pow((phase - 0.925) / 0.075, 2));
+        const recover = Math.exp(-Math.pow((phase - 0.08) / 0.12, 2));
+        const ready = 1 - Math.min(1, hit + recover);
+        // H2 qpos after free base: legs 7..18, waist 19..21, left arm 22..28, right arm 29..35.
+        ie.qpos[8] = 0.05; ie.qpos[10] = 0.18; ie.qpos[14] = -0.05; ie.qpos[16] = 0.18;
+        ie.qpos[19] = -0.12 + 0.72 * hit; ie.qpos[20] = -0.08 * hit; ie.qpos[21] = 0.08 + 0.20 * hit;
+        ie.qpos[22] = 0.18; ie.qpos[23] = 0.25; ie.qpos[25] = 0.55;
+        ie.qpos[29] = -0.40 + 1.15 * hit - 0.25 * recover;
+        ie.qpos[30] = -0.65 + 0.35 * hit;
+        ie.qpos[31] = 0.55 - 1.25 * hit;
+        ie.qpos[32] = 1.15 - 0.78 * hit;
+        ie.qpos[33] = 0.25 + 0.60 * hit;
+        ie.qpos[34] = -0.18 + 0.30 * hit;
+        ie.qpos[35] = 0.18 - 0.75 * hit;
       },
       he = function (ie, Q) {
         ((window.__ATH_TE||te)(U[ie], ie ? C : q, Q, ie ? 1 : -1, te, ie), r.mj_forward(N[ie], U[ie]));
@@ -29918,8 +29922,9 @@ async function ZE() {
           we = U[ie],
           Re = Number(Ee.ngeom);
         for (let Ke = 0; Ke < Re; Ke++) {
-          // H2's group 0 geoms are collision shells; render only group 1 visuals.
-          if (Number(Ee.geom_group[Ke]) !== 1) {
+          // H2 official visual meshes are group 0; racket visual is group 2 and the site launcher/court/net are group 0.
+          // Render all opaque geoms except group 3 helper/collision-only geometry.
+          if (Number(Ee.geom_group[Ke]) === 3) {
             if (m[ie][Ke]) m[ie][Ke].visible = !1;
             continue;
           }
@@ -29986,12 +29991,12 @@ async function ZE() {
       ae = function (ie) {
         if ((requestAnimationFrame(ae), Dr.update(), !M)) {
           const Q = (ie - z) / 1e3;
-          (he(0, Q), innerWidth > 700 && he(1, Q + Math.PI));
-          const Ee = (Math.sin(Q * 1.25) + 1) / 2;
+          he(0, Q);
+          const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
           J.position.set(
-            9.2 * (Ee - 0.5),
-            0.45 * Math.sin(Q * 2.5),
-            0.95 + 8 * Ee * (1 - Ee),
+            -10.15 + 13.55 * Ee,
+            3.0 * (1 - Ee) + 0.18 * Math.sin(Ee * Math.PI),
+            0.82 + 2.7 * 4 * Ee * (1 - Ee),
           );
         }
         Yn.render(Fn, sr);
@@ -30040,6 +30045,7 @@ async function ZE() {
     await Promise.all(Array.from({ length: 6 }, __worker));
     let [e, ...t] = __out;
     e = e.replace(/<contact>[\s\S]*?<\/contact>/, "");
+    e = e.replace(/(<body name="ball_machine" pos=")[^"]+("[^>]*>)/, "$1-7.8 3.0 0$2");
     ((bc.textContent = "Compiling official Unitree H2 model…"),
       document.querySelector("#loadbarfill") &&
         (document.querySelector("#loadbarfill").style.width = "92%"));
@@ -30085,7 +30091,7 @@ async function ZE() {
       (document.querySelector("#physics").textContent =
         "MuJoCo 3.13 WASM · live"),
       (document.querySelector("#geo").textContent =
-        `${a.nmesh} official H2 meshes ×2`),
+        `${a.nmesh} official H2 meshes ×1`),
       (document.querySelector("#badge").textContent = "REAL MUJOCO · LIVE"),
       document.querySelector("#loadbarfill") &&
         (document.querySelector("#loadbarfill").style.width = "100%"),

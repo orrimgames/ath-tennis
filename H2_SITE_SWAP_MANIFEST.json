@@ -1,14 +1,19 @@
 {
   "package": "ATH official H2 site swap",
-  "built_at": "2026-09-22T00:31:00-05:00",
+  "revision": "browserfix5-one-h2-attempting",
+  "built_at": "2026-09-22T00:47:00-05:00",
   "default_camera": "ATP high behind baseline",
-  "ball_machine": "orange physical launcher at far baseline",
-  "clip_policy": "procedural H2 fallback; old H1-2 qpos clips prohibited",
+  "robot_count": 1,
+  "scene_action": "orange baseline launcher feeds one H2; procedural swing/recovery attempt synchronized to 4-second feed cycle",
+  "browser_validation": "PASS exact final bundle in Chrome/WebGL; screenshot included",
+  "browser_fix": "render H2/site group-0 geometry; suppress only group-3 helper collision; preload court texture",
+  "cache_bust_required": true,
+  "recommended_query": "h2atp3",
   "files": [
     {
       "path": "H2_COLLISION_VALIDATION.json",
-      "bytes": 1844,
-      "sha256": "199cdff74279fa3093336f6b4c5ba58d8f9d439a6840988072ec1992034abd88"
+      "bytes": 2327,
+      "sha256": "fd6eb181a2f2914ea2191fec844a7ee9c61b9a808eef4a4c0750de4fc0376ef5"
     },
     {
       "path": "README.md",
@@ -17,8 +22,8 @@
     },
     {
       "path": "assets/index-H2-modelgeom.js",
-      "bytes": 886384,
-      "sha256": "592ec6ac133534e3854c4088cc6d63cb85917a62476ffebe83e9f87d67ed12c6"
+      "bytes": 886658,
+      "sha256": "3bd5c32de8dfc4fb7a6e358ef22a6e94c5706169c525812c27fb4eee90c22306"
     },
     {
       "path": "assets/unitree_h2/assets/head_pitch_link.stl",
@@ -193,12 +198,12 @@
     {
       "path": "assets/unitree_h2/h2_handless_tennis.xml",
       "bytes": 24831,
-      "sha256": "5600fdb08eeb22212de61de318852b340846135c970ee4ddc98e7605c3cc0f40"
+      "sha256": "9e3a8f9011b617f12cd23b933e784ae680da2204b14d57bc20f15f4181866420"
     },
     {
-      "path": "h2_site_swap_atp_high_validation.png",
-      "bytes": 43599,
-      "sha256": "33a8d4a7ea9c935d099b50ad26cfe3fca77767ebe31952aae12c61be25f25116"
+      "path": "h2_site_swap_browser_validation.png",
+      "bytes": 284992,
+      "sha256": "21336b87409d239d7d81a11ac538db96d23c8da771ed1ea26617edcdb58000ee"
     }
   ]
 }
