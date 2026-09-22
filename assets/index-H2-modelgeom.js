@@ -30037,40 +30037,11 @@ async function ZE() {
       ae = function (ie) {
         if ((requestAnimationFrame(ae), Dr.update(), !M)) {
           const Q = (ie - z) / 1e3;
+          __PHYS(Q);
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
-          const __p = window.__CP || { lx: -11.9, ly: 0, bx: 7, by: 0, cx: 9.2, cy: 0, zc: 1.0, A: 0, tf1: 0.55, tf2: 0.14, curve: 0.1, rarc: 1.8 };
-          const __sx = __p.lx + 0.9 * Math.cos(__p.A), __sy = __p.ly + 0.9 * Math.sin(__p.A);
-          const __t = Ee * 4.0;
-          if (__t < __p.tf1) {
-            // feed flight: muzzle -> mid-court bounce, true projectile ~80mph
-            const __u = __t / __p.tf1;
-            const __vz = (0.065 - 0.82 + 4.905 * __p.tf1 * __p.tf1) / __p.tf1;
-            J.position.set(
-              __sx + (__p.bx - __sx) * __u - Math.sin(__p.A) * __p.curve * Math.sin(__u * Math.PI),
-              __sy + (__p.by - __sy) * __u + Math.cos(__p.A) * __p.curve * Math.sin(__u * Math.PI),
-              0.82 + __vz * __t - 4.905 * __t * __t
-            );
-          } else if (__t < __p.tf1 + __p.tf2) {
-            // post-bounce rise to contact
-            const __t2 = __t - __p.tf1, __u = __t2 / __p.tf2;
-            const __vz2 = (__p.zc - 0.065 + 4.905 * __p.tf2 * __p.tf2) / __p.tf2;
-            J.position.set(
-              __p.bx + (__p.cx - __p.bx) * __u,
-              __p.by + (__p.cy - __p.by) * __u,
-              0.065 + __vz2 * __t2 - 4.905 * __t2 * __t2
-            );
-          } else if (__t < __p.tf1 + __p.tf2 + 0.55) {
-            // return arc back toward the machine
-            const __u = (__t - __p.tf1 - __p.tf2) / 0.55;
-            J.position.set(
-              __p.cx + (__sx + 0.6 * Math.cos(__p.A) - __p.cx) * __u,
-              __p.cy + (__sy + 0.6 * Math.sin(__p.A) - __p.cy) * __u,
-              __p.zc + (0.065 - __p.zc) * __u + __p.rarc * 4 * __u * (1 - __u)
-            );
-          } else {
-            J.position.set(__sx + 0.6 * Math.cos(__p.A), __sy + 0.6 * Math.sin(__p.A), 0.065);
-          }
+          // feed ball follows the real MuJoCo body (aero forces + contacts)
+          J.position.set(u.xpos[__BALLB * 3], u.xpos[__BALLB * 3 + 1], u.xpos[__BALLB * 3 + 2]);
         }
         Yn.render(Fn, sr);
       };
@@ -30084,7 +30055,7 @@ async function ZE() {
       document.querySelector("#loadbarfill") &&
         (document.querySelector("#loadbarfill").style.width = "18%"));
     const __urls = [
-        Da + "h2_handless_tennis.xml",
+        Da + "h2_untrained_tennis.xml",
         ...Ac.map((ie) => Da + "assets/" + ie),
       ],
       __out = new Array(__urls.length);
@@ -30096,11 +30067,11 @@ async function ZE() {
         for (let a = 0; a < 4; a++) {
           try {
             __out[k] = await (k === 0
-              ? fetch(__urls[k]).then((ie) => {
+              ? fetch(__urls[k] + "?t=" + Date.now()).then((ie) => {
                   if (!ie.ok) throw new Error(__urls[k] + ": " + ie.status);
                   return ie.text();
                 })
-              : $E(__urls[k]));
+              : $E(__urls[k] + "?t=" + Date.now()));
             ((bc.textContent = `Loading robot assets… ${k + 1}/${__urls.length}`),
               document.querySelector("#loadbarfill") &&
                 (document.querySelector("#loadbarfill").style.width =
@@ -30117,7 +30088,6 @@ async function ZE() {
     }
     await Promise.all(Array.from({ length: 6 }, __worker));
     let [e, ...t] = __out;
-    e = e.replace(/<contact>[\s\S]*?<\/contact>/, "");
     e = e.replace(/(<body name="ball_machine" pos=")[^"]+("[^>]*>)/, "$1-7.8 3.0 0$2");
     ((bc.textContent = "Compiling official Unitree H2 model…"),
       document.querySelector("#loadbarfill") &&
@@ -30149,6 +30119,134 @@ async function ZE() {
       C = Array.from(h.qpos);
     let M = !1,
       z = performance.now();
+    // ---- ATH untrained-policy driver: real dynamics, no puppeteering ----
+    // Robot is stepped by MuJoCo dynamics (500Hz) under the actual random-init ONNX policy
+    // (50Hz, zero observation input - browser smoke schema). Feed ball is a real MuJoCo body
+    // carrying gravity + drag + Magnus forces from the training aero model; bounce/net/robot
+    // contacts are MuJoCo's own. Spin held constant over flight (no decay - training limitation).
+    const __DT = 0.002, __CTRL_DT = 0.02;
+    const __NB = Number(a.nbody), __NQ = Number(a.nq), __NV = Number(a.nv), __NA = Number(a.nu);
+    const __BALLB = __NB - 1, __MACHB = __NB - 2, __BALLQ = __NQ - 7, __BALLV = __NV - 6;
+    const __HOME = [0, 0, 1.03, 1, 0, 0, 0, -0.25, 0, 0, 0.5, 0, -0.25, -0.25, 0, 0, 0.5, 0, -0.25, 0, 0, 0, 0.35, 0.18, 0, 0.87, 0, 0, 0, 0.35, -0.18, 0, 0.87, 0, 0, 0];
+    const __SPAWNQ = [11.5, 0, 1.03, 0, 0, 0, 1];
+    const __MIDF = [0.16141, 0.8507095, 0, 1.2215, -0.02618, -0.2617975, 0.16141, -0.8507095, 0, 1.2215, 0.02618, -0.2617975, 0, 0, 0.043635, -0.392695, 1.0594165, 0, 1.0428345, 0, 0, 0, -0.392695, -1.0594165, 0, 1.0428345, 0, 0, 0];
+    let __MID = __MIDF;
+    try {
+      const cr = a.actuator_ctrlrange;
+      if (cr && cr.length >= 2 * __NA) {
+        __MID = [];
+        for (let i = 0; i < __NA; i++) __MID.push(0.5 * (Number(cr[2 * i]) + Number(cr[2 * i + 1])));
+      }
+    } catch (e) {}
+    const __RHO = 1.21, __BCD = 0.507, __BRAD = 0.033, __BAREA = Math.PI * __BRAD * __BRAD;
+    let __omg = [0, 0, 0];
+    function __aeroF(vx, vy, vz) {
+      const sp = Math.hypot(vx, vy, vz);
+      if (sp < 1e-9) return [0, 0, 0];
+      const S = __BRAD * Math.hypot(__omg[0], __omg[1], __omg[2]) / sp;
+      let cl;
+      if (S <= 0) cl = 0;
+      else if (S >= 0.53) cl = 0.30;
+      else if (S <= 0.14) cl = 0.10 * (S / 0.14);
+      else cl = 0.10 + 0.20 * ((S - 0.14) / 0.39);
+      const q = 0.5 * __RHO * __BAREA * sp * sp;
+      const cx = __omg[1] * vz - __omg[2] * vy, cy = __omg[2] * vx - __omg[0] * vz, cz = __omg[0] * vy - __omg[1] * vx;
+      const cn = Math.hypot(cx, cy, cz);
+      const lx = cn > 1e-12 ? q * cl * cx / cn : 0, ly = cn > 1e-12 ? q * cl * cy / cn : 0, lz = cn > 1e-12 ? q * cl * cz / cn : 0;
+      const kd = q * __BCD / sp;
+      return [lx - kd * vx, ly - kd * vy, lz - kd * vz];
+    }
+    let __simT = 0, __lastWall = null, __fallen = false, __fallT = 0, __ep = 0, __nextCtrl = 0, __lastCy = -1, __infer = false, __sess = null;
+    const __OBS = new Float32Array(68);
+    window.__ATH_TE = function () {}; // physics owns the robot; procedural writer retired
+    (async function () {
+      try {
+        if (typeof ort === "undefined") return;
+        ort.env.wasm.numThreads = 1; // Pages has no cross-origin isolation; single-thread wasm
+        const buf = await $E(Da + "../policy_random_init.onnx?t=" + Date.now());
+        __sess = await ort.InferenceSession.create(buf, { executionProviders: ["wasm"] });
+      } catch (e) { __sess = null; }
+    })();
+    function __resetEpisode() {
+      try { r.mj_resetData(a, u); } catch (e) {}
+      for (let i = 0; i < 36; i++) u.qpos[i] = __HOME[i];
+      for (let i = 0; i < 7; i++) u.qpos[i] = __SPAWNQ[i];
+      try { u.qvel.fill(0); } catch (e) {}
+      try { const xf = u.xfrc_applied; if (xf && xf.fill) xf.fill(0); } catch (e) {}
+      for (let i = 0; i < __NA; i++) u.ctrl[i] = __MID[i];
+      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; __lastCy = -1; try { u.qpos[__BALLQ] = 0; u.qpos[__BALLQ+1] = 0; u.qpos[__BALLQ+2] = -2; u.qpos[__BALLQ+3] = 1; u.qpos[__BALLQ+4] = 0; u.qpos[__BALLQ+5] = 0; u.qpos[__BALLQ+6] = 0; } catch (e) {} try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
+      r.mj_forward(a, u);
+    }
+    window.__PHYS_STATE = function () {
+      return { simT: __simT, fallen: __fallen, ep: __ep, sess: !!__sess,
+        root: [u.qpos[0], u.qpos[1], u.qpos[2]],
+        ball: [u.qpos[__BALLQ], u.qpos[__BALLQ + 1], u.qpos[__BALLQ + 2]],
+        ballv: [u.qvel[__BALLV], u.qvel[__BALLV + 1], u.qvel[__BALLV + 2]],
+        ctrl0: u.ctrl[0], nq: __NQ, nv: __NV, nu: __NA, nbody: __NB };
+    };
+    function __PHYS(Q) {
+      if (__lastWall === null) { __lastWall = Q; __resetEpisode(); }
+      if (Q < __simT - 1) __resetEpisode(); // page reset button jumped the clock back
+      let adv = Q - __lastWall; __lastWall = Q;
+      if (adv > 0.25) adv = 0.25;
+      if (adv < 0) adv = 0;
+      const target = __simT + adv;
+      while (__simT < target) {
+        if (__simT >= __nextCtrl) {
+          __nextCtrl += __CTRL_DT;
+          if (__sess && !__infer) {
+            __infer = true;
+            try {
+              __sess.run({ [__sess.inputNames[0]]: new ort.Tensor("float32", __OBS, [1, 68]) })
+                .then((res) => { window.__ACT = res[__sess.outputNames[0]].data; __infer = false; })
+                .catch(() => { __infer = false; });
+            } catch (e) { __infer = false; }
+          }
+          const aa = window.__ACT;
+          try {
+            const cr = a.actuator_ctrlrange;
+            for (let i = 0; i < __NA; i++) {
+              u.ctrl[i] = (aa && cr && cr.length >= 2 * __NA)
+                ? Number(cr[2 * i]) + (Number(aa[i]) + 1) * 0.5 * (Number(cr[2 * i + 1]) - Number(cr[2 * i]))
+                : __MID[i];
+            }
+          } catch (e) { for (let i = 0; i < __NA; i++) u.ctrl[i] = __MID[i]; }
+        }
+        const __cy = Math.floor(__simT / 4.0);
+        if (__cy !== __lastCy) {
+          __lastCy = __cy;
+          const __h = (n) => { const x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
+          const __lx = -12.6 + 1.0 * __h(1), __ly = -3.5 + 7.0 * __h(2);
+          const __tx = 5.5 + 3.0 * __h(3), __ty = -3.0 + 6.0 * __h(4);
+          const __A = Math.atan2(__ty - __ly, __tx - __lx);
+          const el = 0.16 + 0.08 * __h(5), az = __A + 0.10 * (__h(6) - 0.5);
+          const v = 30 + 5 * __h(8), rpm = 800 + 1200 * __h(9);
+          try {
+            a.body_pos[__MACHB * 3] = __lx; a.body_pos[__MACHB * 3 + 1] = __ly; a.body_pos[__MACHB * 3 + 2] = 0;
+            a.body_quat[__MACHB * 4] = Math.cos(__A / 2); a.body_quat[__MACHB * 4 + 1] = 0; a.body_quat[__MACHB * 4 + 2] = 0; a.body_quat[__MACHB * 4 + 3] = Math.sin(__A / 2);
+          } catch (e) {}
+          u.qpos[__BALLQ] = __lx + 0.9 * Math.cos(__A); u.qpos[__BALLQ + 1] = __ly + 0.9 * Math.sin(__A); u.qpos[__BALLQ + 2] = 0.82;
+          u.qpos[__BALLQ + 3] = 1; u.qpos[__BALLQ + 4] = 0; u.qpos[__BALLQ + 5] = 0; u.qpos[__BALLQ + 6] = 0;
+          u.qvel[__BALLV] = v * Math.cos(el) * Math.cos(az); u.qvel[__BALLV + 1] = v * Math.cos(el) * Math.sin(az); u.qvel[__BALLV + 2] = v * Math.sin(el);
+          u.qvel[__BALLV + 3] = 0; u.qvel[__BALLV + 4] = 0; u.qvel[__BALLV + 5] = 0;
+          const w = rpm * 2 * Math.PI / 60;
+          __omg = [-w * Math.sin(az), w * Math.cos(az), 0]; // topspin axis = z x flight_dir
+        }
+        try {
+          const xf = u.xfrc_applied;
+          if (xf) {
+            const f = __aeroF(u.qvel[__BALLV], u.qvel[__BALLV + 1], u.qvel[__BALLV + 2]);
+            xf[__BALLB * 6] = f[0]; xf[__BALLB * 6 + 1] = f[1]; xf[__BALLB * 6 + 2] = f[2];
+            xf[__BALLB * 6 + 3] = 0; xf[__BALLB * 6 + 4] = 0; xf[__BALLB * 6 + 5] = 0;
+          }
+        } catch (e) {}
+        r.mj_step(a, u);
+        __simT += __DT;
+        if (!__fallen && u.qpos[2] < 0.65) { __fallen = true; __fallT = __simT; }
+      }
+      if (__fallen && __simT - __fallT > 2.5) __resetEpisode();
+    }
+
     const J = new ln(
       new br(0.065, 20, 14),
       new xr({ color: 13106991, emissive: 3359744 }),
