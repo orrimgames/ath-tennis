@@ -30253,7 +30253,7 @@ async function ZE() {
     );
     ((J.castShadow = !0),
       Fn.add(J),
-      KE(Da + "assets/tennis/tennis_court_red_blue.png"),
+      KE(Da + "assets/tennis/tennis_court_red_blue.png?t=" + Date.now()),
       (document.querySelector("#pause").onclick = (ie) => {
         ((M = !M), (ie.target.textContent = M ? "Resume" : "Pause"));
       }),
