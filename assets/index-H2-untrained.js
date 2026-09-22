@@ -30067,11 +30067,11 @@ async function ZE() {
         for (let a = 0; a < 4; a++) {
           try {
             __out[k] = await (k === 0
-              ? fetch(__urls[k]).then((ie) => {
+              ? fetch(__urls[k] + "?t=" + Date.now()).then((ie) => {
                   if (!ie.ok) throw new Error(__urls[k] + ": " + ie.status);
                   return ie.text();
                 })
-              : $E(__urls[k]));
+              : $E(__urls[k] + "?t=" + Date.now()));
             ((bc.textContent = `Loading robot assets… ${k + 1}/${__urls.length}`),
               document.querySelector("#loadbarfill") &&
                 (document.querySelector("#loadbarfill").style.width =
@@ -30162,7 +30162,7 @@ async function ZE() {
     (async function () {
       try {
         if (typeof ort === "undefined") return;
-        const buf = await $E(Da + "../policy_random_init.onnx");
+        const buf = await $E(Da + "../policy_random_init.onnx?t=" + Date.now());
         __sess = await ort.InferenceSession.create(buf, { executionProviders: ["wasm"] });
       } catch (e) { __sess = null; }
     })();
