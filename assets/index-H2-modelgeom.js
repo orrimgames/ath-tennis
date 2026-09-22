@@ -29899,11 +29899,27 @@ async function ZE() {
       te = function (ie, Q, Ee, we) {
         // One H2 visibly attempts each feed. Procedural site demo only, not an executable policy.
         ie.qpos.set(Q);
-        ie.qpos[0] = 3.65;
-        ie.qpos[1] = 0;
+        var __cy = Math.floor(Ee / 4.0);
+        var __h = function (n) { var x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
+        var __lx = -8.6 + 1.6 * __h(1), __ly = -3.2 + 6.4 * __h(2);
+        var __rx = 2.8 + 2.0 * __h(3), __ry = -2.5 + 5.0 * __h(4);
+        window.__CP = { lx: __lx, ly: __ly, rx: __rx, ry: __ry, apex: 1.4 + 1.6 * __h(5), curve: -0.3 + 0.6 * __h(6), zc: 0.9 + 0.4 * __h(7) };
+        ie.qpos[0] = __rx;
+        ie.qpos[1] = __ry;
         ie.qpos[2] = 1.06;
-        var _qw=ie.qpos[3],_qx=ie.qpos[4],_qy=ie.qpos[5],_qz=ie.qpos[6];
-        ie.qpos[3]=-_qz; ie.qpos[4]=-_qy; ie.qpos[5]=_qx; ie.qpos[6]=_qw;
+        var __th = Math.atan2(__ly - __ry, __lx - __rx);
+        var __c = Math.cos(__th / 2), __s = Math.sin(__th / 2);
+        var _qw = ie.qpos[3], _qx = ie.qpos[4], _qy = ie.qpos[5], _qz = ie.qpos[6];
+        ie.qpos[3] = __c * _qw - __s * _qz;
+        ie.qpos[4] = __c * _qx - __s * _qy;
+        ie.qpos[5] = __c * _qy + __s * _qx;
+        ie.qpos[6] = __c * _qz + __s * _qw;
+        try {
+          var __M0 = N[0], __nb = Number(__M0.nbody) - 1;
+          var __la = Math.atan2(__ry - __ly, __rx - __lx);
+          __M0.body_pos[__nb * 3] = __lx; __M0.body_pos[__nb * 3 + 1] = __ly; __M0.body_pos[__nb * 3 + 2] = 0;
+          __M0.body_quat[__nb * 4] = Math.cos(__la / 2); __M0.body_quat[__nb * 4 + 1] = 0; __M0.body_quat[__nb * 4 + 2] = 0; __M0.body_quat[__nb * 4 + 3] = Math.sin(__la / 2);
+        } catch (e) {}
         const phase = ((Ee % 4.0) + 4.0) % 4.0 / 4.0;
         const hit = Math.exp(-Math.pow((phase - 0.925) / 0.075, 2));
         const recover = Math.exp(-Math.pow((phase - 0.08) / 0.12, 2));
@@ -29997,10 +30013,15 @@ async function ZE() {
           const Q = (ie - z) / 1e3;
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
+          const __p = window.__CP || { lx: -7.8, ly: 3.0, rx: 3.65, ry: 0, apex: 2.7, curve: 0.18, zc: 1.0 };
+          const __A = Math.atan2(__p.ry - __p.ly, __p.rx - __p.lx);
+          const __sx = __p.lx + 0.9 * Math.cos(__A), __sy = __p.ly + 0.9 * Math.sin(__A);
+          const __B = Math.atan2(__p.ly - __p.ry, __p.lx - __p.rx);
+          const __ex = __p.rx + 0.35 * Math.cos(__B), __ey = __p.ry + 0.35 * Math.sin(__B);
           J.position.set(
-            -10.15 + 13.55 * Ee,
-            3.0 * (1 - Ee) + 0.18 * Math.sin(Ee * Math.PI),
-            0.82 + 2.7 * 4 * Ee * (1 - Ee),
+            __sx + (__ex - __sx) * Ee - Math.sin(__A) * __p.curve * Math.sin(Ee * Math.PI),
+            __sy + (__ey - __sy) * Ee + Math.cos(__A) * __p.curve * Math.sin(Ee * Math.PI),
+            0.82 + (__p.zc - 0.82) * Ee + __p.apex * 4 * Ee * (1 - Ee),
           );
         }
         Yn.render(Fn, sr);
