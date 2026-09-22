@@ -29755,13 +29755,22 @@ Dr.target.set(-1.7, 0, 0.9);
 Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
-Fn.add(new k_(13493503, 1450032, 2.2));
+window.__CAM = sr; window.__ORBIT = Dr;
+Fn.add(new k_(13493503, 4866104, 2.6));
 const Ls = new H_(16777215, 3.4);
 Ls.position.set(-7, -10, 16);
 Ls.castShadow = !0;
 Ls.shadow.mapSize.set(2048, 2048);
 Ls.shadow.bias = -0.00035; Ls.shadow.normalBias = 0.04; Ls.shadow.camera.left = -16; Ls.shadow.camera.right = 16; Ls.shadow.camera.top = 16; Ls.shadow.camera.bottom = -16; Ls.shadow.camera.near = 1; Ls.shadow.camera.far = 60;
 Fn.add(Ls);
+const Fs = new H_(16777215, 1.7);
+Fs.position.set(8, 10, 12);
+Fs.castShadow = !1;
+Fn.add(Fs);
+const Gs = new H_(16777215, 0.9);
+Gs.position.set(0, 14, 6);
+Gs.castShadow = !1;
+Fn.add(Gs);
 const Da = "./assets/unitree_h2/",
   Ac = [
     "pelvis.stl",
@@ -30128,7 +30137,7 @@ async function ZE() {
     const __NB = Number(a.nbody), __NQ = Number(a.nq), __NV = Number(a.nv), __NA = Number(a.nu);
     const __BALLB = __NB - 1, __MACHB = __NB - 2, __BALLQ = __NQ - 7, __BALLV = __NV - 6;
     const __HOME = [0, 0, 1.03, 1, 0, 0, 0, -0.25, 0, 0, 0.5, 0, -0.25, -0.25, 0, 0, 0.5, 0, -0.25, 0, 0, 0, 0.35, 0.18, 0, 0.87, 0, 0, 0, 0.35, -0.18, 0, 0.87, 0, 0, 0];
-    const __SPAWNQ = [11.5, 0, 1.03, 0, 0, 0, 1];
+    const __SPAWNQ = [11.5, 0, 0.985, 0, 0, 0, 1];
     const __MIDF = [0.16141, 0.8507095, 0, 1.2215, -0.02618, -0.2617975, 0.16141, -0.8507095, 0, 1.2215, 0.02618, -0.2617975, 0, 0, 0.043635, -0.392695, 1.0594165, 0, 1.0428345, 0, 0, 0, -0.392695, -1.0594165, 0, 1.0428345, 0, 0, 0];
     let __MID = __MIDF;
     try {
