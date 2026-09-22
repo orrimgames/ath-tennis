@@ -29867,13 +29867,21 @@ function KE(r) {
   e.anisotropy = 8;
   const t = new ln(new Di(23.77, 10.97), new xr({ map: e, roughness: 0.85 }));
   ((t.position.z = 0.002), (t.receiveShadow = !0), Fn.add(t));
-  const n = new xr({
-      color: 15134452,
-      wireframe: !0,
-      transparent: !0,
-      opacity: 0.6,
-    }),
-    a = new ln(new Di(12.8, 0.92, 32, 5), n);
+  // Fine alpha-grid net (cutout texture) so it reads as mesh, not a grey slab, from the ATP-high camera.
+  const __nc = document.createElement("canvas");
+  __nc.width = 1024; __nc.height = 72;
+  const __nx = __nc.getContext("2d");
+  __nx.clearRect(0, 0, 1024, 72);
+  __nx.strokeStyle = "rgba(26,26,28,0.94)";
+  __nx.lineWidth = 2;
+  for (let __gi = 0; __gi <= 108; __gi++) { const __gx = Math.round(__gi * (1024/108)) + 0.5; __nx.beginPath(); __nx.moveTo(__gx, 0); __nx.lineTo(__gx, 72); __nx.stroke(); }
+  for (let __gj = 0; __gj <= 8; __gj++) { const __gy = __gj * 9 + 0.5; __nx.beginPath(); __nx.moveTo(0, __gy); __nx.lineTo(1024, __gy); __nx.stroke(); }
+  __nx.fillStyle = "rgba(245,245,245,0.98)";
+  __nx.fillRect(0, 0, 1024, 8);
+  const __ntx = new rn(__nc);
+  ((__ntx.colorSpace = on), (__ntx.anisotropy = 8), (__ntx.needsUpdate = !0));
+  const n = new xr({ map: __ntx, alphaTest: 0.28, side: $n, roughness: 0.9 }),
+    a = new ln(new Di(12.8, 0.92), n);
   ((a.rotation.set(0, Math.PI / 2, Math.PI / 2)), (a.position.z = 0.46), Fn.add(a));
   for (const o of [-6.4, 6.4]) {
     const u = new ln(
@@ -29958,6 +29966,11 @@ async function ZE() {
           // H2 official visual meshes are group 0; racket visual is group 2 and the site launcher/court/net are group 0.
           // Render all opaque geoms except group 3 helper/collision-only geometry.
           if (Number(Ee.geom_group[Ke]) === 3) {
+            if (m[ie][Ke]) m[ie][Ke].visible = !1;
+            continue;
+          }
+          // Hide the MJCF "net" box (0.018 x 6.4 x 0.457 solid slab); the textured Three.js net renders instead.
+          if (Math.abs(Ee.geom_size[Ke * 3] - 0.018) < 0.004 && Math.abs(Ee.geom_size[Ke * 3 + 1] - 6.4) < 0.02 && Math.abs(Ee.geom_size[Ke * 3 + 2] - 0.457) < 0.01) {
             if (m[ie][Ke]) m[ie][Ke].visible = !1;
             continue;
           }
