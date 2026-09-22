@@ -30057,15 +30057,6 @@ async function ZE() {
             );
           } else {
             J.position.set(__sx + 0.6 * Math.cos(__p.A), __sy + 0.6 * Math.sin(__p.A), 0.065);
-          } else if (__t < __tf + 0.55) {
-            const __u = (__t - __tf) / 0.55;
-            J.position.set(
-              __cx + (__sx + 0.6 * Math.cos(__A) - __cx) * __u,
-              __cy2 + (__sy + 0.6 * Math.sin(__A) - __cy2) * __u,
-              __p.zc + (0.065 - __p.zc) * __u + __p.rarc * 4 * __u * (1 - __u)
-            );
-          } else {
-            J.position.set(__sx + 0.6 * Math.cos(__A), __sy + 0.6 * Math.sin(__A), 0.065);
           }
         }
         Yn.render(Fn, sr);
