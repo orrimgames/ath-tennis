@@ -30222,7 +30222,7 @@ async function ZE() {
           '<div id="feedpanel">' +
           '<label>Net clearance <span id="fv_clear"></span></label><input id="fs_clear" type="range" min="0.5" max="8" step="0.25" value="2.5">' +
           '<label>Spin <span id="fv_spin"></span></label><input id="fs_spin" type="range" min="-4000" max="4000" step="250" value="3000">' +
-          '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button></label><input id="fs_speed" type="range" min="12" max="34" step="0.5" value="23">' +
+          '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button></label><input id="fs_speed" type="range" min="12" max="62.6" step="0.5" value="23">' +
           '</div>';
         const st = document.createElement("style");
         st.textContent = "#feedctl{position:fixed;left:18px;bottom:96px;z-index:60;font-family:inherit;user-select:none}" +
