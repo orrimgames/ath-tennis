@@ -30156,6 +30156,94 @@ async function ZE() {
       const kd = q * __BCD / sp;
       return [lx - kd * vx, ly - kd * vy, lz - kd * vz];
     }
+
+    function __simFlight(x0, y0, z0, az, el, v, w) {
+      const RB = 0.033;
+      let px = x0, py = y0, pz = z0;
+      let vx = v * Math.cos(el) * Math.cos(az), vy = v * Math.cos(el) * Math.sin(az), vz = v * Math.sin(el);
+      const ox = -w * Math.sin(az), oy = w * Math.cos(az), oz = 0;
+      let apex = z0, znet = null, t = 0;
+      const dt = 0.001, AR = Math.PI * RB * RB;
+      while (t < 8) {
+        const sp = Math.hypot(vx, vy, vz);
+        let ax = 0, ay = 0, az2 = -9.81;
+        if (sp > 1e-9) {
+          const S = RB * Math.abs(w) / sp;
+          let cl; if (S <= 0) cl = 0; else if (S >= 0.53) cl = 0.30; else if (S <= 0.14) cl = 0.10 * (S / 0.14); else cl = 0.10 + 0.20 * ((S - 0.14) / 0.39);
+          const qd = 0.5 * 1.21 * AR * sp * sp;
+          const cx = oy * vz - oz * vy, cy = oz * vx - ox * vz, cz = ox * vy - oy * vx;
+          const cn = Math.hypot(cx, cy, cz);
+          const lx = cn > 1e-12 ? qd * cl * cx / cn : 0, ly = cn > 1e-12 ? qd * cl * cy / cn : 0, lz = cn > 1e-12 ? qd * cl * cz / cn : 0;
+          const kd = qd * 0.507 / sp;
+          ax = (lx - kd * vx) / 0.057; ay = (ly - kd * vy) / 0.057; az2 = (lz - kd * vz) / 0.057 - 9.81;
+        }
+        vx += ax * dt; vy += ay * dt; vz += az2 * dt;
+        px += vx * dt; py += vy * dt; pz += vz * dt; t += dt;
+        if (pz > apex) apex = pz;
+        if (znet === null && px >= 0) znet = pz;
+        if (pz <= RB && t > 0.15) break;
+      }
+      return { land: px, apex: apex, znet: znet, t: t };
+    }
+    function __solveLaunch(x0, y0, z0, az, v, w, clear) {
+      const tgt = 0.914 + clear;
+      let lo = 0.02, hi = 1.35;
+      for (let i = 0; i < 24; i++) {
+        const mid = 0.5 * (lo + hi);
+        const r = __simFlight(x0, y0, z0, az, mid, v, w);
+        const zn = (r.znet === null) ? -1 : r.znet;
+        if (zn < tgt) lo = mid; else hi = mid;
+      }
+      return 0.5 * (lo + hi);
+    }
+    function __maxPace(x0, y0, z0, az, w, clear) {
+      for (let v = 34; v >= 12; v -= 0.5) {
+        const el = __solveLaunch(x0, y0, z0, az, v, w, clear);
+        const r = __simFlight(x0, y0, z0, az, el, v, w);
+        if (r.znet !== null && r.land <= 11.3 && r.land >= 0.5) return v;
+      }
+      return 12;
+    }
+    const __FEED = { clear: 2.5, rpm: 3000, speed: 23, auto: true };
+    function __buildFeedUI() {
+      try {
+        const wrap = document.createElement("div");
+        wrap.id = "feedctl";
+        wrap.innerHTML = '<button id="feedtoggle" type="button">FEED &#9662;</button>' +
+          '<div id="feedpanel">' +
+          '<label>Net clearance <span id="fv_clear"></span></label><input id="fs_clear" type="range" min="0.5" max="8" step="0.25" value="2.5">' +
+          '<label>Spin <span id="fv_spin"></span></label><input id="fs_spin" type="range" min="-4000" max="4000" step="250" value="3000">' +
+          '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button></label><input id="fs_speed" type="range" min="12" max="34" step="0.5" value="23">' +
+          '</div>';
+        const st = document.createElement("style");
+        st.textContent = "#feedctl{position:fixed;left:18px;bottom:96px;z-index:60;font-family:inherit;user-select:none}" +
+          "#feedctl #feedtoggle,#feedctl #fs_auto{background:rgba(12,14,18,.88);color:#e8e8e8;border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer}" +
+          "#feedctl #fs_auto{padding:2px 8px;margin-left:6px;letter-spacing:.06em}" +
+          "#feedctl #fs_auto.off{opacity:.45}" +
+          "#feedpanel{display:none;margin-top:8px;background:rgba(10,12,16,.9);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 12px;width:208px}" +
+          "#feedpanel.open{display:block}" +
+          "#feedpanel label{display:block;color:#cfd4da;font-size:11px;letter-spacing:.08em;margin:8px 0 2px}" +
+          "#feedpanel label span{color:#9be15d}" +
+          "#feedpanel input[type=range]{width:100%;height:26px;accent-color:#9be15d}";
+        document.head.appendChild(st);
+        document.body.appendChild(wrap);
+        const $ = (id) => document.getElementById(id);
+        const panel = $("feedpanel");
+        if (innerWidth >= 700) panel.classList.add("open");
+        $("feedtoggle").onclick = () => panel.classList.toggle("open");
+        const show = () => {
+          $("fv_clear").textContent = __FEED.clear.toFixed(2) + " m";
+          $("fv_spin").textContent = (__FEED.rpm >= 0 ? "+" : "") + __FEED.rpm + " rpm " + (__FEED.rpm >= 0 ? "(topspin)" : "(slice)");
+          $("fv_speed").textContent = __FEED.speed.toFixed(1) + " m/s (" + Math.round(__FEED.speed * 2.23694) + " mph)";
+          $("fs_auto").classList.toggle("off", !__FEED.auto);
+        };
+        $("fs_clear").oninput = (e) => { __FEED.clear = Number(e.target.value); show(); };
+        $("fs_spin").oninput = (e) => { __FEED.rpm = Number(e.target.value); show(); };
+        $("fs_speed").oninput = (e) => { __FEED.speed = Number(e.target.value); __FEED.auto = false; show(); };
+        $("fs_auto").onclick = () => { __FEED.auto = !__FEED.auto; show(); };
+        show();
+      } catch (e) {}
+    }
     let __simT = 0, __lastWall = null, __fallen = false, __fallT = 0, __ep = 0, __nextCtrl = 0, __lastCy = -1, __infer = false, __sess = null;
     const __OBS = new Float32Array(68);
     window.__ATH_TE = function () {}; // physics owns the robot; procedural writer retired
@@ -30219,8 +30307,11 @@ async function ZE() {
           const __lx = -12.6 + 1.0 * __h(1), __ly = -3.5 + 7.0 * __h(2);
           const __tx = 5.5 + 3.0 * __h(3), __ty = -3.0 + 6.0 * __h(4);
           const __A = Math.atan2(__ty - __ly, __tx - __lx);
-          const el = 0.86 + 0.08 * __h(5), az = __A + 0.10 * (__h(6) - 0.5);
-          const v = 16 + 2 * __h(8), rpm = 2950 + 100 * __h(9);
+          const az = __A + 0.10 * (__h(6) - 0.5);
+          const w = __FEED.rpm * 2 * Math.PI / 60;
+          const __sx = __lx + 0.9 * Math.cos(__A), __sy = __ly + 0.9 * Math.sin(__A);
+          const v = __FEED.auto ? __maxPace(__sx, __sy, 0.82, az, w, __FEED.clear) : __FEED.speed;
+          const el = __solveLaunch(__sx, __sy, 0.82, az, v, w, __FEED.clear);
           try {
             a.body_pos[__MACHB * 3] = __lx; a.body_pos[__MACHB * 3 + 1] = __ly; a.body_pos[__MACHB * 3 + 2] = 0;
             a.body_quat[__MACHB * 4] = Math.cos(__A / 2); a.body_quat[__MACHB * 4 + 1] = 0; a.body_quat[__MACHB * 4 + 2] = 0; a.body_quat[__MACHB * 4 + 3] = Math.sin(__A / 2);
@@ -30229,8 +30320,8 @@ async function ZE() {
           u.qpos[__BALLQ + 3] = 1; u.qpos[__BALLQ + 4] = 0; u.qpos[__BALLQ + 5] = 0; u.qpos[__BALLQ + 6] = 0;
           u.qvel[__BALLV] = v * Math.cos(el) * Math.cos(az); u.qvel[__BALLV + 1] = v * Math.cos(el) * Math.sin(az); u.qvel[__BALLV + 2] = v * Math.sin(el);
           u.qvel[__BALLV + 3] = 0; u.qvel[__BALLV + 4] = 0; u.qvel[__BALLV + 5] = 0;
-          const w = rpm * 2 * Math.PI / 60;
-          __omg = [-w * Math.sin(az), w * Math.cos(az), 0]; // topspin axis = z x flight_dir
+          __omg = [-w * Math.sin(az), w * Math.cos(az), 0]; // topspin axis = z x flight_dir (signed: negative = slice)
+          u.qvel[__BALLV + 3] = __omg[0]; u.qvel[__BALLV + 4] = __omg[1]; u.qvel[__BALLV + 5] = __omg[2];
         }
         try {
           const xf = u.xfrc_applied;
@@ -30241,6 +30332,23 @@ async function ZE() {
           }
         } catch (e) {}
         r.mj_step(a, u);
+        try {
+          const RB = 0.033, bq = __BALLQ, bv = __BALLV;
+          if (u.qpos[bq + 2] <= RB + 0.002 && u.qvel[bv + 2] < 0) {
+            // tuned spin-coupled bounce: friction-limited tangential response + COR (not the calibrated training gate)
+            const e = 0.78, mu = 0.65;
+            const vx = u.qvel[bv], vy = u.qvel[bv + 1], vz = u.qvel[bv + 2];
+            const cvx = vx - RB * __omg[1], cvy = vy + RB * __omg[0];
+            const jn = (1 + e) * (-vz);
+            const slip = Math.hypot(cvx, cvy);
+            let jx = 0, jy = 0;
+            if (slip > 1e-9) { const jt = Math.min(slip, mu * jn); jx = -jt * cvx / slip; jy = -jt * cvy / slip; }
+            u.qvel[bv] = vx + jx; u.qvel[bv + 1] = vy + jy; u.qvel[bv + 2] = e * (-vz);
+            __omg = [__omg[0] + 2.5 * jy / RB, __omg[1] - 2.5 * jx / RB, __omg[2]];
+            u.qvel[bv + 3] = __omg[0]; u.qvel[bv + 4] = __omg[1]; u.qvel[bv + 5] = __omg[2];
+            u.qpos[bq + 2] = RB + 0.002;
+          }
+        } catch (e2) {}
         __simT += __DT;
         if (!__fallen && u.qpos[2] < 0.65) { __fallen = true; __fallT = __simT; }
       }
@@ -30254,6 +30362,7 @@ async function ZE() {
     ((J.castShadow = !0),
       Fn.add(J),
       KE(Da + "assets/tennis/tennis_court_red_blue.png?t=" + Date.now()),
+      __buildFeedUI(),
       (document.querySelector("#pause").onclick = (ie) => {
         ((M = !M), (ie.target.textContent = M ? "Resume" : "Pause"));
       }),
