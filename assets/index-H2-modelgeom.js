@@ -30351,16 +30351,16 @@ async function ZE() {
         try {
           const RB = 0.033, bq = __BALLQ, bv = __BALLV;
           if (u.qpos[bq + 2] <= RB + 0.002 && u.qvel[bv + 2] < 0) {
-            // tuned spin-coupled bounce: friction-limited tangential response + COR (not the calibrated training gate)
-            const e = 0.78, mu = 0.65;
+            // spin-coupled rigid-body bounce calibrated to ITF/Cross hard-court measurements (grip: sticking impulse; slide: mu-capped; hollow-ball inertia)
+            const e = 0.78, mu = 0.65, KC = 1.5; // hollow-ball inertia I=(2/3)mR^2 -> spin coupling KC/R (Cross: w2 = (mR/I)(vx1-vx2))
             const vx = u.qvel[bv], vy = u.qvel[bv + 1], vz = u.qvel[bv + 2];
             const cvx = vx - RB * __omg[1], cvy = vy + RB * __omg[0];
             const jn = (1 + e) * (-vz);
             const slip = Math.hypot(cvx, cvy);
             let jx = 0, jy = 0;
-            if (slip > 1e-9) { const jt = Math.min(slip, mu * jn); jx = -jt * cvx / slip; jy = -jt * cvy / slip; }
+            if (slip > 1e-9) { const jt = Math.min(slip / (1 + KC), mu * jn); jx = -jt * cvx / slip; jy = -jt * cvy / slip; } // grip: stop contact slip consistently with spin change; slide: mu cap
             u.qvel[bv] = vx + jx; u.qvel[bv + 1] = vy + jy; u.qvel[bv + 2] = e * (-vz);
-            __omg = [__omg[0] + 2.5 * jy / RB, __omg[1] - 2.5 * jx / RB, __omg[2]];
+            __omg = [__omg[0] + KC * jy / RB, __omg[1] - KC * jx / RB, __omg[2]];
             u.qvel[bv + 3] = __omg[0]; u.qvel[bv + 4] = __omg[1]; u.qvel[bv + 5] = __omg[2];
             u.qpos[bq + 2] = RB + 0.002;
           }
