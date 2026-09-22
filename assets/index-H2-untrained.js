@@ -30162,6 +30162,7 @@ async function ZE() {
     (async function () {
       try {
         if (typeof ort === "undefined") return;
+        ort.env.wasm.numThreads = 1; // Pages has no cross-origin isolation; single-thread wasm
         const buf = await $E(Da + "../policy_random_init.onnx?t=" + Date.now());
         __sess = await ort.InferenceSession.create(buf, { executionProviders: ["wasm"] });
       } catch (e) { __sess = null; }
