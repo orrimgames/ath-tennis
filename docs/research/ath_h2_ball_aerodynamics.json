@@ -1,0 +1,188 @@
+{
+  "suite": "tennis ball drag and Magnus first-flight fixtures",
+  "status": "PASS",
+  "model": {
+    "rho_kg_m3": 1.21,
+    "mass_kg": 0.057,
+    "radius_m": 0.033,
+    "cd": {
+      "mean": 0.507,
+      "sd": 0.024
+    },
+    "cl_vs_spin_ratio": [
+      [
+        0,
+        0
+      ],
+      [
+        0.14,
+        0.1
+      ],
+      [
+        0.53,
+        0.3
+      ]
+    ],
+    "spin_decay": "not yet modeled"
+  },
+  "nominal_feed": {
+    "speed_mps": 35.7632,
+    "spin_rpm": 2708,
+    "angle_deg": 7
+  },
+  "rows": [
+    {
+      "dt_s": 0.001,
+      "landing_x_m": 38.066769956314765,
+      "flight_s": 1.072405286844252,
+      "apex_m": 1.9681942597177429,
+      "impact_speed_mps": 36.028473785593285,
+      "last_coefficients": {},
+      "mode": "ballistic",
+      "landing_error_vs_finest_m": 6.395306407114276e-06,
+      "flight_error_vs_finest_s": 1.8016661562647585e-07
+    },
+    {
+      "dt_s": 0.0005,
+      "landing_x_m": 38.06677568367242,
+      "flight_s": 1.0724054481935454,
+      "apex_m": 1.9681944323187794,
+      "impact_speed_mps": 36.02763442576774,
+      "last_coefficients": {},
+      "mode": "ballistic",
+      "landing_error_vs_finest_m": 6.67948754085046e-07,
+      "flight_error_vs_finest_s": 1.8817322144926152e-08
+    },
+    {
+      "dt_s": 0.00025,
+      "landing_x_m": 38.06677635162117,
+      "flight_s": 1.0724054670108676,
+      "apex_m": 1.9681946525807361,
+      "impact_speed_mps": 36.027634425767815,
+      "last_coefficients": {},
+      "mode": "ballistic",
+      "landing_error_vs_finest_m": 0.0,
+      "flight_error_vs_finest_s": 0.0
+    },
+    {
+      "dt_s": 0.001,
+      "landing_x_m": 20.31052906694585,
+      "flight_s": 0.6941056575316107,
+      "apex_m": 1.508181417151437,
+      "impact_speed_mps": 24.93544562468383,
+      "last_coefficients": {
+        "cd": 0.507,
+        "cl": 0.22062993986499746,
+        "spin_ratio": 0.3752283827367451,
+        "drag_n": 0.6527278739794439,
+        "magnus_n": 0.2840459794561979
+      },
+      "mode": "drag_magnus",
+      "landing_error_vs_finest_m": 6.410034476544979e-06,
+      "flight_error_vs_finest_s": 2.0704706227281378e-07
+    },
+    {
+      "dt_s": 0.0005,
+      "landing_x_m": 20.310533886616806,
+      "flight_s": 0.6941058131088006,
+      "apex_m": 1.5081818464947234,
+      "impact_speed_mps": 24.939947438496457,
+      "last_coefficients": {
+        "cd": 0.507,
+        "cl": 0.22061256378342364,
+        "spin_ratio": 0.3751944993776761,
+        "drag_n": 0.6528457734242772,
+        "magnus_n": 0.2840749109078932
+      },
+      "mode": "drag_magnus",
+      "landing_error_vs_finest_m": 1.590363520875826e-06,
+      "flight_error_vs_finest_s": 5.146987236415157e-08
+    },
+    {
+      "dt_s": 0.00025,
+      "landing_x_m": 20.310535476980327,
+      "flight_s": 0.694105864578673,
+      "apex_m": 1.508182262937676,
+      "impact_speed_mps": 24.942199842114288,
+      "last_coefficients": {
+        "cd": 0.507,
+        "cl": 0.22060387382499175,
+        "spin_ratio": 0.3751775539587339,
+        "drag_n": 0.6529047481409186,
+        "magnus_n": 0.28408938200910694
+      },
+      "mode": "drag_magnus",
+      "landing_error_vs_finest_m": 0.0,
+      "flight_error_vs_finest_s": 0.0
+    }
+  ],
+  "effect_at_finest": {
+    "ballistic": {
+      "dt_s": 0.00025,
+      "landing_x_m": 38.06677635162117,
+      "flight_s": 1.0724054670108676,
+      "apex_m": 1.9681946525807361,
+      "impact_speed_mps": 36.027634425767815,
+      "last_coefficients": {},
+      "mode": "ballistic",
+      "landing_error_vs_finest_m": 0.0,
+      "flight_error_vs_finest_s": 0.0
+    },
+    "drag_magnus": {
+      "dt_s": 0.00025,
+      "landing_x_m": 20.310535476980327,
+      "flight_s": 0.694105864578673,
+      "apex_m": 1.508182262937676,
+      "impact_speed_mps": 24.942199842114288,
+      "last_coefficients": {
+        "cd": 0.507,
+        "cl": 0.22060387382499175,
+        "spin_ratio": 0.3751775539587339,
+        "drag_n": 0.6529047481409186,
+        "magnus_n": 0.28408938200910694
+      },
+      "mode": "drag_magnus",
+      "landing_error_vs_finest_m": 0.0,
+      "flight_error_vs_finest_s": 0.0
+    },
+    "landing_shortening_m": 17.756240874640845,
+    "flight_change_s": -0.3782996024321946,
+    "apex_change_m": -0.4600123896430601
+  },
+  "sign_fixture": {
+    "topspin_accel_z_mps2": -14.78763008680767,
+    "backspin_accel_z_mps2": -4.8323699131923314,
+    "topspin_coefficients": {
+      "cd": 0.507,
+      "cl": 0.1523076923076923,
+      "spin_ratio": 0.24200000000000002,
+      "drag_n": 0.9444600577891479,
+      "magnus_n": 0.28372491494803714
+    },
+    "backspin_coefficients": {
+      "cd": 0.507,
+      "cl": 0.1523076923076923,
+      "spin_ratio": 0.24200000000000002,
+      "drag_n": 0.9444600577891479,
+      "magnus_n": 0.28372491494803714
+    }
+  },
+  "sources": [
+    {
+      "citation": "Cross, R.; Lindsey, C. Measurements of drag and lift on tennis balls in flight. Sports Engineering 17, 89-96 (2014).",
+      "url": "https://doi.org/10.1007/s12283-013-0144-9",
+      "used": "free-flight Cd 0.507\u00b10.024; Cl dependence on spin parameter and observed free-flight envelope"
+    },
+    {
+      "citation": "Alam et al. A Study of Spin Effects on Tennis Ball Aerodynamics. WSEAS Transactions on Fluid Mechanics 3(3), 2008.",
+      "url": "https://www.wseas.us/e-library/transactions/fluid/2008/MGR-09.pdf",
+      "used": "independent wind-tunnel confirmation of drag/lift dependence on speed and spin; uncertainty warning for fuzz and support effects"
+    }
+  ],
+  "limitations": [
+    "Cl interpolation is provisional pending extraction/system identification from measured trajectory data",
+    "Cd ball wear/fuzz uncertainty is not randomized yet",
+    "spin-axis decay/precession and wind are not calibrated",
+    "bounce remains a separate gate"
+  ]
+}

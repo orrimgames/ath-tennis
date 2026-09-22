@@ -1,0 +1,5 @@
+{
+  "started": false,
+  "reason": "contact-isolation diagnostic only; training intentionally disabled",
+  "environment": "minimal H2: floor, gravity, rigid contacts, actuators; no tennis apparatus"
+}

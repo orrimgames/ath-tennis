@@ -1,0 +1,5 @@
+{
+  "started": false,
+  "reason": "parity gate failed",
+  "environment": "minimal H2: floor, gravity, rigid contacts, actuators; no tennis apparatus"
+}
