@@ -67,7 +67,7 @@
       var a = ago(bestMeta.uploaded_utc || bestMeta.promoted_utc || bestMeta.utc);
       var nm = shortName(bestMeta.name) || 'unknown';
       var val = /f64-validated/i.test(bestMeta.status || '') ? ' (f64-validated)' : '';
-      var simNote = (bestObs !== null && bestObs !== 93) ? ' &middot; live sim: <b>stand v3</b> (obs-137 loader in progress)' : '';
+      var simNote = (bestObs !== null && bestObs !== 93) ? ' &middot; live sim: <b>obs-137 ball-contact</b> (f64: 0% contact, 92% falls)' : '';
       bestEl.innerHTML = 'best: <b>' + nm + val + '</b>' + (a ? ' &middot; set ' + a : '') + simNote;
       bestEl.style.whiteSpace = 'normal';
     } else if (bestFailed) {
