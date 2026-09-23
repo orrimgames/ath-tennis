@@ -33,6 +33,7 @@
   var BASE = 'https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/';
   var URL_ = BASE + 'training/progress_ball.json';
   var META = BASE + 'best/metadata.json';
+  var SPEC = BASE + 'best/spec.json';
   var LOSS = BASE + 'training/loss_curve.png';
   var F64 = BASE + 'training/f64_screen.json';
   var panel = document.getElementById('trainprog_panel');
@@ -58,13 +59,17 @@
     if (h < 48) return h + 'h' + (m ? ' ' + m + 'm' : '') + ' ago';
     return Math.floor(h / 24) + 'd ago';
   }
-  var bestMeta = null, bestFailed = false, lastJ = null, lastF64 = null, f64Tried = false;
+  var bestMeta = null, bestFailed = false, lastJ = null, lastF64 = null, f64Tried = false, bestObs = null;
   function pick(o, keys) { for (var i = 0; i < keys.length; i++) { if (o && o[keys[i]] !== undefined && o[keys[i]] !== null) return o[keys[i]]; } return undefined; }
   function frac(v) { v = Number(v); return v > 1 ? v / 100 : v; }
   function renderBest() {
     if (bestMeta) {
-      var a = ago(bestMeta.uploaded_utc);
-      bestEl.innerHTML = 'best: <b>' + (shortName(bestMeta.name) || 'unknown') + '</b>' + (a ? ' &middot; set ' + a : '');
+      var a = ago(bestMeta.uploaded_utc || bestMeta.promoted_utc || bestMeta.utc);
+      var nm = shortName(bestMeta.name) || 'unknown';
+      var val = /f64-validated/i.test(bestMeta.status || '') ? ' (f64-validated)' : '';
+      var simNote = (bestObs !== null && bestObs !== 93) ? ' &middot; live sim: <b>stand v3</b> (obs-137 loader in progress)' : '';
+      bestEl.innerHTML = 'best: <b>' + nm + val + '</b>' + (a ? ' &middot; set ' + a : '') + simNote;
+      bestEl.style.whiteSpace = 'normal';
     } else if (bestFailed) {
       bestEl.textContent = 'best: metadata unavailable';
     }
@@ -146,6 +151,14 @@
       .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(function (m) { bestMeta = m; bestFailed = false; renderBest(); if (lastJ) render(lastJ); })
       .catch(function () { bestFailed = true; renderBest(); });
+    fetch(SPEC, { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(function (sp) {
+        var m = ((sp.onnx && sp.onnx.input) || '').match(/batch,(\d+)/);
+        bestObs = sp.obs_size || (m ? +m[1] : Math.max.apply(null, (sp.obs_layout || []).map(function (x) { return x.slice[1]; })));
+        renderBest();
+      })
+      .catch(function () {});
     fetch(F64, { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(function (fj) { lastF64 = fj; f64Tried = true; if (lastJ) render(lastJ); })
