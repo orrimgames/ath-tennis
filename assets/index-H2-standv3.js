@@ -29742,7 +29742,7 @@ Fn.background = new pt(198412);
 Fn.fog = new Do(198412, 18, 42);
 const sr = new mn(43, innerWidth / innerHeight, 0.05, 100);
 sr.up.set(0, 0, 1);
-sr.position.set(2.9, -3.3, 1.9);
+sr.position.set(3.4, -2.4, 2.0);
 const Yn = new bE({ antialias: !0, powerPreference: "high-performance" });
 Yn.setPixelRatio(Math.min(devicePixelRatio, 2));
 Yn.setSize(innerWidth, innerHeight);
@@ -29751,7 +29751,7 @@ Yn.shadowMap.type = Cc;
 Yn.outputColorSpace = on;
 XE.append(Yn.domElement);
 const Dr = new RE(sr, Yn.domElement);
-Dr.target.set(0, 0, 0.95);
+Dr.target.set(7.0, 2.7, 0.95);
 Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
@@ -30283,6 +30283,9 @@ async function ZE() {
     function __resetEpisode() {
       try { r.mj_resetData(a, u); } catch (e) {}
       for (let i = 0; i < 36; i++) u.qpos[i] = __HOME[i];
+      u.qpos[0] = __HOME[0] + 9.0; u.qpos[1] = __HOME[1] + 3.0;
+      { const hw = __HOME[3], hx = __HOME[4], hy = __HOME[5], hz = __HOME[6];
+        u.qpos[3] = -hz; u.qpos[4] = -hy; u.qpos[5] = hx; u.qpos[6] = hw; }
       __PREV.fill(0);
       try { u.qvel.fill(0); } catch (e) {}
       try { const xf = u.xfrc_applied; if (xf && xf.fill) xf.fill(0); } catch (e) {}
@@ -30412,6 +30415,9 @@ async function ZE() {
       const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
       const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(-7.8, 2.62, 0.15); Fn.add(__wheel);
       const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
+      const __BALLS = []; const __bmat = new xr({ color: 0xd7f542 });
+      for (let bi = 0; bi < 8; bi++) { const bm = new ln(new br(0.06, 12, 10), __bmat); bm.visible = !1; Fn.add(bm); __BALLS.push({ m: bm, p: [0,0,-5], v: [0,0,0], on: !1, age: 0 }); }
+      let __lastFeed = -10, __prevT = performance.now() / 1000;
       (function __skinTick() {
         try {
           for (const s2 of __SKIN) {
@@ -30427,6 +30433,9 @@ async function ZE() {
               s2.mesh.quaternion.set(bq[1], bq[2], bq[3], bq[0]);
             }
           }
+          const nowT = performance.now() / 1000, dt = Math.min(0.05, nowT - __prevT); __prevT = nowT;
+          if (nowT - __lastFeed > 2.2) { __lastFeed = nowT; const fb = __BALLS.find(x => !x.on); if (fb) { fb.on = !0; fb.age = 0; fb.p = [-6.86, 3.0, 0.78]; fb.v = [9.2 + Math.random(), (Math.random() - 0.5) * 0.6, 2.1 + Math.random() * 0.5]; fb.m.visible = !0; } }
+          for (const fb of __BALLS) { if (!fb.on) continue; fb.age += dt; fb.v[2] -= 9.81 * dt; fb.p[0] += fb.v[0] * dt; fb.p[1] += fb.v[1] * dt; fb.p[2] += fb.v[2] * dt; if (fb.p[2] < 0.06 && fb.v[2] < 0) { fb.p[2] = 0.06; fb.v[2] *= -0.62; fb.v[0] *= 0.82; fb.v[1] *= 0.82; } if (fb.age > 9 || fb.p[0] > 8.55) { fb.on = !1; fb.m.visible = !1; } fb.m.position.set(fb.p[0], fb.p[1], fb.p[2]); }
         } catch (e) {}
         requestAnimationFrame(__skinTick);
       })();
