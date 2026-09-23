@@ -96,6 +96,13 @@
       if (fcon !== undefined) rows.push('<b>F64 CONTACT</b> ' + pct(frac(fcon)) + ' of ' + (f.episodes ? fmt(f.episodes) + ' ' : '') + 'episodes (float64)');
       if (ffell !== undefined) rows.push('<b>F64 FELL</b> ' + pct(frac(ffell)));
       if (fa) rows.push('<span style="color:#8a97a5;font-size:10px">f64 screened ' + fa + ' &middot; the exact oracle a policy must pass to become best</span>');
+      if (f.oracle_pass !== undefined || f.oracle_episodes !== undefined) {
+        var opass = (typeof f.oracle_pass === 'boolean') ? f.oracle_pass : false;
+        rows.push('<b>F64 ORACLE</b> <span style="color:' + (opass ? '#8fd14f' : '#ff7a6b') + ';font-weight:700">' + (opass ? 'PASS' : 'FAIL') + '</span>' + (f.oracle_episodes !== undefined ? ' &middot; ' + fmt(f.oracle_episodes) + ' episodes' : ''));
+        if (f.oracle_contact !== undefined) rows.push('<b>F64 ORACLE CONTACT</b> ' + pct(frac(f.oracle_contact)));
+        if (f.oracle_fell !== undefined) rows.push('<b>F64 ORACLE FELL</b> ' + pct(frac(f.oracle_fell)));
+      }
+      if (f.promoted === true) rows.push('<b>PROMOTED</b> this checkpoint is now the live best');
     } else if (f64Tried) {
       rows.push('<span style="color:#8a97a5;font-size:10px">f64 screen: awaiting first publish from training</span>');
     }
