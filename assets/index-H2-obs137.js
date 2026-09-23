@@ -30418,8 +30418,9 @@ async function ZE() {
       if (adv > (__BALLMODE ? 0.06 : 0.25)) adv = __BALLMODE ? 0.06 : 0.25;
       if (adv < 0) adv = 0;
       const target = __simT + adv;
+      const __pt0 = performance.now();
       let __sub = 0;
-      while (__simT < target && (!__BALLMODE || __sub < 10)) { __sub++;
+      while (__simT < target) { if (__BALLMODE && (__sub & 7) === 0 && performance.now() - __pt0 > 10) break; __sub++;
         if (__simT >= __nextCtrl) {
           __nextCtrl += __CTRL_DT;
           if (__sess && !__infer) {
