@@ -30545,7 +30545,7 @@ async function ZE() {
       const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
       const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(-7.8, 2.62, 0.15); Fn.add(__wheel);
       const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
-      // === lawn setting: plain grass, stadium removed (display-only) ===       try {         const __ground = new ln(new Di(200, 200), new jc({ color: 0x35772f }));         __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground); window.__LAWNOK=1;       } catch (e) { document.title = "LAWNERR: " + (e && e.message); }
+      // === lawn setting: plain grass, stadium removed (display-only) ===       try {         const __ground = new ln(new Di(200, 200), new jc({ color: 0x35772f }));         __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground);       } catch (e) {}
 
       let __feedLastCy = -1, __feedLastEp = -1, __feedP = null, __feedV = null, __feedAge = 0, __prevSimT = -1;
       (function __skinTick() {
@@ -30688,3 +30688,4 @@ if (/[?&]parity=1/.test(location.search)) (async function () {
 })();
 
 window.__DBG137 = /[?&]dbg137=1/.test(location.search);
+;(function __lawnFix(){var __tries=0;var __iv=setInterval(function(){__tries++;try{var rk=window.__RACKET;if(!rk){if(__tries>600)clearInterval(__iv);return;}var sc=rk,n=0;while(sc.parent&&n<20){sc=sc.parent;n++;}var court=null,ball=null,has=false;sc.traverse(function(o){if(o.isMesh){if(o.geometry.type==="PlaneGeometry"&&o.geometry.parameters.width===200)has=true;if(o.geometry.type==="PlaneGeometry"&&o.geometry.parameters.width===23.77)court=o;if(o.geometry.type==="SphereGeometry"&&o.material.type==="MeshBasicMaterial")ball=o;}});if(has||!court||!ball){if(has||__tries>600)clearInterval(__iv);return;}var g=new court.constructor(new court.geometry.constructor(200,200),new ball.material.constructor({color:0x35772f}));g.position.set(0,0,-0.02);g.receiveShadow=true;sc.add(g);clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
