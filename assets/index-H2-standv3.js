@@ -30451,7 +30451,7 @@ async function ZE() {
           c.fillStyle = "#9be15d"; c.font = "bold 74px system-ui, sans-serif"; c.textBaseline = "middle";
           for (let x = 30; x < W - 400; x += 480) c.fillText("HARKIN ARENA", x, H / 2);
         });
-        const __bannerMat = new jc({ map: __bannerTx });
+        const __bannerMat = new jc({ map: __bannerTx }); __bannerMat.fog = !1;
         const __mkPanel = (w, h, mat, x, y, z, tx2, ty2, tz2) => {
           const m = new ln(new Di(w, h), mat); m.position.set(x, y, z); m.up.set(0, 0, 1); m.lookAt(tx2, ty2, tz2); Fn.add(m); return m;
         };
@@ -30462,7 +30462,7 @@ async function ZE() {
           c.fillStyle = "#9be15d"; c.font = "bold 118px system-ui, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
           c.fillText("HARKIN ARENA", W / 2, H / 2 + 6);
         });
-        const __fasciaMat = new jc({ map: __fasciaTx });
+        const __fasciaMat = new jc({ map: __fasciaTx }); __fasciaMat.fog = !1;
         for (let s2 = -1; s2 <= 1; s2 += 2) __mkPanel(22, 2.0, __fasciaMat, 0, s2 * 13.2, 5.4, 0, 0, 3.4);
         const __scoreTx = __canvasTex(1024, 512, (c, W, H) => {
           c.fillStyle = "#05080e"; c.fillRect(0, 0, W, H);
@@ -30473,9 +30473,10 @@ async function ZE() {
           c.fillStyle = "#8a97a5"; c.font = "38px system-ui, sans-serif"; c.fillText("CENTER COURT \u00b7 ATH", W / 2, 316);
           c.fillStyle = "#9be15d"; c.font = "bold 60px system-ui, sans-serif"; c.fillText("ROBOT  0  -  0  BALL", W / 2, 424);
         });
-        __mkPanel(10, 5, new jc({ map: __scoreTx }), -19.2, 0, 6.4, 0, 0, 3.5);
+        const __scoreMat = new jc({ map: __scoreTx }); __scoreMat.fog = !1;
+        __mkPanel(10, 5, __scoreMat, -18.2, 0, 6.6, 0, 0, 3.5);
         const __poleMat = new xr({ color: 0x2a313d, roughness: 0.6, metalness: 0.6 });
-        const __lampMat = new jc({ color: 0xfff3c4 });
+        const __lampMat = new jc({ color: 0xfff3c4 }); __lampMat.fog = !1;
         for (const px of [-14.2, 14.2]) for (const py of [-6.8, 6.8]) {
           const pole = new ln(new Ps(0.13, 0.13, 13, 8), __poleMat); pole.rotation.x = Math.PI / 2; pole.position.set(px, py, 6.5); Fn.add(pole);
           const head = new ln(new ar(2.3, 0.5, 1.0), __poleMat); head.position.set(px, py, 13.1); head.rotation.z = Math.atan2(-py, -px) + Math.PI / 2; Fn.add(head);
