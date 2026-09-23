@@ -29756,8 +29756,8 @@ Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
 window.__CAM = sr; window.__ORBIT = Dr;
-Fn.add(new k_(13493503, 4866104, 2.6));
-const Ls = new H_(16777215, 3.4);
+Fn.add(new k_(13493503, 4866104, 2.15));
+const Ls = new H_(16777215, 2.9);
 Ls.position.set(-7, -10, 16);
 Ls.castShadow = !0;
 Ls.shadow.mapSize.set(2048, 2048);
@@ -30688,4 +30688,10 @@ if (/[?&]parity=1/.test(location.search)) (async function () {
 })();
 
 window.__DBG137 = /[?&]dbg137=1/.test(location.search);
-;(function __lawnFix(){var __tries=0;var __iv=setInterval(function(){__tries++;try{var rk=window.__RACKET;if(!rk){if(__tries>600)clearInterval(__iv);return;}var sc=rk,n=0;while(sc.parent&&n<20){sc=sc.parent;n++;}var court=null,ball=null,has=false;sc.traverse(function(o){if(o.isMesh){if(o.geometry.type==="PlaneGeometry"&&o.geometry.parameters.width===200)has=true;if(o.geometry.type==="PlaneGeometry"&&o.geometry.parameters.width===23.77)court=o;if(o.geometry.type==="SphereGeometry"&&o.material.type==="MeshBasicMaterial")ball=o;}});if(has||!court||!ball){if(has||__tries>600)clearInterval(__iv);return;}var g=new court.constructor(new court.geometry.constructor(200,200),new ball.material.constructor({color:0x35772f}));g.position.set(0,0,-0.02);g.receiveShadow=true;sc.add(g);clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
+;(function __lawnFix2(){var __tries=0;var __iv=setInterval(function(){__tries++;try{var rk=window.__RACKET;if(!rk){if(__tries>600)clearInterval(__iv);return;}var sc=rk,n=0;while(sc.parent&&n<20){sc=sc.parent;n++;}var court=null,ball=null,lawn=null,apron=null;sc.traverse(function(o){if(o.isMesh){var g=o.geometry;if(g.type==="PlaneGeometry"){if(g.parameters.width===200)lawn=o;else if(g.parameters.width===23.77)court=o;else if(g.parameters.width===35.77)apron=o;}if(g.type==="SphereGeometry"&&g.parameters&&g.parameters.radius<0.1&&o.material.type==="MeshBasicMaterial")ball=o;}});if(!court||!ball){if(__tries>600)clearInterval(__iv);return;}var BM=ball.material.constructor,SM=court.material.constructor,PG=court.geometry.constructor,Msh=court.constructor,Tex=court.material.map.constructor;
+if(!window.__GRASSTEX){var cv=document.createElement("canvas");cv.width=1024;cv.height=1024;var cx=cv.getContext("2d");cx.fillStyle="#2f6e2b";cx.fillRect(0,0,1024,1024);for(var bi=0;bi<16;bi++){cx.fillStyle=bi%2===0?"rgba(255,255,255,0.055)":"rgba(0,0,0,0.065)";cx.fillRect(bi*64,0,64,1024);}var img=cx.getImageData(0,0,1024,1024),dd=img.data;for(var p=0;p<dd.length;p+=4){var nz=(Math.random()-0.5)*30;dd[p]+=nz*0.8;dd[p+1]+=nz*1.25;dd[p+2]+=nz*0.7;}cx.putImageData(img,0,0);cx.globalAlpha=0.06;cx.strokeStyle="#a8d884";for(var k=0;k<4500;k++){var x=Math.random()*1024,y=Math.random()*1024;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x+(Math.random()*2-1),y-2-Math.random()*2.5);cx.stroke();}cx.globalAlpha=0.05;cx.strokeStyle="#1d4d1c";for(var k2=0;k2<2500;k2++){var x2=Math.random()*1024,y2=Math.random()*1024;cx.beginPath();cx.moveTo(x2,y2);cx.lineTo(x2+(Math.random()*2-1),y2-2-Math.random()*2);cx.stroke();}cx.globalAlpha=1;var gt=new Tex(cv);gt.needsUpdate=true;gt.wrapS=gt.wrapT=1000;gt.repeat.set(14,14);gt.anisotropy=8;window.__GRASSTEX=gt;
+var cv2=document.createElement("canvas");cv2.width=512;cv2.height=512;var c2=cv2.getContext("2d");c2.fillStyle="#a96b52";c2.fillRect(0,0,512,512);var img2=c2.getImageData(0,0,512,512),d2=img2.data;for(var p2=0;p2<d2.length;p2+=4){var n2=(Math.random()-0.5)*22;d2[p2]+=n2;d2[p2+1]+=n2*0.9;d2[p2+2]+=n2*0.8;}c2.putImageData(img2,0,0);var at=new Tex(cv2);at.needsUpdate=true;at.wrapS=at.wrapT=1000;at.repeat.set(8,4);at.anisotropy=8;window.__AProntEX=at;}
+if(!lawn){lawn=new Msh(new PG(200,200),new BM({map:window.__GRASSTEX}));lawn.position.set(0,0,-0.02);lawn.receiveShadow=true;sc.add(lawn);}else if(lawn.material.map!==window.__GRASSTEX){lawn.material=new BM({map:window.__GRASSTEX});}
+if(!apron){apron=new Msh(new PG(35.77,17.97),new SM({map:window.__AProntEX,roughness:0.85}));apron.position.set(0,0,0.001);apron.receiveShadow=true;sc.add(apron);}
+if(!ball.getObjectByName("__halo")){var halo=new Msh(new ball.geometry.constructor(0.058,18,12),new BM({color:0xCCFF00,transparent:true,opacity:0.22,blending:2,depthWrite:false,fog:false}));halo.name="__halo";ball.add(halo);}
+clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
