@@ -29742,7 +29742,7 @@ Fn.background = new pt(198412);
 Fn.fog = new Do(198412, 18, 42);
 const sr = new mn(43, innerWidth / innerHeight, 0.05, 100);
 sr.up.set(0, 0, 1);
-sr.position.set(-16.8, -0.2, 8.6);
+sr.position.set(2.9, -3.3, 1.9);
 const Yn = new bE({ antialias: !0, powerPreference: "high-performance" });
 Yn.setPixelRatio(Math.min(devicePixelRatio, 2));
 Yn.setSize(innerWidth, innerHeight);
@@ -29751,7 +29751,7 @@ Yn.shadowMap.type = Cc;
 Yn.outputColorSpace = on;
 XE.append(Yn.domElement);
 const Dr = new RE(sr, Yn.domElement);
-Dr.target.set(-1.7, 0, 0.9);
+Dr.target.set(0, 0, 0.95);
 Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
@@ -29974,7 +29974,7 @@ async function ZE() {
         for (let Ke = 0; Ke < Re; Ke++) {
           // H2 official visual meshes are group 0; racket visual is group 2 and the site launcher/court/net are group 0.
           // Render all opaque geoms except group 3 helper/collision-only geometry.
-          if (false && Number(Ee.geom_group[Ke]) === 3) {
+          if (Number(Ee.geom_group[Ke]) === 3) {
             if (m[ie][Ke]) m[ie][Ke].visible = !1;
             continue;
           }
@@ -30050,7 +30050,7 @@ async function ZE() {
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
           // feed ball follows the real MuJoCo body (aero forces + contacts)
-          J.visible = !1;
+          J.position.set(-7.8, 3.0, 1.08);
         }
         Yn.render(Fn, sr);
       };
@@ -30381,6 +30381,56 @@ async function ZE() {
       if (__fallen && __simT - __fallT > 2.5) __resetEpisode();
     }
 
+    // === display skin: cosmetic STLs mapped onto the training physics bodies (physics unchanged) ===
+    const __SKIN = [];
+    function __qmul(a, b) { return [a[0]*b[0]-a[1]*b[1]-a[2]*b[2]-a[3]*b[3], a[0]*b[1]+a[1]*b[0]+a[2]*b[3]-a[3]*b[2], a[0]*b[2]-a[1]*b[3]+a[2]*b[0]+a[3]*b[1], a[0]*b[3]+a[1]*b[2]-a[2]*b[1]+a[3]*b[0]]; }
+    function __qrot(q, v) { const u=[0,v[0],v[1],v[2]], c=[q[0],-q[1],-q[2],-q[3]]; const r=__qmul(__qmul(q,u),c); return [r[1],r[2],r[3]]; }
+    try {
+      const __xmlT = await (await fetch(Da + "h2_stand_v3.xml?t=" + Date.now())).text();
+      const __bidx = {}; [...__xmlT.matchAll(/<body name="([^"]+)"/g)].forEach((m, i) => { __bidx[m[1]] = i + 1; });
+      const __stl = (ab) => {
+        const dv = new DataView(ab), n = dv.getUint32(80, true), uu = new Float32Array(n * 9);
+        for (let k = 0; k < n; k++) { const o = 84 + k * 50 + 12; for (let c = 0; c < 9; c++) uu[k * 9 + c] = dv.getFloat32(o + c * 4, true); }
+        const g = new gn(); g.setAttribute("position", new _n(uu, 3)); g.computeVertexNormals(); return g;
+      };
+      const __mat = new xr({ color: 0xb9b9b9, roughness: 0.55, metalness: 0.3 });
+      await Promise.all(Ac.map(async (f) => {
+        try {
+          const nm = f.replace(/\.stl$/i, "");
+          if (!__bidx[nm]) return;
+          const ab = await (await fetch(Da + "assets/" + f)).arrayBuffer();
+          const m = new ln(__stl(ab), __mat); m.castShadow = !0; Fn.add(m);
+          __SKIN.push({ bi: __bidx[nm], mesh: m, op: null, oq: null });
+        } catch (e) {}
+      }));
+      try {
+        const ab = await (await fetch(Da + "assets/tennis/entire_visual.STL?t=" + Date.now())).arrayBuffer();
+        const m = new ln(__stl(ab), __mat); m.castShadow = !0; Fn.add(m);
+        __SKIN.push({ bi: __bidx["right_wrist_yaw_link"], mesh: m, op: [0.0415, -0.003, 0], oq: [0.5, -0.5, 0.5, -0.5] });
+      } catch (e) {}
+      const __mach = new ln(new ar(1.1, 0.96, 1.04), new xr({ color: 0xff5905 })); __mach.position.set(-7.8, 3.0, 0.52); __mach.castShadow = !0; Fn.add(__mach);
+      const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
+      const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(-7.8, 2.62, 0.15); Fn.add(__wheel);
+      const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
+      (function __skinTick() {
+        try {
+          for (const s2 of __SKIN) {
+            const i3 = s2.bi * 3, i4 = s2.bi * 4;
+            const bq = [u.xquat[i4], u.xquat[i4+1], u.xquat[i4+2], u.xquat[i4+3]];
+            if (s2.op) {
+              const wp = __qrot(bq, s2.op);
+              s2.mesh.position.set(u.xpos[i3] + wp[0], u.xpos[i3+1] + wp[1], u.xpos[i3+2] + wp[2]);
+              const wq = __qmul(bq, s2.oq);
+              s2.mesh.quaternion.set(wq[1], wq[2], wq[3], wq[0]);
+            } else {
+              s2.mesh.position.set(u.xpos[i3], u.xpos[i3+1], u.xpos[i3+2]);
+              s2.mesh.quaternion.set(bq[1], bq[2], bq[3], bq[0]);
+            }
+          }
+        } catch (e) {}
+        requestAnimationFrame(__skinTick);
+      })();
+    } catch (e) {}
     const J = new ln(
       new br(0.033, 20, 14),
       new xr({ color: 13106991, emissive: 3359744 }),
@@ -30397,7 +30447,7 @@ async function ZE() {
       (document.querySelector("#physics").textContent =
         "MuJoCo 3.13 WASM · live"),
       (document.querySelector("#geo").textContent =
-        "H2 training MJCF · collision-geom render"),
+        "display skin · training physics (v3 MJCF)"),
       (document.querySelector("#badge").textContent = "REAL MUJOCO · LIVE"),
       document.querySelector("#loadbarfill") &&
         (document.querySelector("#loadbarfill").style.width = "100%"),
