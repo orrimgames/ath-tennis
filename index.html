@@ -103,6 +103,16 @@
         if (f.oracle_fell !== undefined) rows.push('<b>F64 ORACLE FELL</b> ' + pct(frac(f.oracle_fell)));
       }
       if (f.promoted === true) rows.push('<b>PROMOTED</b> this checkpoint is now the live best');
+      var cmean = pick(f, ['closest_mean_m', 'closest_mean', 'racket_ball_mean_m', 'min_dist_mean_m']);
+      var cbest = pick(f, ['closest_best_m', 'closest_best', 'racket_ball_best_m', 'min_dist_best_m']);
+      var frew = pick(f, ['reward', 'episode_reward', 'f64_reward']);
+      if (cmean !== undefined || cbest !== undefined) {
+        var cl = '<b>F64 CLOSEST RACKET-BALL</b> ';
+        if (cmean !== undefined) cl += 'mean ' + Number(cmean).toFixed(2) + ' m';
+        if (cbest !== undefined) cl += (cmean !== undefined ? ' &middot; ' : '') + 'best ' + Number(cbest).toFixed(2) + ' m';
+        rows.push(cl);
+      }
+      if (frew !== undefined) rows.push('<b>F64 REWARD</b> ' + Number(frew).toFixed(1));
     } else if (f64Tried) {
       rows.push('<span style="color:#8a97a5;font-size:10px">f64 screen: awaiting first publish from training</span>');
     }
