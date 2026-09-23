@@ -30365,6 +30365,7 @@ async function ZE() {
       document.title = "PARITY maxdiff=" + maxd.toExponential(3) + " @" + mi;
     };
     function __resetEpisode() {
+      if (window.__DBG137) { window.__rstN = (window.__rstN || 0) + 1; if (window.__rstN <= 5 || window.__rstN % 50 === 0) console.log("RESET137 #" + window.__rstN); }
       try { r.mj_resetData(a, u); } catch (e) {}
       for (let i = 0; i < 36; i++) u.qpos[i] = __HOME[i];
       u.qpos[0] = __HOME[0] + 9.0; u.qpos[1] = __HOME[1] + 3.0;
@@ -30460,7 +30461,8 @@ async function ZE() {
             xf[__BALLB * 6 + 3] = 0; xf[__BALLB * 6 + 4] = 0; xf[__BALLB * 6 + 5] = 0;
           }
         } catch (e) {}
-        r.mj_step(a, u);
+        if (window.__DBG137 && (__simT - (window.__lastDbg || 0) >= 1)) { window.__lastDbg = __simT; console.log("DBG137 t=" + __simT.toFixed(2) + " z=" + u.qpos[2].toFixed(3) + " ball=" + u.qpos[36].toFixed(2) + "," + u.qpos[37].toFixed(2) + "," + u.qpos[38].toFixed(2) + " ep=" + __epStep + " bnc=" + __bounces + " hist=" + __HIST.length); }
+        try { r.mj_step(a, u); } catch (e) { if (!window.__stepErr) { window.__stepErr = 1; console.log("STEP ERR", String(e)); } __simT += __DT; continue; }
         if (__BALLMODE) {
           try {
             const bz = u.qpos[__BALLQ + 2], bvz = u.qvel[__BALLV + 2];
@@ -30718,3 +30720,5 @@ if (/[?&]parity=1/.test(location.search)) (async function () {
     mm(rf);
   } catch (e4) { window.__PARITY = { error: String(e4) }; document.title = "PARITY ERROR " + e4; }
 })();
+
+window.__DBG137 = /[?&]dbg137=1/.test(location.search);
