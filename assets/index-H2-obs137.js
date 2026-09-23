@@ -30545,7 +30545,7 @@ async function ZE() {
       const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
       const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(-7.8, 2.62, 0.15); Fn.add(__wheel);
       const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
-      // === lawn setting: plain grass, stadium removed (display-only) ===       try {         const __ground = new ln(new Di(200, 200), new xr({ color: 0x256b23, roughness: 1, metalness: 0 }));         __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground);       } catch (e) {}
+      // === lawn setting: plain grass, stadium removed (display-only) ===       try {         const __ground = new ln(new Di(200, 200), new jc({ color: 0x35772f }));         __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground);       } catch (e) {}
 
       let __feedLastCy = -1, __feedLastEp = -1, __feedP = null, __feedV = null, __feedAge = 0, __prevSimT = -1;
       (function __skinTick() {
