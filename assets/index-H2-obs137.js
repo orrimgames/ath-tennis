@@ -29756,21 +29756,21 @@ Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
 window.__CAM = sr; window.__ORBIT = Dr;
-Fn.add(new k_(13493503, 4866104, 2.6));
-const Ls = new H_(16777215, 3.4);
+Fn.add(new k_(13493503, 4866104, 3.2));
+const Ls = new H_(16777215, 4.2);
 Ls.position.set(-7, -10, 16);
 Ls.castShadow = !0;
 Ls.shadow.mapSize.set(2048, 2048);
 Ls.shadow.bias = -0.00035; Ls.shadow.normalBias = 0.04; Ls.shadow.camera.left = -16; Ls.shadow.camera.right = 16; Ls.shadow.camera.top = 16; Ls.shadow.camera.bottom = -16; Ls.shadow.camera.near = 1; Ls.shadow.camera.far = 60;
 Fn.add(Ls);
-const Fs = new H_(16777215, 1.7);
+const Fs = new H_(16777215, 2.2);
 Fs.position.set(8, 10, 12);
 Fs.castShadow = !1;
 Fn.add(Fs);
-const Gs = new H_(16777215, 0.9);
+const Gs = new H_(16777215, 1.3);
 Gs.position.set(0, 14, 6);
 Gs.castShadow = !1;
-Fn.add(Gs);
+Fn.add(Gs); const __Ns = new H_(16777215, 1.0); __Ns.position.set(-12, 8, 10); __Ns.castShadow = !1; Fn.add(__Ns);
 const Da = "./assets/unitree_h2/",
   Ac = [
     "pelvis.stl",
@@ -30551,7 +30551,7 @@ async function ZE() {
         const __mkTier = (w, d, h, x, y, z, mi) => { const m = new ln(new ar(w, d, h), __arenaMats[mi % 2]); m.position.set(x, y, z); m.receiveShadow = !0; Fn.add(m); return m; };
         for (let s2 = -1; s2 <= 1; s2 += 2) {
           for (let i = 0; i < 4; i++) __mkTier(34, 1.7, 1.15, 0, s2 * (8.8 + i * 1.75), 0.58 + i * 1.12, i);
-          for (let i = 0; i < 3; i++) __mkTier(1.7, 20, 1.15, s2 * (16.4 + i * 1.75), 0, 0.58 + i * 1.12, i + 1);
+          for (let i = 0; i < 3; i++) __mkTier(1.7, 20, 1.15, s2 * (22.4 + i * 1.75), 0, 0.58 + i * 1.12, i + 1);
         }
         const __ground = new ln(new Di(90, 90), new xr({ color: 0x0b1210, roughness: 1, metalness: 0 }));
         __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground);
@@ -30588,7 +30588,7 @@ async function ZE() {
           c.fillStyle = "#9be15d"; c.font = "bold 60px system-ui, sans-serif"; c.fillText("ROBOT  0  -  0  BALL", W / 2, 424);
         });
         const __scoreMat = new jc({ map: __scoreTx }); __scoreMat.fog = !1;
-        __mkPanel(10, 5, __scoreMat, -18.2, 0, 6.6, 0, 0, 3.5);
+        __mkPanel(10, 5, __scoreMat, -24.6, 0, 6.6, 0, 0, 3.5);
         const __poleMat = new xr({ color: 0x2a313d, roughness: 0.6, metalness: 0.6 });
         const __lampMat = new jc({ color: 0xfff3c4 }); __lampMat.fog = !1;
         for (const px of [-14.2, 14.2]) for (const py of [-6.8, 6.8]) {
