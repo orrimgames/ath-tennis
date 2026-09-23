@@ -56,18 +56,21 @@
     var d = j.utc ? new Date(j.utc) : null;
     document.getElementById('trainprog_asof').textContent = 'as of ' + (d && !isNaN(d) ? d.toLocaleString() : 'unknown');
   }
+  var got = false;
   function tick() {
     fetch(URL_, { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-      .then(render)
+      .then(function (j) { got = true; render(j); setTimeout(tick, 60000); })
       .catch(function () {
-        tog.innerHTML = 'TRAINING &#9656;';
-        document.getElementById('trainprog_body').textContent = 'waiting for first publish\u2026';
-        document.getElementById('trainprog_asof').textContent = '';
+        if (!got) {
+          tog.innerHTML = 'TRAINING &#9656;';
+          document.getElementById('trainprog_body').textContent = 'waiting for first publish\u2026';
+          document.getElementById('trainprog_asof').textContent = '';
+        }
+        setTimeout(tick, got ? 60000 : 12000);
       });
   }
   tick();
-  setInterval(tick, 60000);
 })();
 </script>
 
