@@ -30097,6 +30097,29 @@ async function ZE() {
     await Promise.all(Array.from({ length: 6 }, __worker));
     let [e, ...t] = __out;
     e = e.replace(/(<body name="ball_machine" pos=")[^"]+("[^>]*>)/, "$1-7.8 3.0 0$2");
+    let __BALLMODE = false, __FEEDS = null, __RCSITE = 5, __epStep = 0, __bounces = 0, __bnArm = false, __contact = false, __HIST = [], __HORIZON = 172;
+    try {
+      const __sp = await (await fetch("https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/best/spec.json", { cache: "no-store" })).json();
+      const __on = __sp && (__sp.obs_size || +(((__sp.onnx && __sp.onnx.input) || "").match(/batch,(\d+)/) || [0, 0])[1] || 0);
+      if (__on === 137) {
+        const __BXML = await (await fetch(Da + "h2_ball.xml?t=" + Date.now())).text();
+        if (__BXML.indexOf("tennis_racket") >= 0 && __BXML.indexOf('name="ball"') >= 0) {
+          e = __BXML; __BALLMODE = true;
+          const __sm = [...__BXML.matchAll(/<site name="([^"]+)"/g)].map((m2) => m2[1]);
+          const __ri = __sm.indexOf("racket_center"); if (__ri >= 0) __RCSITE = __ri;
+          try {
+            const __fb = await (await fetch(Da + "feeds.npy?t=" + Date.now())).arrayBuffer();
+            const __dv = new DataView(__fb);
+            const __hl = __dv.getUint16(8, true);
+            const __hd = new TextDecoder().decode(new Uint8Array(__fb, 10, __hl));
+            const __shm = /'shape':\s*\((\d+),\s*(\d+)\)/.exec(__hd);
+            if (__shm) __FEEDS = { n: +__shm[1], d: new Float32Array(__fb, 10 + __hl, (+__shm[1]) * 13) };
+          } catch (__e3) { console.log("feeds.npy unavailable", __e3); }
+          if (!__FEEDS || !__FEEDS.n) { e = __out[0]; __BALLMODE = false; }
+        }
+      }
+    } catch (__e2) { console.log("ball-mode probe failed - keeping stand v3", __e2); }
+    window.__BALLMODE = __BALLMODE;
     ((bc.textContent = "Compiling official Unitree H2 model…"),
       document.querySelector("#loadbarfill") &&
         (document.querySelector("#loadbarfill").style.width = "92%"));
@@ -30146,17 +30169,14 @@ async function ZE() {
         for (let i = 0; i < __NA; i++) __MID.push(0.5 * (Number(cr[2 * i]) + Number(cr[2 * i + 1])));
       }
     } catch (e) {}
-    const __RHO = 1.21, __BCD = 0.507, __BRAD = 0.033, __BAREA = Math.PI * __BRAD * __BRAD;
+    const __RHO = 1.21, __BCD = 0.55, __BRAD = 0.033, __BAREA = Math.PI * __BRAD * __BRAD;
     let __omg = [0, 0, 0];
     function __aeroF(vx, vy, vz) {
       const sp = Math.hypot(vx, vy, vz);
       if (sp < 1e-9) return [0, 0, 0];
       const S = __BRAD * Math.hypot(__omg[0], __omg[1], __omg[2]) / sp;
       let cl;
-      if (S <= 0) cl = 0;
-      else if (S >= 0.53) cl = 0.30;
-      else if (S <= 0.14) cl = 0.10 * (S / 0.14);
-      else cl = 0.10 + 0.20 * ((S - 0.14) / 0.39);
+      cl = S / (2 * S + 1);
       const q = 0.5 * __RHO * __BAREA * sp * sp;
       const cx = __omg[1] * vz - __omg[2] * vy, cy = __omg[2] * vx - __omg[0] * vz, cz = __omg[0] * vy - __omg[1] * vx;
       const cn = Math.hypot(cx, cy, cz);
@@ -30257,12 +30277,13 @@ async function ZE() {
         $("fs_speed").oninput = (e) => { __FEED.speed = Number(e.target.value); __FEED.auto = false; __FEED.rand = false; show(); };
         $("fs_auto").onclick = () => { __FEED.auto = !__FEED.auto; show(); };
         $("fs_rand").onclick = () => { __FEED.rand = !__FEED.rand; show(); };
+        try { if (__BALLMODE) $("feedctl").style.display = "none"; } catch (e) {}
         window.__feedUISync = () => { try { $("fs_clear").value = __FEED.clear; $("fs_spin").value = __FEED.rpm; $("fs_side").value = __FEED.side; $("fs_speed").value = __FEED.speed; } catch (e) {} show(); };
         show();
       } catch (e) {}
     }
     let __simT = 0, __lastWall = null, __fallen = false, __fallT = 0, __ep = 0, __nextCtrl = 0, __lastCy = -1, __infer = false, __sess = null;
-    const __OBS = new Float32Array(93);
+    const __OBS = new Float32Array(__BALLMODE ? 137 : 93);
     const __Q0 = __HOME.slice(7, 36);
     const __PREV = new Float32Array(29);
     function __fillOBS(dd) {
@@ -30271,6 +30292,37 @@ async function ZE() {
         __OBS[0] = -m[15]; __OBS[1] = -m[16]; __OBS[2] = -m[17];
         __OBS[3] = dd.qvel[3]; __OBS[4] = dd.qvel[4]; __OBS[5] = dd.qvel[5];
         for (let i = 0; i < 29; i++) { __OBS[6+i] = dd.qpos[7+i] - __Q0[i]; __OBS[35+i] = 0.1*dd.qvel[6+i]; __OBS[64+i] = __PREV[i]; }
+        if (__BALLMODE) {
+          const r0 = [m[9], m[10], m[11]], r1 = [m[12], m[13], m[14]], r2 = [m[15], m[16], m[17]];
+          const RT = (v) => [r0[0]*v[0]+r1[0]*v[1]+r2[0]*v[2], r0[1]*v[0]+r1[1]*v[1]+r2[1]*v[2], r0[2]*v[0]+r1[2]*v[1]+r2[2]*v[2]];
+          const bs = [dd.qpos[0], dd.qpos[1], dd.qpos[2]];
+          const bp = [dd.qpos[36], dd.qpos[37], dd.qpos[38]];
+          const bv = [dd.qvel[35], dd.qvel[36], dd.qvel[37]];
+          const rp = RT([bp[0]-bs[0], bp[1]-bs[1], bp[2]-bs[2]]);
+          const rv = RT(bv);
+          __OBS[93] = rp[0]; __OBS[94] = rp[1]; __OBS[95] = rp[2];
+          __OBS[96] = 0.1*rv[0]; __OBS[97] = 0.1*rv[1]; __OBS[98] = 0.1*rv[2];
+          const sx = dd.site_xpos[__RCSITE*3], sy = dd.site_xpos[__RCSITE*3+1], sz = dd.site_xpos[__RCSITE*3+2];
+          const rc = RT([sx-bp[0], sy-bp[1], sz-bp[2]]);
+          __OBS[99] = rc[0]; __OBS[100] = rc[1]; __OBS[101] = rc[2];
+          const lv = RT([dd.qvel[0], dd.qvel[1], dd.qvel[2]]);
+          __OBS[102] = lv[0]; __OBS[103] = lv[1]; __OBS[104] = lv[2];
+          __OBS[105] = dd.qpos[2];
+          __OBS[106] = __epStep / 172;
+          for (let k = 0; k < 5; k++) {
+            const h = __HIST[k] || [bp[0], bp[1], bp[2], bv[0], bv[1], bv[2]];
+            const hp = RT([h[0]-bs[0], h[1]-bs[1], h[2]-bs[2]]);
+            const hv = RT([h[3], h[4], h[5]]);
+            __OBS[107+3*k] = hp[0]; __OBS[108+3*k] = hp[1]; __OBS[109+3*k] = hp[2];
+            __OBS[122+3*k] = 0.1*hv[0]; __OBS[123+3*k] = 0.1*hv[1]; __OBS[124+3*k] = 0.1*hv[2];
+          }
+        }
+      } catch (e) {}
+    }
+    function __histPush(dd) {
+      try {
+        __HIST.push([dd.qpos[36], dd.qpos[37], dd.qpos[38], dd.qvel[35], dd.qvel[36], dd.qvel[37]]);
+        while (__HIST.length > 5) __HIST.shift();
       } catch (e) {}
     }
     window.__ATH_TE = function () {}; // physics owns the robot; procedural writer retired
@@ -30282,7 +30334,7 @@ async function ZE() {
         try {
           const spec = await (await fetch("https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/best/spec.json", { cache: "no-store" })).json();
           const __obsN = spec && (spec.obs_size || +(((spec.onnx && spec.onnx.input) || "").match(/batch,(\d+)/) || [0, 0])[1] || Math.max.apply(null, (spec.obs_layout || []).map(function (s) { return s.slice[1]; })));
-          if (__obsN === 93) {
+          if (__obsN === 93 || (__BALLMODE && __obsN === 137)) {
             buf = await (await fetch("https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/best/policy.onnx", { cache: "no-store" })).arrayBuffer();
             console.log("policy: HF best/ loaded (" + (spec.model || "policy.onnx") + ", obs " + __obsN + ")");
           } else {
@@ -30296,6 +30348,22 @@ async function ZE() {
         __sess = await ort.InferenceSession.create(buf, { executionProviders: ["wasm"] });
       } catch (e) { __sess = null; }
     })();
+    window.__MUJOCO_REF = function (rf) {
+      if (!__BALLMODE) throw new Error("not in ball mode");
+      try { r.mj_resetData(a, u); } catch (e) {}
+      for (let i = 0; i < 43; i++) u.qpos[i] = rf.qpos[i];
+      for (let i = 0; i < 41; i++) u.qvel[i] = rf.qvel[i];
+      __PREV.fill(0); __epStep = 0; __bounces = 0; __bnArm = false; __contact = false;
+      __HIST.length = 0;
+      const F = rf.feed;
+      for (let i = 0; i < 5; i++) __HIST.push([F[0], F[1], F[2], F[3], F[4], F[5]]);
+      r.mj_forward(a, u);
+      __fillOBS(u);
+      let maxd = 0, mi = -1;
+      for (let i = 0; i < 137; i++) { const d = Math.abs(__OBS[i] - rf.obs[i]); if (d > maxd) { maxd = d; mi = i; } }
+      window.__PARITY = { maxdiff: maxd, worst_index: mi, got: __OBS[mi], want: rf.obs[mi] };
+      document.title = "PARITY maxdiff=" + maxd.toExponential(3) + " @" + mi;
+    };
     function __resetEpisode() {
       try { r.mj_resetData(a, u); } catch (e) {}
       for (let i = 0; i < 36; i++) u.qpos[i] = __HOME[i];
@@ -30306,7 +30374,22 @@ async function ZE() {
       try { u.qvel.fill(0); } catch (e) {}
       try { const xf = u.xfrc_applied; if (xf && xf.fill) xf.fill(0); } catch (e) {}
       for (let i = 0; i < __NA; i++) u.ctrl[i] = __MID[i];
-      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; __lastCy = -1; try { if (true) throw 0; u.qpos[__BALLQ] = 0; u.qpos[__BALLQ+1] = 0; u.qpos[__BALLQ+2] = -2; u.qpos[__BALLQ+3] = 1; u.qpos[__BALLQ+4] = 0; u.qpos[__BALLQ+5] = 0; u.qpos[__BALLQ+6] = 0; } catch (e) {} try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
+      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; __lastCy = -1; if (__BALLMODE && __FEEDS && __FEEDS.n > 0) {
+        const F = __FEEDS.d, o13 = ((Math.random() * __FEEDS.n) | 0) * 13;
+        const rx = 9 + Math.random() * 4, ry = -4 + Math.random() * 8, yaw = Math.PI + (Math.random() - 0.5);
+        u.qpos[0] = rx; u.qpos[1] = ry; u.qpos[2] = 1.03;
+        u.qpos[3] = Math.cos(yaw / 2); u.qpos[4] = 0; u.qpos[5] = 0; u.qpos[6] = Math.sin(yaw / 2);
+        for (let i = 0; i < 29; i++) u.qpos[7 + i] = __HOME[7 + i] + (Math.random() - 0.5) * 0.1;
+        u.qpos[36] = F[o13]; u.qpos[37] = F[o13+1]; u.qpos[38] = F[o13+2];
+        u.qpos[39] = 1; u.qpos[40] = 0; u.qpos[41] = 0; u.qpos[42] = 0;
+        u.qvel[35] = F[o13+3]; u.qvel[36] = F[o13+4]; u.qvel[37] = F[o13+5];
+        u.qvel[38] = F[o13+6]; u.qvel[39] = F[o13+7]; u.qvel[40] = F[o13+8];
+        __omg = [F[o13+6], F[o13+7], F[o13+8]];
+        __epStep = 0; __bounces = 0; __bnArm = false; __contact = false;
+        __HIST.length = 0;
+        for (let i = 0; i < 5; i++) __HIST.push([F[o13], F[o13+1], F[o13+2], F[o13+3], F[o13+4], F[o13+5]]);
+        __HORIZON = Math.ceil((F[o13+12] + 0.2) / 0.02);
+      } try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
       r.mj_forward(a, u);
     }
     window.__PHYS_STATE = function () {
@@ -30329,11 +30412,12 @@ async function ZE() {
           if (__sess && !__infer) {
             __infer = true;
             try { __fillOBS(u);
-                            __sess.run({ [__sess.inputNames[0]]: new ort.Tensor("float32", __OBS, [1, 93]) })
+                            __sess.run({ [__sess.inputNames[0]]: new ort.Tensor("float32", __OBS, [1, __OBS.length]) })
                 .then((res) => { window.__ACT = res[__sess.outputNames[0]].data; try { __PREV.set(window.__ACT); } catch (e) {} __infer = false; })
                 .catch(() => { __infer = false; });
             } catch (e) { __infer = false; }
           }
+          if (__BALLMODE) { __epStep++; __histPush(u); }
           const aa = window.__ACT;
           try {
             const cr = a.actuator_ctrlrange;
@@ -30370,13 +30454,24 @@ async function ZE() {
         }
         try {
           const xf = u.xfrc_applied;
-          if (false && xf) {
+          if (__BALLMODE && xf) {
             const f = __aeroF(u.qvel[__BALLV], u.qvel[__BALLV + 1], u.qvel[__BALLV + 2]);
             xf[__BALLB * 6] = f[0]; xf[__BALLB * 6 + 1] = f[1]; xf[__BALLB * 6 + 2] = f[2];
             xf[__BALLB * 6 + 3] = 0; xf[__BALLB * 6 + 4] = 0; xf[__BALLB * 6 + 5] = 0;
           }
         } catch (e) {}
         r.mj_step(a, u);
+        if (__BALLMODE) {
+          try {
+            const bz = u.qpos[__BALLQ + 2], bvz = u.qvel[__BALLV + 2];
+            if (bz <= 0.036 && bvz < -0.01 && !__bnArm) { __bounces++; __bnArm = true; }
+            if (bz > 0.05) __bnArm = false;
+            const sx2 = u.site_xpos[__RCSITE*3], sy2 = u.site_xpos[__RCSITE*3+1], sz2 = u.site_xpos[__RCSITE*3+2];
+            const dcq = Math.hypot(u.qpos[__BALLQ]-sx2, u.qpos[__BALLQ+1]-sy2, u.qpos[__BALLQ+2]-sz2);
+            if (dcq < 0.16) __contact = true;
+            if ((u.xmat[17] < 0.6) || u.qpos[2] < 0.65 || __contact || __bounces >= 2 || __epStep >= __HORIZON) __resetEpisode();
+          } catch (e) {}
+        }
         try {
           const RB = 0.033, bq = __BALLQ, bv = __BALLV; if (true) throw 0;
           if (u.qpos[bq + 2] <= RB + 0.002 && u.qvel[bv + 2] < 0) {
@@ -30507,7 +30602,7 @@ async function ZE() {
             __prevSimT = sT;
             if (__pst.ep !== __feedLastEp) { __feedLastEp = __pst.ep; __feedLastCy = -1; }
             const __cy = Math.floor(sT / 4.0);
-            if (__cy !== __feedLastCy) {
+            if (!__BALLMODE && __cy !== __feedLastCy) {
               __feedLastCy = __cy;
               let __h = (n) => { const x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
               if (__FEED.rand) {
@@ -30545,7 +30640,7 @@ async function ZE() {
                 __wheel2.position.set(__lx + 0.38 * Math.sin(__A), __ly - 0.38 * Math.cos(__A), 0.15); __wheel2.rotation.z = __A;
               } catch (me) {}
             }
-            if (__feedP && sdt > 0) {
+            if (__feedP && sdt > 0 && !__BALLMODE) {
               __feedAge += sdt;
               const f2 = __aeroF(__feedV[0], __feedV[1], __feedV[2]);
               __feedV[0] += f2[0] / 0.057 * sdt; __feedV[1] += f2[1] / 0.057 * sdt; __feedV[2] += (f2[2] / 0.057 - 9.81) * sdt;
@@ -30566,7 +30661,7 @@ async function ZE() {
               if (__feedP[2] <= RB2 + 0.003 && __feedV[2] === 0) { const fr = Math.max(0, 1 - 1.4 * sdt); __feedV[0] *= fr; __feedV[1] *= fr; }
               if (__feedAge > 12 || __feedP[0] > 13 || Math.abs(__feedP[1]) > 7) __feedP = null;
             }
-            if (__feedP) { J.visible = !0; J.position.set(__feedP[0], __feedP[1], Math.max(__feedP[2], 0.033)); }
+            if (__BALLMODE) { J.visible = !0; J.position.set(u.xpos[__BALLB*3], u.xpos[__BALLB*3+1], Math.max(u.xpos[__BALLB*3+2], 0.033)); } else if (__feedP) { J.visible = !0; J.position.set(__feedP[0], __feedP[1], Math.max(__feedP[2], 0.033)); }
             else { J.visible = !0; J.position.set(__mach.position.x, __mach.position.y, 1.08); }
           } catch (fe) {}
         } catch (e) {}
@@ -30612,3 +30707,14 @@ const JE = Object.freeze(
     value: "Module",
   }),
 );
+
+// ---- obs-137 parity hook (?parity=1): reset to ref episode, build obs, report max abs diff ----
+if (/[?&]parity=1/.test(location.search)) (async function () {
+  try {
+    for (let i = 0; i < 240 && !window.__BALLMODE; i++) await new Promise((s2) => setTimeout(s2, 500));
+    const rf = await (await fetch("./assets/unitree_h2/ref_obs.json?t=" + Date.now())).json();
+    const mm = window.__MUJOCO_REF;
+    if (!mm) throw new Error("no mujoco ref hook");
+    mm(rf);
+  } catch (e4) { window.__PARITY = { error: String(e4) }; document.title = "PARITY ERROR " + e4; }
+})();

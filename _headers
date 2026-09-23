@@ -1,6 +1,11 @@
-/*
-  Cache-Control: public, max-age=600
-/index.html
-  Cache-Control: no-cache, no-store, must-revalidate
+# HTML entry point: always revalidate so deploys show up immediately
 /
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/index-dev.html
+  Cache-Control: no-cache
+
+# Static assets: short cache (deploys update them without filename changes)
+/assets/*
+  Cache-Control: public, max-age=3600, must-revalidate
