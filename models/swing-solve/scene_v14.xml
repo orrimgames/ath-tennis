@@ -244,7 +244,45 @@
                             <inertial pos="0.08 -0.004 0.28" mass="0.32" diaginertia="0.014 0.014 0.003" />
                             <geom name="tennis_racket_visual" pos="0.0415 -0.003 0" quat="0.5 -0.5 0.5 -0.5" class="visual" mesh="tennis_racket" />
                             <geom name="tennis_racket_collision" pos="0.1025 -0.004 0.4" quat="0 0 -0.7071068 0.7071068" type="cylinder" size="0.12 0.005" contype="4" conaffinity="4" condim="3" friction="0.6 0.005 0.02" solref="0.004 0.5" group="3" rgba="1 0.3 0.1 0.4" />
-                          <site name="racket_contact" pos="0.1025 -0.004 0.4" size="0.01" /></body>
+                          <site name="racket_contact" pos="0.1025 -0.004 0.4" size="0.01" />
+                            <body name="tennis_racket_strings" pos="0.1025 -0.004 0.4" quat="0 0 -0.7071068 0.7071068">
+                              <geom name="string_m0" type="box" pos="-0.12880 0.00710 0" size="0.00045 0.04181 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m1" type="box" pos="-0.11199 0.00710 0" size="0.00045 0.09315 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m2" type="box" pos="-0.09517 0.00710 0" size="0.00045 0.12089 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m3" type="box" pos="-0.07836 0.00710 0" size="0.00045 0.13987 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m4" type="box" pos="-0.06155 0.00710 0" size="0.00045 0.15337 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m5" type="box" pos="-0.04473 0.00710 0" size="0.00045 0.16276 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m6" type="box" pos="-0.02792 0.00710 0" size="0.00045 0.16873 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m7" type="box" pos="-0.01111 0.00710 0" size="0.00045 0.17164 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m8" type="box" pos="0.00571 0.00710 0" size="0.00045 0.17164 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m9" type="box" pos="0.02252 0.00710 0" size="0.00045 0.16873 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m10" type="box" pos="0.03933 0.00710 0" size="0.00045 0.16276 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m11" type="box" pos="0.05615 0.00710 0" size="0.00045 0.15337 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m12" type="box" pos="0.07296 0.00710 0" size="0.00045 0.13987 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m13" type="box" pos="0.08977 0.00710 0" size="0.00045 0.12089 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m14" type="box" pos="0.10659 0.00710 0" size="0.00045 0.09315 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_m15" type="box" pos="0.12340 0.00710 0" size="0.00045 0.04181 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c0" type="box" pos="-0.00270 -0.15974 0" size="0.03160 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c1" type="box" pos="-0.00270 -0.14120 0" size="0.06585 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c2" type="box" pos="-0.00270 -0.12266 0" size="0.08533 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c3" type="box" pos="-0.00270 -0.10413 0" size="0.09916 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c4" type="box" pos="-0.00270 -0.08559 0" size="0.10951 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c5" type="box" pos="-0.00270 -0.06705 0" size="0.11730 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c6" type="box" pos="-0.00270 -0.04851 0" size="0.12302 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c7" type="box" pos="-0.00270 -0.02998 0" size="0.12694 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c8" type="box" pos="-0.00270 -0.01144 0" size="0.12924 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c9" type="box" pos="-0.00270 0.00710 0" size="0.13000 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c10" type="box" pos="-0.00270 0.02564 0" size="0.12924 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c11" type="box" pos="-0.00270 0.04418 0" size="0.12694 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c12" type="box" pos="-0.00270 0.06271 0" size="0.12302 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c13" type="box" pos="-0.00270 0.08125 0" size="0.11730 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c14" type="box" pos="-0.00270 0.09979 0" size="0.10951 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c15" type="box" pos="-0.00270 0.11833 0" size="0.09916 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c16" type="box" pos="-0.00270 0.13686 0" size="0.08533 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c17" type="box" pos="-0.00270 0.15540 0" size="0.06585 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                              <geom name="string_c18" type="box" pos="-0.00270 0.17394 0" size="0.03160 0.00045 0.00045" contype="0" conaffinity="0" group="2" rgba="0.12 0.12 0.12 0.95" />
+                            </body>
+                          </body>
                         </body>
                       </body>
                     </body>

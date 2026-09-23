@@ -34,3 +34,5 @@ The meshes are not duplicated here on purpose.
 - `robot_only.xml`, `robot_nf2.xml`, `robot_nofix.xml` - robot-only MJCF extractions.
 - `mini.xml` - minimal repro scene.
 - `scene_v14_roll001.xml` - scene_v14 with rolling friction 0.001 baked into the ball and racket geoms (ball-contact scene; used by the solved swing replay - see results/wb-swing/).
+
+Both `scene_v14*.xml` include a visual-only string bed on the racket (35 thin box geoms fitted to the STL head ellipse, contype 0 / conaffinity 0 / group 2 in a massless child body). Zero physics effect; collision disc untouched.

@@ -1,3 +1,9 @@
+# **WITHDRAWN - 2026-09-22**
+
+**This package is physically impossible as solved.** The racket was collision-exempt versus the robot body (racket contype/conaffinity 4 vs body 2/2, so racket-vs-body was never checked). Full-envelope validation shows the hoop penetrating the torso (-12.1 cm) and the head (-7.6 cm). Every number below (contact speed, exit, spin, torque table) is invalid and retained for provenance only. A corrected re-solve with the racket as a real collider will replace this package.
+
+---
+
 # H2 whole-body forehand swing solve - final package (scene_v14 physics)
 
 ## Result: MuJoCo replay, stationary ball at C (scene_v14, dt 2.5e-4, ball and racket rolling 0.001)

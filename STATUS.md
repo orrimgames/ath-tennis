@@ -22,6 +22,8 @@ Open problems with current state: docs/status/open-questions.md.
 
 ## Known limits (kept honest on purpose)
 
+- WITHDRAWN (2026-09-22): the wb-swing package in results/wb-swing/ - racket was collision-exempt vs the body and the solved path passes through the torso (-12.1 cm) and head (-7.6 cm) in full-envelope validation. Numbers invalid, kept for provenance; corrected re-solve with the racket as a real collider is in flight.
+
 - No trained locomotion yet (parity gate passed v14 on 2026-09-22; training pipeline restart is next).
 - Stage-1 XML actuator limits were wrong pre-training (18/29). Corrected to the official
   unitree_ros H2.urdf: shoulder pitch 130, shoulder roll/elbow/wrist roll 60, wrist pitch/yaw 10,
