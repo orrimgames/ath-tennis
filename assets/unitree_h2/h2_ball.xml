@@ -21,7 +21,7 @@
   </default>
 
   <worldbody>
-    <geom name="floor" size="30 30 0.1" type="plane" friction="0.6" rgba="0.15 0.18 0.22 1"/>
+    <geom name="floor" size="30 30 0.1" type="plane" friction="0.6" rgba="0.15 0.18 0.22 1" group="3"/>
     <body name="pelvis" childclass="h2" pos="0 0 1.03">
       <inertial pos="0.00046244 -4.214e-05 -0.0147344" quat="0.707546 0.706201 -0.0235095 -0.0102787" mass="7.60468" diaginertia="0.0355137 0.0275324 0.0228779"/>
       <joint name="floating_base_joint" type="free"/>

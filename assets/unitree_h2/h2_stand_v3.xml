@@ -180,7 +180,7 @@
         </body>
       </body>
     </body>
-    <geom name="floor" type="plane" size="30 30 .1" rgba=".15 .18 .22 1" friction=".6 .005 .0001" condim="3" />
+    <geom name="floor" type="plane" size="30 30 .1" rgba=".15 .18 .22 1" friction=".6 .005 .0001" condim="3" group="3" />
   </worldbody>
   <contact>
     <exclude body1="left_elbow_link" body2="left_wrist_pitch_link" />
