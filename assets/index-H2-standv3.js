@@ -30215,7 +30215,7 @@ async function ZE() {
       }
       return 12;
     }
-    const __FEED = { clear: 2.5, rpm: 3000, speed: 23, side: 0, auto: true };
+    const __FEED = { clear: 2.5, rpm: 3000, speed: 23, side: 0, auto: true, rand: true };
     function __buildFeedUI() {
       try {
         const wrap = document.createElement("div");
@@ -30225,13 +30225,13 @@ async function ZE() {
           '<label>Net clearance <span id="fv_clear"></span></label><input id="fs_clear" type="range" min="0.01" max="8" step="0.01" value="2.5">' +
           '<label>Spin <span id="fv_spin"></span></label><input id="fs_spin" type="range" min="-4000" max="4000" step="250" value="3000">' +
           '<label>Sidespin <span id="fv_side"></span></label><input id="fs_side" type="range" min="-4000" max="4000" step="250" value="0">' +
-          '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button></label><input id="fs_speed" type="range" min="12" max="62.6" step="0.5" value="23">' +
+          '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button><button id="fs_rand" type="button">RANDOM</button></label><input id="fs_speed" type="range" min="12" max="62.6" step="0.5" value="23">' +
           '</div>';
         const st = document.createElement("style");
         st.textContent = "#feedctl{position:fixed;left:18px;bottom:96px;z-index:60;font-family:inherit;user-select:none}" +
           "#feedctl #feedtoggle,#feedctl #fs_auto{background:rgba(12,14,18,.88);color:#e8e8e8;border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer}" +
-          "#feedctl #fs_auto{padding:2px 8px;margin-left:6px;letter-spacing:.06em}" +
-          "#feedctl #fs_auto.off{opacity:.45}" +
+          "#feedctl #fs_auto,#feedctl #fs_rand{padding:2px 8px;margin-left:6px;letter-spacing:.06em}" +
+          "#feedctl #fs_auto.off,#feedctl #fs_rand.off{opacity:.45}" +
           "#feedpanel{display:none;margin-top:8px;background:rgba(10,12,16,.9);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 12px;width:208px}" +
           "#feedpanel.open{display:block}" +
           "#feedpanel label{display:block;color:#cfd4da;font-size:11px;letter-spacing:.08em;margin:8px 0 2px}" +
@@ -30249,12 +30249,15 @@ async function ZE() {
           $("fv_side").textContent = (__FEED.side >= 0 ? "+" : "") + __FEED.side + " rpm " + (__FEED.side === 0 ? "(none)" : "(sidespin)");
           $("fv_speed").textContent = __FEED.speed.toFixed(1) + " m/s (" + Math.round(__FEED.speed * 2.23694) + " mph)";
           $("fs_auto").classList.toggle("off", !__FEED.auto);
+          $("fs_rand").classList.toggle("off", !__FEED.rand);
         };
-        $("fs_clear").oninput = (e) => { __FEED.clear = Number(e.target.value); show(); };
-        $("fs_spin").oninput = (e) => { __FEED.rpm = Number(e.target.value); show(); };
-        $("fs_side").oninput = (e) => { __FEED.side = Number(e.target.value); show(); };
-        $("fs_speed").oninput = (e) => { __FEED.speed = Number(e.target.value); __FEED.auto = false; show(); };
+        $("fs_clear").oninput = (e) => { __FEED.clear = Number(e.target.value); __FEED.rand = false; show(); };
+        $("fs_spin").oninput = (e) => { __FEED.rpm = Number(e.target.value); __FEED.rand = false; show(); };
+        $("fs_side").oninput = (e) => { __FEED.side = Number(e.target.value); __FEED.rand = false; show(); };
+        $("fs_speed").oninput = (e) => { __FEED.speed = Number(e.target.value); __FEED.auto = false; __FEED.rand = false; show(); };
         $("fs_auto").onclick = () => { __FEED.auto = !__FEED.auto; show(); };
+        $("fs_rand").onclick = () => { __FEED.rand = !__FEED.rand; show(); };
+        window.__feedUISync = () => { try { $("fs_clear").value = __FEED.clear; $("fs_spin").value = __FEED.rpm; $("fs_side").value = __FEED.side; $("fs_speed").value = __FEED.speed; } catch (e) {} show(); };
         show();
       } catch (e) {}
     }
@@ -30453,7 +30456,14 @@ async function ZE() {
             const __cy = Math.floor(sT / 4.0);
             if (__cy !== __feedLastCy) {
               __feedLastCy = __cy;
-              const __h = (n) => { const x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
+              let __h = (n) => { const x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
+              if (__FEED.rand) {
+                __h = (n) => Math.random();
+                __FEED.clear = Math.round((0.5 + Math.random() * 2.5) * 100) / 100; // net clearance 0.5-3.0 m
+                __FEED.rpm = Math.round((Math.random() * 2 - 1) * 4000 / 250) * 250; // topspin/slice mix, training band
+                __FEED.side = Math.round((Math.random() * 2 - 1) * 4000 / 250) * 250; // sidespin
+                __FEED.speed = Math.round((16 + Math.random() * 19) * 2) / 2; // 16-35 m/s, training band
+              }
               const __lx = -12.6 + 1.0 * __h(1), __ly = -3.5 + 7.0 * __h(2);
               const __tx = 5.5 + 3.0 * __h(3), __ty = -3.0 + 6.0 * __h(4);
               const __A = Math.atan2(__ty - __ly, __tx - __lx);
@@ -30461,8 +30471,15 @@ async function ZE() {
               const w = __FEED.rpm * 2 * Math.PI / 60;
               const ws = __FEED.side * 2 * Math.PI / 60;
               const __sx = __lx + 0.9 * Math.cos(__A), __sy = __ly + 0.9 * Math.sin(__A);
-              const v = __FEED.auto ? __maxPace(__sx, __sy, 0.82, az, w, __FEED.clear, ws) : __FEED.speed;
-              const el = __solveLaunch(__sx, __sy, 0.82, az, v, w, __FEED.clear, ws);
+              const __cap = __maxPace(__sx, __sy, 0.82, az, w, __FEED.clear, ws);
+              let v = __FEED.rand ? Math.min(__FEED.speed, __cap) : (__FEED.auto ? __cap : __FEED.speed);
+              let el = __solveLaunch(__sx, __sy, 0.82, az, v, w, __FEED.clear, ws);
+              if (__FEED.rand) {
+                const __chk = __simFlight(__sx, __sy, 0.82, az, el, v, w, ws);
+                if (!(__chk.znet !== null && __chk.land >= 0.5 && __chk.land <= 11.3 && Math.abs(__chk.yland) <= 5.6)) { v = __cap; el = __solveLaunch(__sx, __sy, 0.82, az, v, w, __FEED.clear, ws); }
+                __FEED.speed = v;
+                try { if (window.__feedUISync) window.__feedUISync(); } catch (e) {}
+              }
               __omg = [-w * Math.sin(az), w * Math.cos(az), ws];
               __feedP = [__sx, __sy, 0.82];
               __feedV = [v * Math.cos(el) * Math.cos(az), v * Math.cos(el) * Math.sin(az), v * Math.sin(el)];
