@@ -30372,6 +30372,7 @@ async function ZE() {
       let maxd = 0, mi = -1;
       for (let i = 0; i < 137; i++) { const d = Math.abs(__OBS[i] - rf.obs[i]); if (d > maxd) { maxd = d; mi = i; } }
       window.__PARITY = { maxdiff: maxd, worst_index: mi, got: __OBS[mi], want: rf.obs[mi] };
+      console.log("PARITY137 maxdiff=" + maxd.toExponential(3) + " @" + mi + " got=" + __OBS[mi] + " want=" + rf.obs[mi]);
       document.title = "PARITY maxdiff=" + maxd.toExponential(3) + " @" + mi;
     };
     function __resetEpisode() {
@@ -30414,7 +30415,7 @@ async function ZE() {
       if (__lastWall === null) { __lastWall = Q; __resetEpisode(); }
       if (Q < __simT - 1) __resetEpisode(); // page reset button jumped the clock back
       let adv = Q - __lastWall; __lastWall = Q;
-      if (adv > 0.25) adv = 0.25;
+      if (adv > (__BALLMODE ? 0.06 : 0.25)) adv = __BALLMODE ? 0.06 : 0.25;
       if (adv < 0) adv = 0;
       const target = __simT + adv;
       while (__simT < target) {
@@ -30732,7 +30733,7 @@ if (/[?&]parity=1/.test(location.search)) (async function () {
     const mm = window.__MUJOCO_REF;
     if (!mm) throw new Error("no mujoco ref hook");
     mm(rf);
-  } catch (e4) { window.__PARITY = { error: String(e4) }; document.title = "PARITY ERROR " + e4; }
+  } catch (e4) { window.__PARITY = { error: String(e4) }; console.log("PARITY137 ERROR " + e4); document.title = "PARITY ERROR " + e4; }
 })();
 
 window.__DBG137 = /[?&]dbg137=1/.test(location.search);
