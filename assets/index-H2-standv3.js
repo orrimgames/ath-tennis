@@ -30415,9 +30415,7 @@ async function ZE() {
       const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
       const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(-7.8, 2.62, 0.15); Fn.add(__wheel);
       const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
-      const __BALLS = []; const __bmat = new xr({ color: 0xd7f542 });
-      for (let bi = 0; bi < 8; bi++) { const bm = new ln(new br(0.06, 12, 10), __bmat); bm.visible = !1; Fn.add(bm); __BALLS.push({ m: bm, p: [0,0,-5], v: [0,0,0], on: !1, age: 0 }); }
-      let __lastFeed = -10, __prevT = performance.now() / 1000; window.__BALLDBG = () => __BALLS.map(b => ({ on: b.on, p: b.p.map(v => +v.toFixed(2)), v: b.v.map(v => +v.toFixed(2)), age: +b.age.toFixed(1) }));
+      let __feedLastCy = -1, __feedLastEp = -1, __feedP = null, __feedV = null, __feedAge = 0, __prevSimT = -1;
       (function __skinTick() {
         try {
           for (const s2 of __SKIN) {
@@ -30433,14 +30431,61 @@ async function ZE() {
               s2.mesh.quaternion.set(bq[1], bq[2], bq[3], bq[0]);
             }
           }
-          const nowT = performance.now() / 1000, dt = Math.min(0.05, nowT - __prevT); __prevT = nowT;
-          if (nowT - __lastFeed > 3.0 && __BALLS.filter(x => x.on).length < 3) { __lastFeed = nowT; const fb = __BALLS.find(x => !x.on); if (fb) { fb.on = !0; fb.age = 0; fb.p = [-6.86, 3.0, 0.78]; fb.v = [9.2 + Math.random(), (Math.random() - 0.5) * 0.6, 2.1 + Math.random() * 0.5]; fb.m.visible = !0; } }
-          for (const fb of __BALLS) { try { if (!fb.on) continue; fb.age += dt; fb.v[2] -= 9.81 * dt; fb.p[0] += fb.v[0] * dt; fb.p[1] += fb.v[1] * dt; fb.p[2] += fb.v[2] * dt;
-            if (fb.p[2] < 0.06 && fb.v[2] < 0) { fb.p[2] = 0.06; fb.v[2] *= -0.62; fb.v[0] *= 0.82; fb.v[1] *= 0.82; if (Math.abs(fb.v[2]) < 0.7) fb.v[2] = 0; }
-            if (fb.p[2] <= 0.061 && fb.v[2] === 0) { const fr = Math.max(0, 1 - 2.2 * dt); fb.v[0] *= fr; fb.v[1] *= fr; }
-            const sp = Math.hypot(fb.v[0], fb.v[1]);
-            if (fb.age > 5 || fb.p[0] > 8.2 || (fb.age > 0.8 && sp < 0.7)) { fb.on = !1; fb.m.visible = !1; }
-            fb.m.position.set(fb.p[0], fb.p[1], fb.p[2]); } catch (be) {} }
+          try {
+            const __pst = window.__PHYS_STATE();
+            const sT = __pst.simT;
+            const sdt = __prevSimT < 0 ? 0 : Math.min(0.05, Math.max(0, sT - __prevSimT));
+            __prevSimT = sT;
+            if (__pst.ep !== __feedLastEp) { __feedLastEp = __pst.ep; __feedLastCy = -1; }
+            const __cy = Math.floor(sT / 4.0);
+            if (__cy !== __feedLastCy) {
+              __feedLastCy = __cy;
+              const __h = (n) => { const x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
+              const __lx = -12.6 + 1.0 * __h(1), __ly = -3.5 + 7.0 * __h(2);
+              const __tx = 5.5 + 3.0 * __h(3), __ty = -3.0 + 6.0 * __h(4);
+              const __A = Math.atan2(__ty - __ly, __tx - __lx);
+              const az = __A + 0.10 * (__h(6) - 0.5);
+              const w = __FEED.rpm * 2 * Math.PI / 60;
+              const ws = __FEED.side * 2 * Math.PI / 60;
+              const __sx = __lx + 0.9 * Math.cos(__A), __sy = __ly + 0.9 * Math.sin(__A);
+              const v = __FEED.auto ? __maxPace(__sx, __sy, 0.82, az, w, __FEED.clear, ws) : __FEED.speed;
+              const el = __solveLaunch(__sx, __sy, 0.82, az, v, w, __FEED.clear, ws);
+              __omg = [-w * Math.sin(az), w * Math.cos(az), ws];
+              __feedP = [__sx, __sy, 0.82];
+              __feedV = [v * Math.cos(el) * Math.cos(az), v * Math.cos(el) * Math.sin(az), v * Math.sin(el)];
+              __feedAge = 0;
+              window.__FEEDDBG = { lx: +__lx.toFixed(2), ly: +__ly.toFixed(2), tx: +__tx.toFixed(2), ty: +__ty.toFixed(2), v: +v.toFixed(1), el: +el.toFixed(3), cy: __cy };
+              try {
+                __mach.position.set(__lx, __ly, 0.52); __mach.rotation.z = __A;
+                __tube.position.set(__lx + 0.48 * Math.cos(__A), __ly + 0.48 * Math.sin(__A), 0.78); __tube.rotation.z = Math.PI / 2 + __A;
+                __wheel.position.set(__lx - 0.38 * Math.sin(__A), __ly + 0.38 * Math.cos(__A), 0.15); __wheel.rotation.z = __A;
+                __wheel2.position.set(__lx + 0.38 * Math.sin(__A), __ly - 0.38 * Math.cos(__A), 0.15); __wheel2.rotation.z = __A;
+              } catch (me) {}
+            }
+            if (__feedP && sdt > 0) {
+              __feedAge += sdt;
+              const f2 = __aeroF(__feedV[0], __feedV[1], __feedV[2]);
+              __feedV[0] += f2[0] / 0.057 * sdt; __feedV[1] += f2[1] / 0.057 * sdt; __feedV[2] += (f2[2] / 0.057 - 9.81) * sdt;
+              __feedP[0] += __feedV[0] * sdt; __feedP[1] += __feedV[1] * sdt; __feedP[2] += __feedV[2] * sdt;
+              const RB2 = 0.033;
+              if (__feedP[2] <= RB2 + 0.002 && __feedV[2] < 0) {
+                const e2 = 0.78, mu2 = 0.65, KC2 = 1.5;
+                const vx2 = __feedV[0], vy2 = __feedV[1], vz2 = __feedV[2];
+                const cvx = vx2 - RB2 * __omg[1], cvy = vy2 + RB2 * __omg[0];
+                const jn = (1 + e2) * (-vz2), slip = Math.hypot(cvx, cvy);
+                let jx = 0, jy = 0;
+                if (slip > 1e-9) { const jt = Math.min(slip / (1 + KC2), mu2 * jn); jx = -jt * cvx / slip; jy = -jt * cvy / slip; }
+                __feedV[0] = vx2 + jx; __feedV[1] = vy2 + jy; __feedV[2] = e2 * (-vz2);
+                __omg = [__omg[0] + KC2 * jy / RB2, __omg[1] - KC2 * jx / RB2, __omg[2]];
+                __feedP[2] = RB2 + 0.002;
+                if (Math.abs(__feedV[2]) < 0.6) __feedV[2] = 0;
+              }
+              if (__feedP[2] <= RB2 + 0.003 && __feedV[2] === 0) { const fr = Math.max(0, 1 - 1.4 * sdt); __feedV[0] *= fr; __feedV[1] *= fr; }
+              if (__feedAge > 12 || __feedP[0] > 13 || Math.abs(__feedP[1]) > 7) __feedP = null;
+            }
+            if (__feedP) { J.visible = !0; J.position.set(__feedP[0], __feedP[1], Math.max(__feedP[2], 0.033)); }
+            else { J.visible = !0; J.position.set(__mach.position.x, __mach.position.y, 1.08); }
+          } catch (fe) {}
         } catch (e) {}
         requestAnimationFrame(__skinTick);
       })();
@@ -30452,7 +30497,7 @@ async function ZE() {
     ((J.castShadow = !0),
       Fn.add(J),
       KE(Da + "assets/tennis/tennis_court_red_blue.png?t=" + Date.now()),
-      
+      __buildFeedUI(),
       (document.querySelector("#pause").onclick = (ie) => {
         ((M = !M), (ie.target.textContent = M ? "Resume" : "Pause"));
       }),
