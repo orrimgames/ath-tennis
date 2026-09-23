@@ -30306,7 +30306,7 @@ async function ZE() {
       try { u.qvel.fill(0); } catch (e) {}
       try { const xf = u.xfrc_applied; if (xf && xf.fill) xf.fill(0); } catch (e) {}
       for (let i = 0; i < __NA; i++) u.ctrl[i] = __MID[i];
-      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; __lastCy = -1; try { if (true) throw 0; u.qpos[__BALLQ] = 0; u.qpos[__BALLQ+1] = 0; u.qpos[__BALLQ+2] = -2; u.qpos[__BALLQ+3] = 1; u.qpos[__BALLQ+4] = 0; u.qpos[__BALLQ+5] = 0; u.qpos[__BALLQ+6] = 0; } catch (e) {} try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
+      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; if (window.__RACKET) window.__RACKET.visible = true; __lastCy = -1; try { if (true) throw 0; u.qpos[__BALLQ] = 0; u.qpos[__BALLQ+1] = 0; u.qpos[__BALLQ+2] = -2; u.qpos[__BALLQ+3] = 1; u.qpos[__BALLQ+4] = 0; u.qpos[__BALLQ+5] = 0; u.qpos[__BALLQ+6] = 0; } catch (e) {} try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
       r.mj_forward(a, u);
     }
     window.__PHYS_STATE = function () {
@@ -30395,7 +30395,7 @@ async function ZE() {
           }
         } catch (e2) {}
         __simT += __DT;
-        if (!__fallen && u.qpos[2] < 0.65) { __fallen = true; __fallT = __simT; }
+        if (!__fallen && u.qpos[2] < 0.65) { __fallen = true; __fallT = __simT; if (window.__RACKET) window.__RACKET.visible = false; }
       }
       if (__fallen && __simT - __fallT > 2.5) __resetEpisode();
     }
@@ -30425,7 +30425,7 @@ async function ZE() {
       try {
         const ab = await (await fetch(Da + "assets/tennis/entire_visual.STL?t=" + Date.now())).arrayBuffer();
         const m = new ln(__stl(ab), __mat); m.castShadow = !0; Fn.add(m);
-        __SKIN.push({ bi: __bidx["right_wrist_yaw_link"], mesh: m, op: [0.0415, -0.003, 0], oq: [0.5, -0.5, 0.5, -0.5] });
+        __SKIN.push({ bi: __bidx["right_wrist_yaw_link"], mesh: m, op: [0.0415, -0.003, 0], oq: [0.5, -0.5, 0.5, -0.5] }); window.__RACKET = m;;
       } catch (e) {}
       const __mach = new ln(new ar(1.1, 0.96, 1.04), new xr({ color: 0xff5905 })); __mach.position.set(-7.8, 3.0, 0.52); __mach.castShadow = !0; Fn.add(__mach);
       const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
