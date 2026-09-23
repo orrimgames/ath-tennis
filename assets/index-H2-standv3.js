@@ -29742,7 +29742,7 @@ Fn.background = new pt(198412);
 Fn.fog = new Do(198412, 18, 42);
 const sr = new mn(43, innerWidth / innerHeight, 0.05, 100);
 sr.up.set(0, 0, 1);
-sr.position.set(3.4, -2.4, 2.0);
+sr.position.set(12.3, 4.6, 2.8);
 const Yn = new bE({ antialias: !0, powerPreference: "high-performance" });
 Yn.setPixelRatio(Math.min(devicePixelRatio, 2));
 Yn.setSize(innerWidth, innerHeight);
@@ -29751,7 +29751,7 @@ Yn.shadowMap.type = Cc;
 Yn.outputColorSpace = on;
 XE.append(Yn.domElement);
 const Dr = new RE(sr, Yn.domElement);
-Dr.target.set(7.0, 2.7, 0.95);
+Dr.target.set(6.2, 2.9, 0.9);
 Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
@@ -30417,7 +30417,7 @@ async function ZE() {
       const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
       const __BALLS = []; const __bmat = new xr({ color: 0xd7f542 });
       for (let bi = 0; bi < 8; bi++) { const bm = new ln(new br(0.06, 12, 10), __bmat); bm.visible = !1; Fn.add(bm); __BALLS.push({ m: bm, p: [0,0,-5], v: [0,0,0], on: !1, age: 0 }); }
-      let __lastFeed = -10, __prevT = performance.now() / 1000;
+      let __lastFeed = -10, __prevT = performance.now() / 1000; window.__BALLDBG = () => __BALLS.map(b => ({ on: b.on, p: b.p.map(v => +v.toFixed(2)), v: b.v.map(v => +v.toFixed(2)), age: +b.age.toFixed(1) }));
       (function __skinTick() {
         try {
           for (const s2 of __SKIN) {
@@ -30434,8 +30434,13 @@ async function ZE() {
             }
           }
           const nowT = performance.now() / 1000, dt = Math.min(0.05, nowT - __prevT); __prevT = nowT;
-          if (nowT - __lastFeed > 2.2) { __lastFeed = nowT; const fb = __BALLS.find(x => !x.on); if (fb) { fb.on = !0; fb.age = 0; fb.p = [-6.86, 3.0, 0.78]; fb.v = [9.2 + Math.random(), (Math.random() - 0.5) * 0.6, 2.1 + Math.random() * 0.5]; fb.m.visible = !0; } }
-          for (const fb of __BALLS) { if (!fb.on) continue; fb.age += dt; fb.v[2] -= 9.81 * dt; fb.p[0] += fb.v[0] * dt; fb.p[1] += fb.v[1] * dt; fb.p[2] += fb.v[2] * dt; if (fb.p[2] < 0.06 && fb.v[2] < 0) { fb.p[2] = 0.06; fb.v[2] *= -0.62; fb.v[0] *= 0.82; fb.v[1] *= 0.82; } if (fb.age > 9 || fb.p[0] > 8.55) { fb.on = !1; fb.m.visible = !1; } fb.m.position.set(fb.p[0], fb.p[1], fb.p[2]); }
+          if (nowT - __lastFeed > 3.0 && __BALLS.filter(x => x.on).length < 3) { __lastFeed = nowT; const fb = __BALLS.find(x => !x.on); if (fb) { fb.on = !0; fb.age = 0; fb.p = [-6.86, 3.0, 0.78]; fb.v = [9.2 + Math.random(), (Math.random() - 0.5) * 0.6, 2.1 + Math.random() * 0.5]; fb.m.visible = !0; } }
+          for (const fb of __BALLS) { try { if (!fb.on) continue; fb.age += dt; fb.v[2] -= 9.81 * dt; fb.p[0] += fb.v[0] * dt; fb.p[1] += fb.v[1] * dt; fb.p[2] += fb.v[2] * dt;
+            if (fb.p[2] < 0.06 && fb.v[2] < 0) { fb.p[2] = 0.06; fb.v[2] *= -0.62; fb.v[0] *= 0.82; fb.v[1] *= 0.82; if (Math.abs(fb.v[2]) < 0.7) fb.v[2] = 0; }
+            if (fb.p[2] <= 0.061 && fb.v[2] === 0) { const fr = Math.max(0, 1 - 2.2 * dt); fb.v[0] *= fr; fb.v[1] *= fr; }
+            const sp = Math.hypot(fb.v[0], fb.v[1]);
+            if (fb.age > 5 || fb.p[0] > 8.2 || (fb.age > 0.8 && sp < 0.7)) { fb.on = !1; fb.m.visible = !1; }
+            fb.m.position.set(fb.p[0], fb.p[1], fb.p[2]); } catch (be) {} }
         } catch (e) {}
         requestAnimationFrame(__skinTick);
       })();
