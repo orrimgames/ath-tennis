@@ -1,5 +1,7 @@
 # Exact-H2 whole-body IK engineering track
 
+Status (Daniel, 2026-09-22 7:45 PM): demoted from the critical path to a background bootstrap utility. The main line (parity -> standing/balance -> goal-conditioned static volley) uses no mocap. The live control loop has no IK; the RL policy maps racket-state targets directly to joint targets. Keep these fixtures and the solver track for optional balance bootstrap references and as an offline baseline/fallback. No urgency.
+
 Inverse kinematics is a first-class ATH subsystem, not a file-format conversion utility. Its output is admissible only after independent kinematic, temporal, contact, dynamics and visual gates.
 
 ## Modules

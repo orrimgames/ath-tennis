@@ -15,10 +15,13 @@ Stage-1 training never ran: every version failed or never produced a report. No 
 | v6 | condim 6 -> 3 | 2 x 25 | FAIL | perturbed first cross step 12; qpos 0.0237912, qvel 2.46160. Rules out torsional/rolling friction dims. |
 | v7 | v6 + robot self-collision disabled (floor only) | 2 x 25 | FAIL | step 12; qpos 0.0237908, qvel 2.46161. Floor-contact evolution implicated, not self-collision. Throughput 5.18 -> 343 env-steps/s (self-collision broadphase is a separate perf cost). |
 | v8 | v6 + cone elliptic -> pyramidal | 2 x 25 | FAIL, worse | BOTH cases now fail, first cross step 13; max qpos 0.020645 (home case 0.009845, previously 6e-7), max qvel 3.05707; MJX home case loses all contacts at step 14 (bounce) while CPU does not. cold 60.15 s, cached 0.125 s, 401 env-steps/s. Pyramidal is not the fix and breaks the home case. |
-| v9 | v6 physics + MJX float64 (x64) + teacher-forced one-step diagnostic | 2 x 25 | RUNNING at bundle time | Tests whether float32 MJX vs float64 CPU at stiff impact causes the split; teacher-forced step starts MJX from the exact CPU pre-step state incl. qacc_warmstart at every step and records CPU/MJX solver_niter, separating one-step solver error from chaotic amplification. Fixes the x64 int32->int64 contact-index carry bug by casting the scan carry. |
+| v9 | v6 physics + MJX float64 (x64) + teacher-forced one-step diagnostic | 2 x 25 | DONE - superseded by v12 | Float64 did not close the gap by itself; pointed at solver budget. |
+| v10-v11 | solver-budget and solver-param iterations | - | superseded | Intermediate scans between v9 and v12; numbers not in this bundle. |
+| v12 | oracle solver budget (solver iterations / ls_iterations raised to match the CPU oracle) | contact suite | **PASS** | max qpos err 1.39e-10, max qvel err 1.85e-8 vs gate 1e-4 / 1e-3. Contact divergence resolved: solver iteration budget, not condim, self-collision, cone shape, or float precision. Stage-1 training unblocked. | Tests whether float32 MJX vs float64 CPU at stiff impact causes the split; teacher-forced step starts MJX from the exact CPU pre-step state incl. qacc_warmstart at every step and records CPU/MJX solver_niter, separating one-step solver error from chaotic amplification. Fixes the x64 int32->int64 contact-index carry bug by casting the scan carry. |
 
 Observations so far:
-- Divergence begins exactly at first floor impact (~22-26 ms, steps 11-13). Free flight matches to ~1e-7.
+- RESOLVED (v12): the first-impact divergence was the MJX solver iteration budget, not physics parameters. With the oracle budget the full contact suite passes (qpos 1.39e-10, qvel 1.85e-8).
+- Divergence began exactly at first floor impact (~22-26 ms, steps 11-13). Free flight matched to ~1e-7.
 - Not caused by condim 6, not by self-collision. Pyramidal cone changes the behavior but worsens it.
 - All MJX runs before v9 were float32 (JAX_ENABLE_X64=false) against a float64 CPU oracle.
 - Remaining matrix after v9: solver iterations/ls_iterations, solver type, impratio, solref/solimp, then per-contact-pair dist/force comparison at the first divergent step.

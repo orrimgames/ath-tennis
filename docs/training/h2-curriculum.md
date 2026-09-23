@@ -2,6 +2,8 @@
 
 Order updated by Daniel on 2026-09-22: a static volley is the first tennis shot, immediately after standing plus arm tracking and the racket/stringbed/ball physics gate. Movement competence then precedes moving volleys and groundstrokes.
 
+Reprioritized by Daniel on 2026-09-22 7:45 PM: the main line is Gate 0 parity -> standing/balance -> goal-conditioned static volley, all trained without mocap. Human references are optional only as an early balance bootstrap. The exact-H2 IK retarget lane is a background utility, off the critical path (see motion_priors/IK_ENGINEERING_TRACK.md).
+
 ## Gate 0 - physics/backend parity
 CPU MuJoCo vs MJX H2 rigid-body/contact, actuator, limits, stepping, controlled-fall and support-contact fixtures. No training until the stage-relevant fixtures pass.
 
@@ -9,7 +11,7 @@ CPU MuJoCo vs MJX H2 rigid-body/contact, actuator, limits, stepping, controlled-
 Zero commanded velocity. Upright/root-height, support polygon, foot slip, limit/torque use, fall time, impulse recovery. Promote on paired deterministic evaluation and checkpoint reload/export parity.
 
 ## Stage 1A - standing arm and racket tracking
-While maintaining a static bilateral base, track compact upper-body/racket references across reachable face angles, contact heights and impact points. Enforce standing safety metrics, racket-body clearance, limits, velocities, accelerations and torque margins. No ball is present until this stage and the independent racket/stringbed/ball physics gates pass.
+While maintaining a static bilateral base, track commanded racket states (from the impact-inverse solver, not mocap) across reachable face angles, contact heights and impact points. Enforce standing safety metrics, racket-body clearance, limits, velocities, accelerations and torque margins. No ball is present until this stage and the independent racket/stringbed/ball physics gates pass.
 
 ## Stage 1B - static volley from a feed
 First trained tennis shot. Feed a controlled incoming ball to a stationary robot at net-like contact height. Use compact forehand and backhand volley actions without locomotion. The goal-conditioned shot-execution objective governs placement, pace, trajectory, signed 3D spin, direction and contact-time choice within the volley envelope. This stage exercises calibrated ball/racket/stringbed contact physics at the earliest safe point.

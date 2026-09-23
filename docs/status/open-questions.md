@@ -1,7 +1,7 @@
-# ATH open questions - state at 2026-09-22 7:00 PM CDT
+# ATH open questions - state at 2026-09-22 9:00 PM CDT
 
 ## Blocking now
-1. H2 CPU/MJX contact parity. Perturbed (and under pyramidal cone, home) trajectories split at first floor impact (steps 11-13 at 2 ms). Ruled out: condim 6 (v6), self-collision (v7). Pyramidal cone changes it but makes it worse (v8). Running: v9 float64 MJX + teacher-forced one-step diagnostic. Next: solver iterations/ls_iterations, solver type, impratio, solref/solimp, per-contact-pair dist/force at first divergent step. Stage-1 training blocked until this passes.
+1. ~~H2 CPU/MJX contact parity~~ **RESOLVED 2026-09-22 (v12 PASS)**. Root cause: MJX solver iteration budget vs the float64 CPU oracle - with the oracle budget the contact suite matches (max qpos err 1.39e-10, max qvel err 1.85e-8). Ruled out along the way: condim 6 (v6), self-collision (v7), pyramidal cone (v8), float32 vs float64 (v9). Stage-1 training unblocked. Found pre-training: 18/29 actuator limits in the stage-1 XML were wrong; corrected to official unitree_ros H2.urdf values with armature 0.01 / damping 0.05 / frictionloss 0.2 on all joints.
 2. MJX compile and throughput at scale. Long scans exceed Kaggle's session cap; self-collision cost must be solved (collision pair pruning, capsule simplification, or MuJoCo-Warp) before 1024-4096 env runs.
 3. Exact-H2 whole-body IK. Needs an efficient constrained solver (Mink/QP or warm-started Jacobian) and the ablation matrix over permanent fixtures (LATENT clip 1 frame 1125 shoulder jump, clips 2-4 wrist jumps, joint limits, contact locks, unreachable wrist, missing head targets, ankle ordering, floating root). Per-frame SciPy least-squares is too slow.
 
