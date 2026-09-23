@@ -30275,7 +30275,21 @@ async function ZE() {
       try {
         if (typeof ort === "undefined") return;
         ort.env.wasm.numThreads = 1; // Pages has no cross-origin isolation; single-thread wasm
-        const buf = await $E(Da + "../ath_h2_stand_v3.onnx?t=" + Date.now());
+        let buf;
+        try {
+          const spec = await (await fetch("https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/best/spec.json", { cache: "no-store" })).json();
+          const __obsN = spec && (spec.obs_size || +(((spec.onnx && spec.onnx.input) || "").match(/batch,(\d+)/) || [0, 0])[1] || Math.max.apply(null, (spec.obs_layout || []).map(function (s) { return s.slice[1]; })));
+          if (__obsN === 93) {
+            buf = await (await fetch("https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/best/policy.onnx", { cache: "no-store" })).arrayBuffer();
+            console.log("policy: HF best/ loaded (" + (spec.model || "policy.onnx") + ", obs " + __obsN + ")");
+          } else {
+            console.log("policy: best/ spec obs " + __obsN + " does not match runtime 93 - keeping bundled stand v3");
+            buf = await $E(Da + "../ath_h2_stand_v3.onnx?t=" + Date.now());
+          }
+        } catch (e) {
+          console.log("policy: HF best/ unavailable - keeping bundled stand v3", e);
+          buf = await $E(Da + "../ath_h2_stand_v3.onnx?t=" + Date.now());
+        }
         __sess = await ort.InferenceSession.create(buf, { executionProviders: ["wasm"] });
       } catch (e) { __sess = null; }
     })();
