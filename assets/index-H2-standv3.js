@@ -30050,7 +30050,7 @@ async function ZE() {
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
           // feed ball follows the real MuJoCo body (aero forces + contacts)
-          if (__BALLB >= 0) J.position.set(u.xpos[__BALLB * 3], u.xpos[__BALLB * 3 + 1], u.xpos[__BALLB * 3 + 2]); else J.visible = !1;
+          J.visible = !1;
         }
         Yn.render(Fn, sr);
       };
@@ -30287,7 +30287,7 @@ async function ZE() {
       try { u.qvel.fill(0); } catch (e) {}
       try { const xf = u.xfrc_applied; if (xf && xf.fill) xf.fill(0); } catch (e) {}
       for (let i = 0; i < __NA; i++) u.ctrl[i] = __MID[i];
-      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; __lastCy = -1; try { if (!(__BALLQ > 6)) throw 0; u.qpos[__BALLQ] = 0; u.qpos[__BALLQ+1] = 0; u.qpos[__BALLQ+2] = -2; u.qpos[__BALLQ+3] = 1; u.qpos[__BALLQ+4] = 0; u.qpos[__BALLQ+5] = 0; u.qpos[__BALLQ+6] = 0; } catch (e) {} try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
+      __simT = 0; __nextCtrl = 0; __fallen = false; __ep++; __lastCy = -1; try { if (true) throw 0; u.qpos[__BALLQ] = 0; u.qpos[__BALLQ+1] = 0; u.qpos[__BALLQ+2] = -2; u.qpos[__BALLQ+3] = 1; u.qpos[__BALLQ+4] = 0; u.qpos[__BALLQ+5] = 0; u.qpos[__BALLQ+6] = 0; } catch (e) {} try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
       r.mj_forward(a, u);
     }
     window.__PHYS_STATE = function () {
@@ -30326,7 +30326,7 @@ async function ZE() {
           } catch (e) { for (let i = 0; i < __NA; i++) u.ctrl[i] = __MID[i]; }
         }
         const __cy = Math.floor(__simT / 4.0);
-        if (__cy !== __lastCy && __BALLQ > 6) {
+        if (false && __cy !== __lastCy) {
           __lastCy = __cy;
           const __h = (n) => { const x = Math.sin(__cy * 127.1 + n * 311.7) * 43758.5453; return x - Math.floor(x); };
           const __lx = -12.6 + 1.0 * __h(1), __ly = -3.5 + 7.0 * __h(2);
@@ -30351,7 +30351,7 @@ async function ZE() {
         }
         try {
           const xf = u.xfrc_applied;
-          if (xf && __BALLB >= 0) {
+          if (false && xf) {
             const f = __aeroF(u.qvel[__BALLV], u.qvel[__BALLV + 1], u.qvel[__BALLV + 2]);
             xf[__BALLB * 6] = f[0]; xf[__BALLB * 6 + 1] = f[1]; xf[__BALLB * 6 + 2] = f[2];
             xf[__BALLB * 6 + 3] = 0; xf[__BALLB * 6 + 4] = 0; xf[__BALLB * 6 + 5] = 0;
@@ -30359,7 +30359,7 @@ async function ZE() {
         } catch (e) {}
         r.mj_step(a, u);
         try {
-          const RB = 0.033, bq = __BALLQ, bv = __BALLV; if (!(__BALLQ > 6)) throw 0;
+          const RB = 0.033, bq = __BALLQ, bv = __BALLV; if (true) throw 0;
           if (u.qpos[bq + 2] <= RB + 0.002 && u.qvel[bv + 2] < 0) {
             // spin-coupled rigid-body bounce calibrated to ITF/Cross hard-court measurements (grip: sticking impulse; slide: mu-capped; hollow-ball inertia)
             const e = 0.78, mu = 0.65, KC = 1.5; // hollow-ball inertia I=(2/3)mR^2 -> spin coupling KC/R (Cross: w2 = (mR/I)(vx1-vx2))
