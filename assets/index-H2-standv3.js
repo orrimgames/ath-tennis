@@ -30050,7 +30050,6 @@ async function ZE() {
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
           // feed ball follows the real MuJoCo body (aero forces + contacts)
-          J.position.set(-7.8, 3.0, 1.08);
         }
         Yn.render(Fn, sr);
       };
