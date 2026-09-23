@@ -30062,6 +30062,7 @@ async function ZE() {
     ((bc.textContent = "MuJoCo ready · loading optimized robot meshes…"),
       document.querySelector("#loadbarfill") &&
         (document.querySelector("#loadbarfill").style.width = "18%"));
+    console.log("T137 wasm ready");
     const __urls = [
         Da + "h2_stand_v3.xml",
         ...Ac.map((ie) => Da + "assets/" + ie),
@@ -30095,20 +30096,22 @@ async function ZE() {
       }
     }
     await Promise.all(Array.from({ length: 6 }, __worker));
+    console.log("T137 assets loaded n=" + __out.length);
     let [e, ...t] = __out;
     e = e.replace(/(<body name="ball_machine" pos=")[^"]+("[^>]*>)/, "$1-7.8 3.0 0$2");
+    console.log("T137 probe start");
     let __BALLMODE = false, __FEEDS = null, __RCSITE = 5, __epStep = 0, __bounces = 0, __bnArm = false, __contact = false, __HIST = [], __HORIZON = 172;
     try {
-      const __sp = await (await fetch("https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/best/spec.json", { cache: "no-store" })).json();
+      console.log("T137 fetching spec"); const __sp = await (await fetch("https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/best/spec.json", { cache: "no-store" })).json(); console.log("T137 spec ok obs=" + (__sp && __sp.obs_size));
       const __on = __sp && (__sp.obs_size || +(((__sp.onnx && __sp.onnx.input) || "").match(/batch,(\d+)/) || [0, 0])[1] || 0);
       if (__on === 137) {
-        const __BXML = await (await fetch(Da + "h2_ball.xml?t=" + Date.now())).text();
+        console.log("T137 fetching xml"); const __BXML = await (await fetch(Da + "h2_ball.xml?t=" + Date.now())).text(); console.log("T137 xml ok len=" + __BXML.length);
         if (__BXML.indexOf("tennis_racket") >= 0 && __BXML.indexOf('name="ball"') >= 0) {
           e = __BXML; __BALLMODE = true;
           const __sm = [...__BXML.matchAll(/<site name="([^"]+)"/g)].map((m2) => m2[1]);
           const __ri = __sm.indexOf("racket_center"); if (__ri >= 0) __RCSITE = __ri;
           try {
-            const __fb = await (await fetch(Da + "feeds.npy?t=" + Date.now())).arrayBuffer();
+            console.log("T137 fetching feeds"); const __fb = await (await fetch(Da + "feeds.npy?t=" + Date.now())).arrayBuffer(); console.log("T137 feeds ok bytes=" + __fb.byteLength);
             const __dv = new DataView(__fb);
             const __hl = __dv.getUint16(8, true);
             const __hd = new TextDecoder().decode(new Uint8Array(__fb, 10, __hl));
@@ -30119,6 +30122,7 @@ async function ZE() {
         }
       }
     } catch (__e2) { console.log("ball-mode probe failed - keeping stand v3", __e2); }
+    console.log("T137 probe done ballmode=" + __BALLMODE);
     window.__BALLMODE = __BALLMODE;
     ((bc.textContent = "Compiling official Unitree H2 model…"),
       document.querySelector("#loadbarfill") &&
