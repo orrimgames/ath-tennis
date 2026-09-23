@@ -30125,9 +30125,15 @@ async function ZE() {
         (document.querySelector("#loadbarfill").style.width = "92%"));
     const n = new r.MjVFS();
     Ac.forEach((ie, Q) => n.addBuffer(ie, t[Q]));
-    const a = r.MjModel.from_xml_string(e, n),
+    console.log("INIT137 pre-compile ballmode=" + window.__BALLMODE + " xmllen=" + (e ? e.length : -1));
+    let a = null, o = null;
+    try {
+      a = r.MjModel.from_xml_string(e, n);
+      console.log("INIT137 first compile ok");
       o = r.MjModel.from_xml_string(e, n);
-    if (!a || !o) throw new Error("MuJoCo could not compile the released MJCF");
+      console.log("INIT137 second compile ok");
+    } catch (e2) { console.log("INIT137 COMPILE FAIL", String(e2 && e2.message || e2)); throw e2; }
+    if (!a || !o) { console.log("INIT137 null model"); throw new Error("MuJoCo could not compile the released MJCF"); }
     const u = new r.MjData(a),
       h = new r.MjData(o),
       p = new r.MjvOption(),
