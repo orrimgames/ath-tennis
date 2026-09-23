@@ -30481,7 +30481,11 @@ async function ZE() {
             const sx2 = u.site_xpos[__RCSITE*3], sy2 = u.site_xpos[__RCSITE*3+1], sz2 = u.site_xpos[__RCSITE*3+2];
             const dcq = Math.hypot(u.qpos[__BALLQ]-sx2, u.qpos[__BALLQ+1]-sy2, u.qpos[__BALLQ+2]-sz2);
             if (dcq < 0.16) __contact = true;
-            if ((u.xmat[17] < 0.6) || u.qpos[2] < 0.65 || __contact || __bounces >= 2 || __epStep >= __HORIZON) __resetEpisode();
+            if ((u.xmat[17] < 0.6) || u.qpos[2] < 0.65 || __contact || __bounces >= 2 || __epStep >= __HORIZON) {
+              window.__whyN = (window.__whyN || 0) + 1;
+              if (window.__whyN <= 12) console.log("WHY137 up=" + u.xmat[17].toFixed(3) + " z=" + u.qpos[2].toFixed(3) + " contact=" + __contact + " bnc=" + __bounces + " ep=" + __epStep + " H=" + __HORIZON + " dcq=" + dcq.toFixed(3) + " ballz=" + u.qpos[__BALLQ+2].toFixed(3) + " simT=" + __simT.toFixed(2));
+              __resetEpisode();
+            }
           } catch (e) {}
         }
         try {
