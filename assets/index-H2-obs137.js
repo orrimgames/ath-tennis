@@ -29756,21 +29756,21 @@ Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
 window.__CAM = sr; window.__ORBIT = Dr;
-Fn.add(new k_(13493503, 4866104, 3.2));
-const Ls = new H_(16777215, 4.2);
+Fn.add(new k_(13493503, 4866104, 2.6));
+const Ls = new H_(16777215, 3.4);
 Ls.position.set(-7, -10, 16);
 Ls.castShadow = !0;
 Ls.shadow.mapSize.set(2048, 2048);
 Ls.shadow.bias = -0.00035; Ls.shadow.normalBias = 0.04; Ls.shadow.camera.left = -16; Ls.shadow.camera.right = 16; Ls.shadow.camera.top = 16; Ls.shadow.camera.bottom = -16; Ls.shadow.camera.near = 1; Ls.shadow.camera.far = 60;
 Fn.add(Ls);
-const Fs = new H_(16777215, 2.2);
+const Fs = new H_(16777215, 1.7);
 Fs.position.set(8, 10, 12);
 Fs.castShadow = !1;
 Fn.add(Fs);
-const Gs = new H_(16777215, 1.3);
+const Gs = new H_(16777215, 0.9);
 Gs.position.set(0, 14, 6);
 Gs.castShadow = !1;
-Fn.add(Gs); const __Ns = new H_(16777215, 1.0); __Ns.position.set(-12, 8, 10); __Ns.castShadow = !1; Fn.add(__Ns);
+Fn.add(Gs);
 const Da = "./assets/unitree_h2/",
   Ac = [
     "pelvis.stl",
@@ -30545,58 +30545,7 @@ async function ZE() {
       const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
       const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(-7.8, 2.62, 0.15); Fn.add(__wheel);
       const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
-      // === HARKIN ARENA dressing: grandstands, banner ring, floodlights, scoreboard (display-only, no physics) ===
-      try {
-        const __arenaMats = [new xr({ color: 0x131a26, roughness: 0.95, metalness: 0.05 }), new xr({ color: 0x1a2232, roughness: 0.95, metalness: 0.05 })];
-        const __mkTier = (w, d, h, x, y, z, mi) => { const m = new ln(new ar(w, d, h), __arenaMats[mi % 2]); m.position.set(x, y, z); m.receiveShadow = !0; Fn.add(m); return m; };
-        for (let s2 = -1; s2 <= 1; s2 += 2) {
-          for (let i = 0; i < 4; i++) __mkTier(34, 1.7, 1.15, 0, s2 * (8.8 + i * 1.75), 0.58 + i * 1.12, i);
-          for (let i = 0; i < 3; i++) __mkTier(1.7, 20, 1.15, s2 * (22.4 + i * 1.75), 0, 0.58 + i * 1.12, i + 1);
-        }
-        const __ground = new ln(new Di(90, 90), new xr({ color: 0x0b1210, roughness: 1, metalness: 0 }));
-        __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground);
-        const __canvasTex = (wpx, hpx, draw) => {
-          const cv = document.createElement("canvas"); cv.width = wpx; cv.height = hpx;
-          draw(cv.getContext("2d"), wpx, hpx);
-          const tx = new rn(cv); tx.needsUpdate = !0; try { tx.colorSpace = on; } catch (e) {} return tx;
-        };
-        const __bannerTx = __canvasTex(4096, 128, (c, W, H) => {
-          c.fillStyle = "#0a0e14"; c.fillRect(0, 0, W, H);
-          c.fillStyle = "#9be15d"; c.font = "bold 74px system-ui, sans-serif"; c.textBaseline = "middle";
-          for (let x = 30; x < W - 400; x += 480) c.fillText("HARKIN ARENA", x, H / 2);
-        });
-        const __bannerMat = new jc({ map: __bannerTx }); __bannerMat.fog = !1;
-        const __mkPanel = (w, h, mat, x, y, z, tx2, ty2, tz2) => {
-          const m = new ln(new Di(w, h), mat); m.position.set(x, y, z); m.up.set(0, 0, 1); m.lookAt(tx2, ty2, tz2); Fn.add(m); return m;
-        };
-        for (let s2 = -1; s2 <= 1; s2 += 2) __mkPanel(30, 1.15, __bannerMat, 0, s2 * 7.7, 1.2, 0, 0, 1.2);
-        const __fasciaTx = __canvasTex(2048, 192, (c, W, H) => {
-          c.fillStyle = "#05080e"; c.fillRect(0, 0, W, H);
-          c.strokeStyle = "#9be15d"; c.lineWidth = 8; c.strokeRect(10, 10, W - 20, H - 20);
-          c.fillStyle = "#9be15d"; c.font = "bold 118px system-ui, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
-          c.fillText("HARKIN ARENA", W / 2, H / 2 + 6);
-        });
-        const __fasciaMat = new jc({ map: __fasciaTx }); __fasciaMat.fog = !1;
-        for (let s2 = -1; s2 <= 1; s2 += 2) __mkPanel(22, 2.0, __fasciaMat, 0, s2 * 13.2, 5.4, 0, 0, 3.4);
-        const __scoreTx = __canvasTex(1024, 512, (c, W, H) => {
-          c.fillStyle = "#05080e"; c.fillRect(0, 0, W, H);
-          c.strokeStyle = "#9be15d"; c.lineWidth = 10; c.strokeRect(14, 14, W - 28, H - 28);
-          c.textAlign = "center";
-          c.fillStyle = "#9be15d"; c.font = "bold 96px system-ui, sans-serif"; c.fillText("HARKIN ARENA", W / 2, 128);
-          c.fillStyle = "#e8eef5"; c.font = "bold 52px system-ui, sans-serif"; c.fillText("GRAND CENTER VENUE", W / 2, 232);
-          c.fillStyle = "#8a97a5"; c.font = "38px system-ui, sans-serif"; c.fillText("CENTER COURT \u00b7 ATH", W / 2, 316);
-          c.fillStyle = "#9be15d"; c.font = "bold 60px system-ui, sans-serif"; c.fillText("ROBOT  0  -  0  BALL", W / 2, 424);
-        });
-        const __scoreMat = new jc({ map: __scoreTx }); __scoreMat.fog = !1;
-        __mkPanel(10, 5, __scoreMat, -24.6, 0, 6.6, 0, 0, 3.5);
-        const __poleMat = new xr({ color: 0x2a313d, roughness: 0.6, metalness: 0.6 });
-        const __lampMat = new jc({ color: 0xfff3c4 }); __lampMat.fog = !1;
-        for (const px of [-14.2, 14.2]) for (const py of [-6.8, 6.8]) {
-          const pole = new ln(new Ps(0.13, 0.13, 13, 8), __poleMat); pole.rotation.x = Math.PI / 2; pole.position.set(px, py, 6.5); Fn.add(pole);
-          const head = new ln(new ar(2.3, 0.5, 1.0), __poleMat); head.position.set(px, py, 13.1); head.rotation.z = Math.atan2(-py, -px) + Math.PI / 2; Fn.add(head);
-          __mkPanel(2.1, 0.85, __lampMat, px * 0.97, py * 0.97, 13.0, 0, 0, 1.0);
-        }
-      } catch (e) {}
+      // === lawn setting: plain grass, stadium removed (display-only) ===       try {         const __ground = new ln(new Di(90, 90), new xr({ color: 0x3e7c33, roughness: 1, metalness: 0 }));         __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground);       } catch (e) {}
 
       let __feedLastCy = -1, __feedLastEp = -1, __feedP = null, __feedV = null, __feedAge = 0, __prevSimT = -1;
       (function __skinTick() {
@@ -30689,9 +30638,9 @@ async function ZE() {
     } catch (e) {}
     const J = new ln(
       new br(0.033, 20, 14),
-      new xr({ color: 13106991, emissive: 3359744 }),
+      new jc({ color: 13434624 }),
     );
-    ((J.castShadow = !0),
+    (J.material.fog = !1, (J.castShadow = !0),
       Fn.add(J),
       KE(Da + "assets/tennis/tennis_court_red_blue.png?t=" + Date.now()),
       __buildFeedUI(),
