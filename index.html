@@ -4,9 +4,9 @@
 </style>  <script src="./assets/ort/ort.wasm.min.js?v=standv3b"></script>
   <script type="module" crossorigin src="./assets/index-H2-standv3.js?v=hf1"></script>
 
-</head><body><div id="app"></div><div class="top"><div class="brand"><b>LATENT</b> / MUJOCO</div><div class="badge" id="badge">BOOTING REAL SIM</div></div><div class="hud"><div class="row"><span>PHYSICS</span><strong id="physics">MuJoCo WASM loading</strong></div><div class="row"><span>MODEL</span><strong id="model">H2 stand MJCF (training-exact) · 29 servos</strong></div><div class="row"><span>GEOMETRY</span><strong id="geo">Loading official H2 meshes</strong></div><div class="row"><span>CONTROL</span><strong>LIVE: V3 STAND (FALLS) · V4 REPLAY: STAYS UP, SKATES</strong></div></div><div class="truth"><b>What is real?</b><br><i>Real:</i> official MuJoCo engine at 500Hz (2 ms), the exact h2_stand_model.xml the v3 policy trained on, driving a cosmetic display skin mapped onto the real training bodies - the skin is display-only, physics is the training MJCF - with its 29 training-gain servos. The ONNX policy runs in-browser on the training observation contract, output scaled 0.3 and clipped to servo ranges.<br><br><i>Honest limits:</i> v3 (live above): best checkpoint of a failed run - ~1.5 s up, then a fall; fails the float64 oracle 8/8. v4 (60.8M steps, replay below right): stays up under 0.6 m/s shoves in float64 - 0/8 falls - but foot-slides; not yet browser-exported. v5 training: slip/drift/twitch penalties + a hard stage-1 gate. The robot starts at the far baseline facing the machine. Robot skin, racket, and the ball machine's ball flight are a display layer; ball-interaction physics stays parked.</div><div class="copy"</div><div class="copy" id="copy"><span class="copytag" id="copytag">REAL MODEL. REAL PHYSICS.</span><h1>REAL MODEL.<br>REAL PHYSICS.</h1><p>The live robot above is still the v3 stand policy (best eval) - the newest browser-runnable export: it stands ~1.5s, falls, resets, and fails the float64 oracle 8/8. The newest checkpoint, v4 (60.8M steps), no longer falls - 0/8 under 0.6 m/s shoves in float64 physics - but its feet visibly slide. Watch the v4 replay on the right. v5 is in training now with slip/drift/twitch penalties and a hard stage-1 gate. Drag to orbit.</p><p class="roadmap"><b>ATH - Association of Tennis Humanoids</b><br>Building toward physics-first humanoid tennis: pro footwork, spin-aware ball flight, drills, serves, and match play.</p><button class="copytoggle" id="copytoggle">Hide text</button></div><div class="media"><video autoplay muted loop playsinline><source src="./assets/media/stand_v4_seed3.mp4?v=standv4a" type="video/mp4"><source src="./assets/media/stand_v4_seed3.webm?v=standv4a" type="video/webm"></video><b>TRAINING PROGRESS &middot; STAND v4 (NEWEST)</b><br>Stand v4 - 60.8M steps: stays up under 0.6 m/s shoves in float64 physics (0/8 falls), but the feet slide. v5 in training to fix it.</div><div class="mobcap"><b>LIVE SIM - v3 stand policy:</b> stands ~1.5 s, falls, fails the float64 oracle 8/8. v4 stays up under shoves but the feet slide (replay on desktop). v5 in training. The robot starts at the baseline; the skin, racket, and the ball machine's ball flight are a display layer over the real training physics (ball-interaction physics stays parked).</div><div class="controls"><button id="pause">Pause</button><button id="reset">Reset</button><a href="https://github.com/unitreerobotics/unitree_ros" target="_blank">Source</a></div><div class="loading" id="loading"><div><b>COMPILING UNITREE H2</b><small id="loadmsg">Loading stand-v3 training model…</small><div class="loadbar" role="progressbar" aria-label="Loading simulation"><i id="loadbarfill"></i></div></div></div><script>(function(){var c=document.getElementById("copy"),t=document.getElementById("copytoggle"),g=document.getElementById("copytag");function set(m){c.classList.toggle("min",m);t.textContent=m?"About":"Hide text"}t.addEventListener("click",function(){set(!c.classList.contains("min"))});g.addEventListener("click",function(){set(false)});if(window.matchMedia&&window.matchMedia("(max-width:700px)").matches)set(true)})();</script><!-- LIVE TRAINING PROGRESS PANEL (reads HF danielharkin21/ath-h2-policies) -->
+</head><body><div id="app"></div><div class="top"><div class="brand"><b>LATENT</b> / MUJOCO</div><div class="badge" id="badge">BOOTING REAL SIM</div></div><div class="hud"><div class="row"><span>PHYSICS</span><strong id="physics">MuJoCo WASM loading</strong></div><div class="row"><span>MODEL</span><strong id="model">H2 stand MJCF (training-exact) · 29 servos</strong></div><div class="row"><span>GEOMETRY</span><strong id="geo">Loading official H2 meshes</strong></div><div class="row"><span>CONTROL</span><strong>LIVE: V3 STAND (FALLS) · V4 REPLAY: STAYS UP, SKATES</strong></div></div><div class="truth"><b>What is real?</b><br><i>Real:</i> official MuJoCo engine at 500Hz (2 ms), the exact h2_stand_model.xml the v3 policy trained on, driving a cosmetic display skin mapped onto the real training bodies - the skin is display-only, physics is the training MJCF - with its 29 training-gain servos. The ONNX policy runs in-browser on the training observation contract, output scaled 0.3 and clipped to servo ranges.<br><br><i>Honest limits:</i> v3 (live above): best checkpoint of a failed run - ~1.5 s up, then a fall; fails the float64 oracle 8/8. v4 (60.8M steps, replay below right): stays up under 0.6 m/s shoves in float64 - 0/8 falls - but foot-slides; not yet browser-exported. v5 training: slip/drift/twitch penalties + a hard stage-1 gate. The robot starts at the far baseline facing the machine. Robot skin, racket, and the ball machine's ball flight are a display layer; ball-interaction physics stays parked.</div><div class="copy"</div><div class="copy" id="copy"><span class="copytag" id="copytag">REAL MODEL. REAL PHYSICS.</span><h1>REAL MODEL.<br>REAL PHYSICS.</h1><p>The live robot above is still the v3 stand policy (best eval) - the newest browser-runnable export: it stands ~1.5s, falls, resets, and fails the float64 oracle 8/8. The newest checkpoint, v4 (60.8M steps), no longer falls - 0/8 under 0.6 m/s shoves in float64 physics - but its feet visibly slide. Watch the v4 replay on the right. v5 is in training now with slip/drift/twitch penalties and a hard stage-1 gate. Drag to orbit.</p><p class="roadmap"><b>ATH - Association of Tennis Humanoids</b><br>Building toward physics-first humanoid tennis: pro footwork, spin-aware ball flight, drills, serves, and match play.</p><button class="copytoggle" id="copytoggle">Hide text</button></div><div class="media"><video autoplay muted loop playsinline><source src="./assets/media/stand_v4_seed3.mp4?v=standv4a" type="video/mp4"><source src="./assets/media/stand_v4_seed3.webm?v=standv4a" type="video/webm"></video><b>TRAINING PROGRESS &middot; STAND v4 (NEWEST)</b><br>Stand v4 - 60.8M steps: stays up under 0.6 m/s shoves in float64 physics (0/8 falls), but the feet slide. v5 in training to fix it.</div><div class="mobcap"><b>LIVE SIM - v3 stand policy:</b> stands ~1.5 s, falls, fails the float64 oracle 8/8. v4 stays up under shoves but the feet slide (replay on desktop). v5 in training. The robot starts at the baseline; the skin, racket, and the ball machine's ball flight are a display layer over the real training physics (ball-interaction physics stays parked).</div><div class="controls"><button id="pause">Pause</button><button id="reset">Reset</button><a href="https://github.com/unitreerobotics/unitree_ros" target="_blank">Source</a></div><div class="loading" id="loading"><div><b>COMPILING UNITREE H2</b><small id="loadmsg">Loading stand-v3 training model…</small><div class="loadbar" role="progressbar" aria-label="Loading simulation"><i id="loadbarfill"></i></div></div></div><script>(function(){var c=document.getElementById("copy"),t=document.getElementById("copytoggle"),g=document.getElementById("copytag");function set(m){c.classList.toggle("min",m);t.textContent=m?"About":"Hide text"}t.addEventListener("click",function(){set(!c.classList.contains("min"))});g.addEventListener("click",function(){set(false)});if(window.matchMedia&&window.matchMedia("(max-width:700px)").matches)set(true)})();</script><!-- LIVE TRAINING PROGRESS BAR + PANEL (reads HF danielharkin21/ath-h2-policies) -->
 <div id="trainprog">
-  <button id="trainprog_toggle" type="button">TRAINING &#9662;</button>
+  <button id="trainprog_toggle" type="button">TRAINING &hellip;</button>
   <div id="trainprog_panel">
     <div style="font-weight:700;letter-spacing:.06em;color:#8fd14f;font-size:11px">LIVE TRAINING FEED</div>
     <div id="trainprog_body" style="margin-top:4px">waiting for first publish&hellip;</div>
@@ -15,31 +15,40 @@
   </div>
 </div>
 <style>
-#trainprog{position:fixed;left:18px;bottom:356px;z-index:60;font-family:inherit;user-select:none}
-#trainprog_toggle{background:#0d141c;color:#cfd8e3;border:1px solid rgba(140,160,180,.25);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:.06em;cursor:pointer}
+#trainprog{position:fixed;left:18px;bottom:344px;z-index:60;font-family:inherit;user-select:none}
+#trainprog_toggle{background:#0d141c;color:#cfd8e3;border:1px solid rgba(140,160,180,.25);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
+#trainprog_toggle b{color:#8fd14f}
 #trainprog_panel{margin-top:6px;max-width:290px;background:rgba(10,14,20,.85);border:1px solid rgba(140,160,180,.25);border-radius:10px;padding:10px 12px;color:#cfd8e3;font-size:12px;line-height:1.5;backdrop-filter:blur(4px)}
-@media(max-width:700px){#trainprog{left:14px;bottom:auto;top:170px}}
+@media(max-width:700px){#trainprog{left:14px;bottom:auto;top:168px}}
 </style>
 <script>
 (function () {
   var URL_ = 'https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/training/progress_ball.json';
   var panel = document.getElementById('trainprog_panel');
   var tog = document.getElementById('trainprog_toggle');
-  var open = !(window.matchMedia && window.matchMedia('(max-width:700px)').matches);
-  function setOpen(o) { open = o; panel.style.display = o ? 'block' : 'none'; tog.innerHTML = o ? 'TRAINING &#9662;' : 'TRAINING &#9656;'; }
+  var open = false;
+  function setOpen(o) { open = o; panel.style.display = o ? 'block' : 'none'; }
   tog.addEventListener('click', function () { setOpen(!open); });
-  setOpen(open);
+  setOpen(false);
   function pct(x) { return (x * 100).toFixed(1) + '%'; }
   function fmt(n) { return (typeof n === 'number') ? n.toLocaleString('en-US') : String(n); }
+  function short(n) { return n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : fmt(n); }
   function render(j) {
     var L = j.latest || {};
+    var steps = L.steps !== undefined ? L.steps : (j.steps !== undefined ? j.steps : undefined);
+    var hit = L['eval/episode_hit'], fell = L['eval/episode_fell'];
+    var bar = '<b>' + (j.run || 'TRAINING') + '</b>';
+    if (steps !== undefined) bar += ' &middot; ' + short(steps) + (j.target_steps ? '/' + short(j.target_steps) : '') + ' steps';
+    if (hit !== undefined) bar += ' &middot; hit ' + pct(hit);
+    if (fell !== undefined) bar += ' &middot; fell ' + pct(fell);
+    if (j.status) bar += ' &middot; ' + j.status;
+    tog.innerHTML = bar + (open ? ' &#9662;' : ' &#9656;');
     var rows = [];
     if (j.run) rows.push('<b>RUN</b> ' + j.run + (j.status ? ' &middot; ' + j.status : ''));
-    var steps = L.steps !== undefined ? L.steps : (j.steps !== undefined ? j.steps : undefined);
     if (steps !== undefined) rows.push('<b>STEPS</b> ' + fmt(steps) + (j.target_steps ? ' / ' + fmt(j.target_steps) : ''));
     if (j.log && j.log.length) rows.push('<b>EVALS</b> ' + fmt(j.log.length));
-    if (L['eval/episode_hit'] !== undefined) rows.push('<b>RACKET CONTACT</b> ' + pct(L['eval/episode_hit']) + ' of eval episodes');
-    if (L['eval/episode_fell'] !== undefined) rows.push('<b>FELL</b> ' + pct(L['eval/episode_fell']));
+    if (hit !== undefined) rows.push('<b>RACKET CONTACT</b> ' + pct(hit) + ' of eval episodes');
+    if (fell !== undefined) rows.push('<b>FELL</b> ' + pct(fell));
     if (L['eval/episode_reward'] !== undefined) rows.push('<b>REWARD</b> ' + L['eval/episode_reward'].toFixed(1));
     if (L['eval/episode_dist'] !== undefined) rows.push('<b>DIST</b> ' + L['eval/episode_dist'].toFixed(1));
     if (!rows.length) rows.push('published keys: ' + Object.keys(j).slice(0, 8).join(', '));
@@ -52,6 +61,7 @@
       .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
       .then(render)
       .catch(function () {
+        tog.innerHTML = 'TRAINING &#9656;';
         document.getElementById('trainprog_body').textContent = 'waiting for first publish\u2026';
         document.getElementById('trainprog_asof').textContent = '';
       });
