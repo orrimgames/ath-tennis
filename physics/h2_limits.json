@@ -1,0 +1,188 @@
+{
+ "left_hip_pitch_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -2.4525975,
+  "upper": 2.7754225
+ },
+ "left_hip_roll_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -0.467441,
+  "upper": 2.1688605
+ },
+ "left_hip_yaw_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -2.827,
+  "upper": 2.827
+ },
+ "left_knee_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -0.08725,
+  "upper": 2.53025
+ },
+ "left_ankle_roll_joint": {
+  "effort": 19.0,
+  "velocity": 100.7,
+  "lower": -0.3490658503,
+  "upper": 0.296705972783
+ },
+ "left_ankle_pitch_joint": {
+  "effort": 66.88,
+  "velocity": 28.61,
+  "lower": -1.13446401358,
+  "upper": 0.61086523808
+ },
+ "right_hip_pitch_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -2.4525975,
+  "upper": 2.7754225
+ },
+ "right_hip_roll_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -2.1688605,
+  "upper": 0.467441
+ },
+ "right_hip_yaw_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -2.827,
+  "upper": 2.827
+ },
+ "right_knee_joint": {
+  "effort": 360.0,
+  "velocity": 20.0,
+  "lower": -0.08725,
+  "upper": 2.53025
+ },
+ "right_ankle_roll_joint": {
+  "effort": 19.0,
+  "velocity": 100.7,
+  "lower": -0.296705972783,
+  "upper": 0.3490658503
+ },
+ "right_ankle_pitch_joint": {
+  "effort": 66.88,
+  "velocity": 28.61,
+  "lower": -1.13446401358,
+  "upper": 0.61086523808
+ },
+ "waist_yaw_joint": {
+  "effort": 120.0,
+  "velocity": 28.375,
+  "lower": -1.7453,
+  "upper": 1.7453
+ },
+ "waist_roll_joint": {
+  "effort": 180.0,
+  "velocity": 28.375,
+  "lower": -0.5236,
+  "upper": 0.5236
+ },
+ "waist_pitch_joint": {
+  "effort": 180.0,
+  "velocity": 28.375,
+  "lower": -0.43633,
+  "upper": 0.5236
+ },
+ "head_pitch_joint": {
+  "effort": 50.0,
+  "velocity": 10.0,
+  "lower": -0.5236,
+  "upper": 0.83775
+ },
+ "head_yaw_joint": {
+  "effort": 50.0,
+  "velocity": 10.0,
+  "lower": -1.7453,
+  "upper": 1.7453
+ },
+ "left_shoulder_pitch_joint": {
+  "effort": 130.0,
+  "velocity": 21.9,
+  "lower": -2.618,
+  "upper": 1.833
+ },
+ "left_shoulder_roll_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -0.517,
+  "upper": 2.494
+ },
+ "left_shoulder_yaw_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -2.618,
+  "upper": 2.618
+ },
+ "left_elbow_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -0.986,
+  "upper": 3.071
+ },
+ "left_wrist_roll_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -2.618,
+  "upper": 2.618
+ },
+ "left_wrist_pitch_joint": {
+  "effort": 10.0,
+  "velocity": 37.7,
+  "lower": -0.576,
+  "upper": 0.576
+ },
+ "left_wrist_yaw_joint": {
+  "effort": 10.0,
+  "velocity": 37.7,
+  "lower": -1.22,
+  "upper": 1.22
+ },
+ "right_shoulder_pitch_joint": {
+  "effort": 130.0,
+  "velocity": 21.9,
+  "lower": -2.618,
+  "upper": 1.833
+ },
+ "right_shoulder_roll_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -2.494,
+  "upper": 0.517
+ },
+ "right_shoulder_yaw_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -2.618,
+  "upper": 2.618
+ },
+ "right_elbow_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -0.986,
+  "upper": 3.071
+ },
+ "right_wrist_roll_joint": {
+  "effort": 60.0,
+  "velocity": 18.7,
+  "lower": -2.618,
+  "upper": 2.618
+ },
+ "right_wrist_pitch_joint": {
+  "effort": 10.0,
+  "velocity": 37.7,
+  "lower": -0.576,
+  "upper": 0.576
+ },
+ "right_wrist_yaw_joint": {
+  "effort": 10.0,
+  "velocity": 37.7,
+  "lower": -1.22,
+  "upper": 1.22
+ }
+}

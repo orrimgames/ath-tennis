@@ -1,0 +1,5 @@
+exec(open('volley.py').read().split("if __name__")[0])
+render(1.70, '/tmp/uturn/m_step.png')
+render(1.93, '/tmp/uturn/m_contact.png')
+render(2.10, '/tmp/uturn/m_out.png')
+print('ok')
