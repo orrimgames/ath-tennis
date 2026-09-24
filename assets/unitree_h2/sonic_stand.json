@@ -1,7 +1,7 @@
 {
- "name": "stand",
+ "name": "roddick_serve",
  "fps": 50,
- "frames": 1449,
+ "frames": 141,
  "dof": 31,
  "layout": [
   "root_pos[f,3]",
@@ -10,5 +10,5 @@
   "dof_vel[f,31]"
  ],
  "dtype": "float32le",
- "source": "sonic_test/stand.pkl (GMR order MJ31)"
+ "source": "roddick_serve_v2 clean cut -> GVHMR -> GMR retarget (H2, ik_h2 canonical), grounded; resampled 30->50Hz; MJ31 joint order; loop-blend appended"
 }
