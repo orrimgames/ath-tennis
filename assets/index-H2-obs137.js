@@ -30786,18 +30786,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       return out;
     }
     var infer=false;
-    function policyTick(){
-      if (!sess || infer) return;
-      infer=true;
-      try { var ob=obs1670();
-        sess.run({obs_dict: new ort.Tensor('float32', ob, [1,1670])}).then(function(res){
-          var a=res[sess.outputNames[0]].data;
-          for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
-            var j=XJ[m]; if (j>=0) dS.ctrl[j]=DEFV[m]+cl*SCALE[m]; }
-          infer=false;
-        }).catch(function(){ infer=false; });
-      } catch(e){ infer=false; }
-    }
+    function policyTick(){ /* retired: synchronous-apply loop below (tracking policy falls with >=1 tick action delay) */ }
     function reset(){
       try { r.mj_resetData(mS,dS); } catch(e){}
       var rp=clip.rp(0), rq=clip.rq(0);
@@ -30810,22 +30799,30 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       frame=0; fallT=-1; simT=0; nextCtrl=0;
       r.mj_forward(mS,dS);
     }
-    function tick(){
-      if (!S.active || !S.ready) return;
-      var now=performance.now()/1000;
-      if (lastWall<0) lastWall=now;
-      var adv=Math.min(0.1, Math.max(0, now-lastWall)); lastWall=now;
-      var target=simT+adv, sub=0;
-      while (simT<target && sub<40){ sub++;
-        if (simT>=nextCtrl){ nextCtrl+=0.02; policyTick(); frame=Math.min(frame+1, clip.frames-1); }
-        try { r.mj_step(mS,dS); } catch(e){ simT+=0.005; continue; }
-        simT+=0.005;
+    var looping=false;
+    async function ctrlLoop(){
+      if (looping) return; looping=true;
+      var wall0=performance.now()/1000, sim0=simT;
+      while (S.active && S.ready){
+        var ob=obs1670();
+        try {
+          var res=await sess.run({obs_dict:new ort.Tensor('float32', ob, [1,1670])});
+          var a=res[sess.outputNames[0]].data;
+          for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
+            var j=XJ[m]; if (j>=0) dS.ctrl[j]=DEFV[m]+cl*SCALE[m]; }
+        } catch(e){}
+        frame=Math.min(frame+1, clip.frames-1);
+        for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); } catch(e){} simT+=0.005; }
+        if (frame>=clip.frames-1){ reset(); wall0=performance.now()/1000; sim0=simT; continue; }
+        var cz=clip.rp(frame)[2], up=dS.xmat[17];
+        if (fallT<0 && (dS.qpos[2]<cz-0.3 || up<0.5)){ fallT=simT; }
+        if (fallT>=0 && simT-fallT>1.5){ reset(); wall0=performance.now()/1000; sim0=simT; continue; }
+        var wallNow=performance.now()/1000, target=wall0+(simT-sim0);
+        if (target>wallNow) await new Promise(function(rs){ setTimeout(rs, Math.min(250,(target-wallNow)*1000)); });
       }
-      if (frame>=clip.frames-1){ reset(); return; }
-      var cz=clip.rp(frame)[2], up=dS.xmat[17];
-      if (fallT<0 && (dS.qpos[2]<cz-0.3 || up<0.5)){ fallT=simT; }
-      if (fallT>=0 && simT-fallT>1.5) reset();
+      looping=false;
     }
+    function tick(){ /* replaced by ctrlLoop */ }
     function setBtn(t){ var b=document.getElementById('sonicbtn'); if (b) b.textContent=t; }
     function activate(){
       if (!S.ready || S.active) return;
@@ -30835,6 +30832,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       var cap=document.getElementById('soniccap'); if (cap) cap.style.display='block';
       setBtn('SONIC: ON');
       reset();
+      ctrlLoop();
     }
     function deactivate(){
       S.active=false;
