@@ -30761,7 +30761,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       if (n==='left_shoulder_roll_joint') v=0.2; if (n==='left_shoulder_pitch_joint') v=0.2;
       if (n==='right_shoulder_roll_joint') v=-0.2; if (n==='right_shoulder_pitch_joint') v=0.2; return v; });
     var SCALE=MJ31.map(function(_,i){ return KP[i]>0 ? 0.25*EFFR[i]/KP[i] : 0; });
-    var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand' };
+    var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand', stepCount:0, lastErr:null };
     var mS=null, dS=null, r=null, sess=null, clip=null, simT=0, lastWall=-1, nextCtrl=0, frame=0, fallT=-1;
     var last=new Float64Array(31), hist={av:[],jp:[],jv:[],ac:[],g:[]};
     var OFF={x:7.4,y:2.85};
@@ -30812,11 +30812,11 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
             var j=XJ[m]; if (j>=0) dS.ctrl[j]=DEFV[m]+cl*SCALE[m]; }
         } catch(e){}
         frame=Math.min(frame+1, clip.frames-1);
-        for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); } catch(e){} simT+=0.005; }
-        if (frame>=clip.frames-1){ reset(); wall0=performance.now()/1000; sim0=simT; continue; }
+        for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); S.stepCount++; } catch(e){ S.lastErr=String(e); } simT+=0.005; }
+        if (frame>=clip.frames-1){ S.lastReset='clip_end@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         var cz=clip.rp(frame)[2], up=dS.xmat[17];
         if (fallT<0 && (dS.qpos[2]<cz-0.3 || up<0.5)){ fallT=simT; }
-        if (fallT>=0 && simT-fallT>1.5){ reset(); wall0=performance.now()/1000; sim0=simT; continue; }
+        if (fallT>=0 && simT-fallT>1.5){ S.lastReset='fall@'+simT.toFixed(2)+' z='+dS.qpos[2].toFixed(3); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         var wallNow=performance.now()/1000, target=wall0+(simT-sim0);
         if (target>wallNow) await new Promise(function(rs){ setTimeout(rs, Math.min(250,(target-wallNow)*1000)); });
       }
@@ -30854,7 +30854,9 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
           rp:function(i){return fa.subarray(o1+i*3,o1+i*3+3);}, rq:function(i){return fa.subarray(o2+i*4,o2+i*4+4);},
           dof:function(i){return fa.subarray(o3+i*31,o3+i*31+31);}, dofv:function(i){return fa.subarray(o4+i*31,o4+i*31+31);} };
         mS=r.MjModel.from_xml_string(xml, new r.MjVFS());
+        if(!window.__SONICDBG) window.__SONICDBG={}; window.__SONICDBG.m=mS;
         dS=new r.MjData(mS);
+        window.__SONICDBG.d=dS;
         // runtime gain override (sonic_mj.py build()): fixed-gain PD per joint, effort from file ranges
         try {
           for (var j=0;j<29;j++){ var m=j<15?j:j+2;
@@ -30862,7 +30864,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
             mS.actuator_gainprm[j*10]=KP[m]; mS.actuator_biasprm[j*10+1]=-KP[m]; mS.actuator_biasprm[j*10+2]=-KD[m];
             mS.actuator_forcerange[j*2]=-EFFR[m]; mS.actuator_forcerange[j*2+1]=EFFR[m];
             mS.dof_armature[6+j]=ARM[m]; } // forcelimited/ctrllimited stay as the MJCF declares (forcelimited=true via actuatorfrcrange; no ctrlrange)
-          console.log('SONIC gains overridden (EFF=real from h2_ath.xml)');
+          console.log('SONIC gains overridden (EFF=real from h2_ath.xml)'); S.gains=mS.actuator_forcerange[0]+','+mS.actuator_forcerange[1];
         } catch(e){ console.log('SONIC gain override failed', e); }
         setBtn('SONIC: POLICY');
         var spec=await (await fetch('https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/sonic/policy/spec.json',{cache:'no-store'})).json();
@@ -30873,7 +30875,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
         var ta=test[sess.outputNames[0]].data, ok=ta.length===31;
         for (var i=0;i<31;i++) if (!isFinite(ta[i]) || Math.abs(ta[i])>20) ok=false;
         if (!ok) throw new Error('sonic sanity gate failed');
-        S.u=dS; S.ready=true; S.loading=false;
+        S.u=dS; S.ready=true; S.loading=false; S.timestep=mS.opt.timestep;
         setBtn('SONIC DEMO'); console.log('SONIC ready: h2_ath + model_step_100000_g1 (1670->31), clip='+hdr.name+' '+F+'f');
         reset();
       } catch(e){ S.err=String(e); S.loading=false; setBtn('SONIC: ERR'); console.log('SONIC load failed', e); }
