@@ -30867,7 +30867,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
         clip={ frames:F,
           rp:function(i){return fa.subarray(o1+i*3,o1+i*3+3);}, rq:function(i){return fa.subarray(o2+i*4,o2+i*4+4);},
           dof:function(i){return fa.subarray(o3+i*31,o3+i*31+31);}, dofv:function(i){return fa.subarray(o4+i*31,o4+i*31+31);} };
-        (function(){ var tmp=new Float32Array(31); for (var i=0;i<F;i++){ var d=clip.dof(i); tmp.set(d); for (var k=0;k<31;k++) d[k]=tmp[PERM[k]]; var v=clip.dofv(i); tmp.set(v); for (var k2=0;k2<31;k2++) v[k2]=tmp[PERM[k2]]; } })(); // clip now in ISA (policy) order
+        (function(){ var tmp=new Float32Array(31); for (var i=0;i<F;i++){ var d=clip.dof(i); tmp.set(d); for (var k=0;k<31;k++) d[k]=tmp[PERM[k]]; var v=clip.dofv(i); tmp.set(v); for (var k2=0;k2<31;k2++) v[k2]=tmp[PERM[k2]]; } })(); // clip now in ISA (policy) order window.__SONIC.clipName=hdr.name||'clip';
         mS=r.MjModel.from_xml_string(xml, new r.MjVFS());
         if(!window.__SONICDBG) window.__SONICDBG={}; window.__SONICDBG.m=mS;
         dS=new r.MjData(mS);
@@ -30898,7 +30898,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     // UI
     var btn=document.createElement('button'); btn.id='sonicbtn'; btn.type='button'; btn.textContent='SONIC DEMO';
     var cap=document.createElement('div'); cap.id='soniccap';
-    cap.textContent='SONIC motion-tracking checkpoint · Unitree-exact H2 body · skill: STAND (Federer forehand clip coming) · toggle off for the trained ball policy (old body)';
+    cap.textContent='SONIC motion-tracking checkpoint · Unitree-exact H2 body · skill: RODDICK SERVE (reference tracking) · toggle off for the trained ball policy (old body)';
     var st=document.createElement('style');
     st.textContent='#sonicbtn{position:fixed;right:18px;bottom:96px;z-index:60;background:rgba(12,14,18,.88);color:#e8e8e8;border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer;font-family:inherit}'+
       '#soniccap{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:64px;z-index:60;max-width:82vw;text-align:center;background:rgba(10,12,16,.85);color:#cfd4da;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:5px 10px;font-size:10px;letter-spacing:.06em;font-family:inherit}';
