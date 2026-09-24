@@ -30821,7 +30821,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
           for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
             var j=XJp[m]; if (j>=0) dS.ctrl[j]=DEFVp[m]+cl*SCALEp[m]; }
         } catch(e){}
-        frame=Math.min(frame+1, clip.frames-1); if (frame>=clip.frames-1){ S.lastReset='clip-end@'+simT.toFixed(2); reset(); }
+        frame=Math.min(frame+1, clip.frames-1); if (frame>=110){ S.lastReset='loop@'+simT.toFixed(2); reset(); }
         for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); S.stepCount++; } catch(e){ S.lastErr=String(e); } simT+=0.005; }
         if (frame>=clip.frames-1){ S.lastReset='clip_end@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         var cz=clip.rp(frame)[2], up=dS.xmat[17];
