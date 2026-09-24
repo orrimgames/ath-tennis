@@ -29756,7 +29756,7 @@ Dr.enableDamping = !0;
 Dr.minDistance = 1.2;
 Dr.maxDistance = 32;
 window.__CAM = sr; window.__ORBIT = Dr;
-Fn.add(new k_(13493503, 4866104, 2.15));
+Fn.add(new k_(16773600, 4866104, 2.15));
 const Ls = new H_(16777215, 2.9);
 Ls.position.set(-7, -10, 16);
 Ls.castShadow = !0;
@@ -30245,7 +30245,7 @@ async function ZE() {
       }
       return 12;
     }
-    const __FEED = { clear: 2.5, rpm: 3000, speed: 23, side: 0, auto: true, rand: true };
+    const __FEED = { clear: 2.5, rpm: 3000, speed: 23, side: 0, auto: true, rand: true, custom: false };
     function __buildFeedUI() {
       try {
         const wrap = document.createElement("div");
@@ -30253,9 +30253,9 @@ async function ZE() {
         wrap.innerHTML = '<button id="feedtoggle" type="button">FEED &#9662;</button>' +
           '<div id="feedpanel">' +
           '<label>Net clearance <span id="fv_clear"></span></label><input id="fs_clear" type="range" min="0.01" max="8" step="0.01" value="2.5">' +
-          '<label>Spin <span id="fv_spin"></span></label><input id="fs_spin" type="range" min="-4000" max="4000" step="250" value="3000">' +
+          '<label>Spin <span id="fv_spin"></span></label><input id="fs_spin" type="range" min="-4000" max="4500" step="250" value="3000">' +
           '<label>Sidespin <span id="fv_side"></span></label><input id="fs_side" type="range" min="-4000" max="4000" step="250" value="0">' +
-          '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button><button id="fs_rand" type="button">RANDOM</button></label><input id="fs_speed" type="range" min="12" max="62.6" step="0.5" value="23">' +
+          '<label>Speed <span id="fv_speed"></span> <button id="fs_auto" type="button">AUTO</button><button id="fs_rand" type="button">RANDOM</button></label><input id="fs_speed" type="range" min="10" max="62.6" step="0.5" value="23"><div id="fv_mode"></div>' +
           '</div>';
         const st = document.createElement("style");
         st.textContent = "#feedctl{position:fixed;left:18px;bottom:96px;z-index:60;font-family:inherit;user-select:none}" +
@@ -30266,7 +30266,8 @@ async function ZE() {
           "#feedpanel.open{display:block}" +
           "#feedpanel label{display:block;color:#cfd4da;font-size:11px;letter-spacing:.08em;margin:8px 0 2px}" +
           "#feedpanel label span{color:#9be15d}" +
-          "#feedpanel input[type=range]{width:100%;height:26px;accent-color:#9be15d}";
+          "#feedpanel input[type=range]{width:100%;height:26px;accent-color:#9be15d}" +
+          "#feedctl #fv_mode{margin-top:8px;font-size:10px;letter-spacing:.1em;color:#9be15d}" + "#feedctl #fv_mode.custom{color:#ff9040}";
         document.head.appendChild(st);
         document.body.appendChild(wrap);
         const $ = (id) => document.getElementById(id);
@@ -30279,15 +30280,16 @@ async function ZE() {
           $("fv_side").textContent = (__FEED.side >= 0 ? "+" : "") + __FEED.side + " rpm " + (__FEED.side === 0 ? "(none)" : "(sidespin)");
           $("fv_speed").textContent = __FEED.speed.toFixed(1) + " m/s (" + Math.round(__FEED.speed * 2.23694) + " mph)";
           $("fs_auto").classList.toggle("off", !__FEED.auto);
-          $("fs_rand").classList.toggle("off", !__FEED.rand);
+          $("fs_rand").classList.toggle("off", __FEED.custom);
+          const __fm = $("fv_mode"); if (__fm) { __fm.textContent = __FEED.custom ? "CUSTOM FEED (NOT FROM TRAINING)" : "LIVE TRAINING FEED"; __fm.classList.toggle("custom", __FEED.custom); }
         };
-        $("fs_clear").oninput = (e) => { __FEED.clear = Number(e.target.value); __FEED.rand = false; show(); };
-        $("fs_spin").oninput = (e) => { __FEED.rpm = Number(e.target.value); __FEED.rand = false; show(); };
-        $("fs_side").oninput = (e) => { __FEED.side = Number(e.target.value); __FEED.rand = false; show(); };
-        $("fs_speed").oninput = (e) => { __FEED.speed = Number(e.target.value); __FEED.auto = false; __FEED.rand = false; show(); };
-        $("fs_auto").onclick = () => { __FEED.auto = !__FEED.auto; show(); };
-        $("fs_rand").onclick = () => { __FEED.rand = !__FEED.rand; show(); };
-        try { if (__BALLMODE) $("feedctl").style.display = "none"; } catch (e) {}
+        $("fs_clear").oninput = (e) => { __FEED.clear = Number(e.target.value); __FEED.custom = true; show(); };
+        $("fs_spin").oninput = (e) => { __FEED.rpm = Number(e.target.value); __FEED.custom = true; show(); };
+        $("fs_side").oninput = (e) => { __FEED.side = Number(e.target.value); __FEED.custom = true; show(); };
+        $("fs_speed").oninput = (e) => { __FEED.speed = Number(e.target.value); __FEED.auto = false; __FEED.custom = true; show(); };
+        $("fs_auto").onclick = () => { __FEED.auto = !__FEED.auto; __FEED.custom = true; show(); };
+        $("fs_rand").onclick = () => { __FEED.custom = false; show(); };
+        
         window.__feedUISync = () => { try { $("fs_clear").value = __FEED.clear; $("fs_spin").value = __FEED.rpm; $("fs_side").value = __FEED.side; $("fs_speed").value = __FEED.speed; } catch (e) {} show(); };
         show();
       } catch (e) {}
@@ -30403,6 +30405,30 @@ async function ZE() {
         __HORIZON = Math.ceil((F[o13+12] + 0.2) / 0.02);
         window.__FEEDIDX = o13 / 13;
         try { if (window.__MACHG) { const __p0x = F[o13], __p0y = F[o13+1], __p0z = F[o13+2]; let __dx = F[o13+9] - __p0x, __dy = F[o13+10] - __p0y, __dz = F[o13+11] - __p0z; const __dl = Math.sqrt(__dx*__dx + __dy*__dy + __dz*__dz) || 1; __dx /= __dl; __dy /= __dl; __dz /= __dl; const __q = new Ci(); __q.setFromUnitVectors(new K(1, 0, 0), new K(__dx, __dy, __dz)); window.__MACHG.quaternion.copy(__q); const __off = new K(0.94, 0, 0.78).applyQuaternion(__q); window.__MACHG.position.set(__p0x - __off.x, __p0y - __off.y, Math.max(__p0z - __off.z, -0.05)); } } catch (e) {}
+        if (__FEED.custom) {
+          const __cp0x = F[o13], __cp0y = F[o13+1], __cp0z = F[o13+2];
+          const __caz = Math.atan2(F[o13+10] - __cp0y, F[o13+9] - __cp0x);
+          const __cw = __FEED.rpm * 2 * Math.PI / 60, __cws = __FEED.side * 2 * Math.PI / 60;
+          const __cv = __FEED.auto ? __maxPace(__cp0x, __cp0y, __cp0z, __caz, __cw, __FEED.clear, __cws) : __FEED.speed;
+          const __cel = __solveLaunch(__cp0x, __cp0y, __cp0z, __caz, __cv, __cw, __FEED.clear, __cws);
+          u.qvel[35] = __cv * Math.cos(__cel) * Math.cos(__caz); u.qvel[36] = __cv * Math.cos(__cel) * Math.sin(__caz); u.qvel[37] = __cv * Math.sin(__cel);
+          u.qvel[38] = -__cw * Math.sin(__caz); u.qvel[39] = __cw * Math.cos(__caz); u.qvel[40] = __cws;
+          __omg = [u.qvel[38], u.qvel[39], u.qvel[40]];
+          for (let i = 0; i < 5; i++) { const h = __HIST[__HIST.length - 5 + i]; if (h) { h[3] = u.qvel[35]; h[4] = u.qvel[36]; h[5] = u.qvel[37]; } }
+          const __rf = __simFlight(__cp0x, __cp0y, __cp0z, __caz, __cel, __cv, __cw, __cws);
+          __HORIZON = Math.ceil((__rf.t + 0.2) / 0.02);
+        } else {
+          const __mvx = F[o13+3], __mvy = F[o13+4], __mvz = F[o13+5];
+          const __mvv = Math.hypot(__mvx, __mvy, __mvz) || 1;
+          const __maz = Math.atan2(__mvy, __mvx), __mel = Math.asin(Math.min(1, Math.max(-1, __mvz / __mvv)));
+          const __mw = -F[o13+6] * Math.sin(__maz) + F[o13+7] * Math.cos(__maz), __mws = F[o13+8];
+          __FEED.speed = Math.min(62.6, Math.max(10, Math.round(__mvv * 2) / 2));
+          __FEED.rpm = Math.min(4500, Math.max(-4000, Math.round(__mw * 60 / (2 * Math.PI) / 250) * 250));
+          __FEED.side = Math.min(4000, Math.max(-4000, Math.round(__mws * 60 / (2 * Math.PI) / 250) * 250));
+          const __rf0 = __simFlight(F[o13], F[o13+1], F[o13+2], __maz, __mel, __mvv, __mw, __mws);
+          if (__rf0.znet !== null) __FEED.clear = Math.min(8, Math.max(0.01, Math.round((__rf0.znet - 0.914) * 100) / 100));
+          if (window.__feedUISync) window.__feedUISync();
+        }
       } try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
       r.mj_forward(a, u);
     }
@@ -30691,6 +30717,7 @@ if (/[?&]parity=1/.test(location.search)) (async function () {
 })();
 
 window.__DBG137 = /[?&]dbg137=1/.test(location.search);
+;(function __wasdNav(){var __tries=0;var __iv=setInterval(function(){__tries++;try{var cam=window.__CAM,orb=window.__ORBIT;if(!cam||!orb){if(__tries>600)clearInterval(__iv);return;}clearInterval(__iv);var keys={};window.addEventListener('keydown',function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;var k=(e.key||'').toLowerCase();keys[k]=true;if(k==='w'||k==='a'||k==='s'||k==='d'||k.indexOf('arrow')===0)e.preventDefault();});window.addEventListener('keyup',function(e){keys[(e.key||'').toLowerCase()]=false;});window.addEventListener('blur',function(){keys={};});setInterval(function(){var f=0,st=0;if(keys['w']||keys['arrowup'])f+=1;if(keys['s']||keys['arrowdown'])f-=1;if(keys['d']||keys['arrowright'])st+=1;if(keys['a']||keys['arrowleft'])st-=1;if(!f&&!st)return;var dx=orb.target.x-cam.position.x,dy=orb.target.y-cam.position.y;var dl=Math.hypot(dx,dy)||1;dx/=dl;dy/=dl;var sp=(keys['shift']?14:6)*0.016;var mx=(dx*f-dy*st)*sp,my=(dy*f+dx*st)*sp;cam.position.x+=mx;cam.position.y+=my;orb.target.x+=mx;orb.target.y+=my;orb.update();},16);}catch(e){}},250);})();
 ;(function __lawnFix2(){var __tries=0;var __iv=setInterval(function(){__tries++;try{var rk=window.__RACKET;if(!rk){if(__tries>600)clearInterval(__iv);return;}var sc=rk,n=0;while(sc.parent&&n<20){sc=sc.parent;n++;}var court=null,ball=null,lawn=null,apron=null;sc.traverse(function(o){if(o.isMesh){var g=o.geometry;if(g.type==="PlaneGeometry"){if(g.parameters.width===200)lawn=o;else if(g.parameters.width===23.77)court=o;else if(g.parameters.width===35.77)apron=o;}if(g.type==="SphereGeometry"&&g.parameters&&g.parameters.radius<0.1&&o.material.type==="MeshBasicMaterial")ball=o;}});if(!court||!ball){if(__tries>600)clearInterval(__iv);return;}var BM=ball.material.constructor,SM=court.material.constructor,PG=court.geometry.constructor,Msh=court.constructor,Tex=court.material.map.constructor;
 if(!window.__GRASSTEX){var cv=document.createElement("canvas");cv.width=1024;cv.height=1024;var cx=cv.getContext("2d");cx.fillStyle="#2f6e2b";cx.fillRect(0,0,1024,1024);for(var bi=0;bi<16;bi++){cx.fillStyle=bi%2===0?"rgba(255,255,255,0.055)":"rgba(0,0,0,0.065)";cx.fillRect(bi*64,0,64,1024);}var img=cx.getImageData(0,0,1024,1024),dd=img.data;for(var p=0;p<dd.length;p+=4){var nz=(Math.random()-0.5)*30;dd[p]+=nz*0.8;dd[p+1]+=nz*1.25;dd[p+2]+=nz*0.7;}cx.putImageData(img,0,0);cx.globalAlpha=0.06;cx.strokeStyle="#a8d884";for(var k=0;k<4500;k++){var x=Math.random()*1024,y=Math.random()*1024;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x+(Math.random()*2-1),y-2-Math.random()*2.5);cx.stroke();}cx.globalAlpha=0.05;cx.strokeStyle="#1d4d1c";for(var k2=0;k2<2500;k2++){var x2=Math.random()*1024,y2=Math.random()*1024;cx.beginPath();cx.moveTo(x2,y2);cx.lineTo(x2+(Math.random()*2-1),y2-2-Math.random()*2);cx.stroke();}cx.globalAlpha=1;var gt=new Tex(cv);gt.needsUpdate=true;gt.colorSpace=court.material.map.colorSpace;gt.wrapS=gt.wrapT=1000;gt.repeat.set(14,14);gt.anisotropy=8;window.__GRASSTEX=gt;
 var cv2=document.createElement("canvas");cv2.width=512;cv2.height=512;var c2=cv2.getContext("2d");c2.fillStyle="#b86542";c2.fillRect(0,0,512,512);var img2=c2.getImageData(0,0,512,512),d2=img2.data;for(var p2=0;p2<d2.length;p2+=4){var n2=(Math.random()-0.5)*22;d2[p2]+=n2;d2[p2+1]+=n2*0.9;d2[p2+2]+=n2*0.8;}c2.putImageData(img2,0,0);var at=new Tex(cv2);at.needsUpdate=true;at.colorSpace=court.material.map.colorSpace;at.wrapS=at.wrapT=1000;at.repeat.set(8,4);at.anisotropy=8;window.__AProntEX=at;}
