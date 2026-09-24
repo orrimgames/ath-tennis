@@ -30744,7 +30744,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     var MJ31 = ["left_hip_pitch_joint","left_hip_roll_joint","left_hip_yaw_joint","left_knee_joint","left_ankle_roll_joint","left_ankle_pitch_joint","right_hip_pitch_joint","right_hip_roll_joint","right_hip_yaw_joint","right_knee_joint","right_ankle_roll_joint","right_ankle_pitch_joint","waist_yaw_joint","waist_roll_joint","waist_pitch_joint","head_pitch_joint","head_yaw_joint","left_shoulder_pitch_joint","left_shoulder_roll_joint","left_shoulder_yaw_joint","left_elbow_joint","left_wrist_roll_joint","left_wrist_pitch_joint","left_wrist_yaw_joint","right_shoulder_pitch_joint","right_shoulder_roll_joint","right_shoulder_yaw_joint","right_elbow_joint","right_wrist_roll_joint","right_wrist_pitch_joint","right_wrist_yaw_joint"];
     // welded-out of the ath body: slots 15 (head_pitch), 16 (head_yaw) stay inert
     var XJ = MJ31.map(function(_,m){ return m<15 ? m : (m>16 ? m-2 : -1); }); // MJ31 slot -> model joint index (0..28) or -1
-    var EFFR = [360,360,360,360,19,66.88,360,360,360,360,19,66.88,120,180,180,0,0,130,60,60,60,60,10,10,130,60,60,60,60,10,10]; // EFF=real: actuatorfrcrange of h2_ath.xml
+    var EFFR = [360,360,360,360,19,66.88,360,360,360,360,19,66.88,120,180,180,0,0,120,54,54,54,54,25,25,120,54,54,54,54,25,25]; // EFF=real per published harness: actuatorfrcrange of its /tmp/h2.xml (validated locally: stand rmse 0.133, no fall)
     var AA = {A5020:0.003609725, A7520_14:0.010177520, A7520_22:0.025101925, A4010:0.00425};
     var WW = 10*2*Math.PI, ZZ = 2.0;
     function gn(n){ var K=function(a){return a*WW*WW;}, D=function(a){return 2*ZZ*a*WW;};
