@@ -30799,14 +30799,14 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     function policyTick(){ /* retired: synchronous-apply loop below (tracking policy falls with >=1 tick action delay) */ }
     function reset(){
       try { r.mj_resetData(mS,dS); } catch(e){}
-      var rp=clip.rp(0), rq=clip.rq(0);
+      var rp=clip.rp(50), rq=clip.rq(50);
       dS.qpos[0]=rp[0]+OFF.x; dS.qpos[1]=rp[1]+OFF.y; dS.qpos[2]=rp[2];
       dS.qpos[3]=rq[0]; dS.qpos[4]=rq[1]; dS.qpos[5]=rq[2]; dS.qpos[6]=rq[3];
-      var d0=clip.dof(0), dv0=clip.dofv(0);
+      var d0=clip.dof(50), dv0=clip.dofv(50);
       for (var m=0;m<31;m++){ var j=XJp[m]; if (j>=0){ dS.qpos[7+j]=d0[m]; dS.qvel[6+j]=dv0[m]; } }
       for (var j2=0;j2<29;j2++){ var mm=j2<15?j2:j2+2; dS.ctrl[j2]=DEFV[mm]; }
       last.fill(0); hist={av:[],jp:[],jv:[],ac:[],g:[]};
-      frame=0; fallT=-1; simT=0; nextCtrl=0;
+      frame=50; fallT=-1; simT=0; nextCtrl=0; // harness lead-in: skip first 50 frames, warm-start from reference state
       r.mj_forward(mS,dS);
     }
     var looping=false;
@@ -30821,7 +30821,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
           for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
             var j=XJp[m]; if (j>=0) dS.ctrl[j]=DEFVp[m]+cl*SCALEp[m]; }
         } catch(e){}
-        frame=Math.min(frame+1, clip.frames-1);
+        frame=Math.min(frame+1, clip.frames-1); if (frame>=clip.frames-1){ S.lastReset='clip-end@'+simT.toFixed(2); reset(); }
         for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); S.stepCount++; } catch(e){ S.lastErr=String(e); } simT+=0.005; }
         if (frame>=clip.frames-1){ S.lastReset='clip_end@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         var cz=clip.rp(frame)[2], up=dS.xmat[17];
