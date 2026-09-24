@@ -30046,7 +30046,7 @@ async function ZE() {
       ae = function (ie) {
         if ((requestAnimationFrame(ae), Dr.update(), !M)) {
           const Q = (ie - z) / 1e3;
-          __PHYS(Q);
+          if (!window.__SONIC || !window.__SONIC.active) __PHYS(Q);
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
           // feed ball follows the real MuJoCo body (aero forces + contacts)
@@ -30127,7 +30127,7 @@ async function ZE() {
     ((bc.textContent = "Compiling official Unitree H2 model…"),
       document.querySelector("#loadbarfill") &&
         (document.querySelector("#loadbarfill").style.width = "92%"));
-    const n = new r.MjVFS();
+    window.__MJ = r; const n = new r.MjVFS();
     Ac.forEach((ie, Q) => n.addBuffer(ie, t[Q]));
     console.log("INIT137 pre-compile ballmode=" + window.__BALLMODE + " xmllen=" + (e ? e.length : -1));
     let a = null, o = null;
@@ -30580,15 +30580,15 @@ async function ZE() {
       (function __skinTick() {
         try {
           for (const s2 of __SKIN) {
-            const i3 = s2.bi * 3, i4 = s2.bi * 4;
-            const bq = [u.xquat[i4], u.xquat[i4+1], u.xquat[i4+2], u.xquat[i4+3]];
+            const __sd = (window.__SONIC && window.__SONIC.active && window.__SONIC.u) || u, i3 = s2.bi * 3, i4 = s2.bi * 4;
+            const bq = [__sd.xquat[i4], __sd.xquat[i4+1], __sd.xquat[i4+2], __sd.xquat[i4+3]];
             if (s2.op) {
               const wp = __qrot(bq, s2.op);
-              s2.mesh.position.set(u.xpos[i3] + wp[0], u.xpos[i3+1] + wp[1], u.xpos[i3+2] + wp[2]);
+              s2.mesh.position.set(__sd.xpos[i3] + wp[0], __sd.xpos[i3+1] + wp[1], __sd.xpos[i3+2] + wp[2]);
               const wq = __qmul(bq, s2.oq);
               s2.mesh.quaternion.set(wq[1], wq[2], wq[3], wq[0]);
             } else {
-              s2.mesh.position.set(u.xpos[i3], u.xpos[i3+1], u.xpos[i3+2]);
+              s2.mesh.position.set(__sd.xpos[i3], __sd.xpos[i3+1], __sd.xpos[i3+2]);
               s2.mesh.quaternion.set(bq[1], bq[2], bq[3], bq[0]);
             }
           }
@@ -30658,8 +30658,8 @@ async function ZE() {
               if (__feedP[2] <= RB2 + 0.003 && __feedV[2] === 0) { const fr = Math.max(0, 1 - 1.4 * sdt); __feedV[0] *= fr; __feedV[1] *= fr; }
               if (__feedAge > 12 || __feedP[0] > 13 || Math.abs(__feedP[1]) > 7) __feedP = null;
             }
-            if (__BALLMODE) { J.visible = !0; J.position.set(u.xpos[__BALLB*3], u.xpos[__BALLB*3+1], Math.max(u.xpos[__BALLB*3+2], 0.033)); } else if (__feedP) { J.visible = !0; J.position.set(__feedP[0], __feedP[1], Math.max(__feedP[2], 0.033)); }
-            else { J.visible = !0; J.position.set(__mach.position.x, __mach.position.y, 1.08); }
+            if (__BALLMODE) { J.visible = !(window.__SONIC && window.__SONIC.active); J.position.set(u.xpos[__BALLB*3], u.xpos[__BALLB*3+1], Math.max(u.xpos[__BALLB*3+2], 0.033)); } else if (__feedP) { J.visible = !(window.__SONIC && window.__SONIC.active); J.position.set(__feedP[0], __feedP[1], Math.max(__feedP[2], 0.033)); }
+            else { J.visible = !(window.__SONIC && window.__SONIC.active); J.position.set(__mach.position.x, __mach.position.y, 1.08); }
           } catch (fe) {}
         } catch (e) {}
         requestAnimationFrame(__skinTick);
@@ -30670,7 +30670,7 @@ async function ZE() {
       new jc({ color: 14745408 }),
     );
     (J.material.fog = !1, (J.castShadow = !0),
-      Fn.add(J),
+      Fn.add(J), window.__BALLM = J,
       KE(Da + "assets/tennis/tennis_court_clay.png?t=" + Date.now()),
       __buildFeedUI(),
       (document.querySelector("#pause").onclick = (ie) => {
@@ -30720,7 +30720,7 @@ window.__DBG137 = /[?&]dbg137=1/.test(location.search);
 ;(function __uiHide(){
   try{
     var st=document.createElement('style');
-    st.textContent='body.__uihide .top,body.__uihide .hud,body.__uihide .copy,body.__uihide .controls,body.__uihide .truth,body.__uihide .chip,body.__uihide #trainprog,body.__uihide #feedctl{display:none!important}'+
+    st.textContent='body.__uihide .top,body.__uihide .hud,body.__uihide .copy,body.__uihide .controls,body.__uihide .truth,body.__uihide .chip,body.__uihide #trainprog,body.__uihide #feedctl,body.__uihide #sonicbtn,body.__uihide #soniccap{display:none!important}'+
     '#uihidebtn{position:fixed;right:14px;bottom:14px;z-index:400;background:rgba(12,14,18,.55);color:#cfd8e3;border:1px solid rgba(140,160,180,.25);border-radius:8px;padding:4px 9px;font-size:10px;letter-spacing:.12em;cursor:pointer;opacity:.6;font-family:inherit}'+
     '#uihidebtn:hover{opacity:1}';
     document.head.appendChild(st);
@@ -30739,3 +30739,157 @@ if(!lawn){lawn=new Msh(new PG(200,200),new BM({map:window.__GRASSTEX}));lawn.pos
 if(!apron){apron=new Msh(new PG(35.77,17.97),new SM({map:window.__AProntEX,roughness:0.85}));apron.position.set(0,0,0.001);apron.receiveShadow=true;sc.add(apron);}
 
 clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
+;(function __sonicMode(){
+  try {
+    var MJ31 = ["left_hip_pitch_joint","left_hip_roll_joint","left_hip_yaw_joint","left_knee_joint","left_ankle_roll_joint","left_ankle_pitch_joint","right_hip_pitch_joint","right_hip_roll_joint","right_hip_yaw_joint","right_knee_joint","right_ankle_roll_joint","right_ankle_pitch_joint","waist_yaw_joint","waist_roll_joint","waist_pitch_joint","head_pitch_joint","head_yaw_joint","left_shoulder_pitch_joint","left_shoulder_roll_joint","left_shoulder_yaw_joint","left_elbow_joint","left_wrist_roll_joint","left_wrist_pitch_joint","left_wrist_yaw_joint","right_shoulder_pitch_joint","right_shoulder_roll_joint","right_shoulder_yaw_joint","right_elbow_joint","right_wrist_roll_joint","right_wrist_pitch_joint","right_wrist_yaw_joint"];
+    // welded-out of the ath body: slots 15 (head_pitch), 16 (head_yaw) stay inert
+    var XJ = MJ31.map(function(_,m){ return m<15 ? m : (m>16 ? m-2 : -1); }); // MJ31 slot -> model joint index (0..28) or -1
+    var EFFR = [360,360,360,360,19,66.88,360,360,360,360,19,66.88,120,180,180,0,0,130,60,60,60,60,10,10,130,60,60,60,60,10,10]; // EFF=real: actuatorfrcrange of h2_ath.xml
+    var AA = {A5020:0.003609725, A7520_14:0.010177520, A7520_22:0.025101925, A4010:0.00425};
+    var WW = 10*2*Math.PI, ZZ = 2.0;
+    function gn(n){ var K=function(a){return a*WW*WW;}, D=function(a){return 2*ZZ*a*WW;};
+      if (n.indexOf('hip_yaw')>=0) return [K(AA.A7520_14),D(AA.A7520_14),AA.A7520_14];
+      if (n.indexOf('hip')>=0 || n.indexOf('knee')>=0) return [K(AA.A7520_22),D(AA.A7520_22),AA.A7520_22];
+      if (n.indexOf('ankle')>=0 || n==='waist_roll_joint' || n==='waist_pitch_joint' || n.indexOf('head')>=0) return [2*K(AA.A5020),2*D(AA.A5020),2*AA.A5020];
+      if (n==='waist_yaw_joint') return [K(AA.A7520_14),D(AA.A7520_14),AA.A7520_14];
+      if (n.indexOf('wrist_pitch')>=0 || n.indexOf('wrist_yaw')>=0) return [K(AA.A4010),D(AA.A4010),AA.A4010];
+      return [K(AA.A5020),D(AA.A5020),AA.A5020]; }
+    var KP=MJ31.map(function(n){return gn(n)[0];}), KD=MJ31.map(function(n){return gn(n)[1];}), ARM=MJ31.map(function(n){return gn(n)[2];});
+    var DEFV=MJ31.map(function(n){ var v=0;
+      if (n.indexOf('hip_pitch')>=0) v=-0.312; if (n.indexOf('knee')>=0) v=0.669;
+      if (n.indexOf('ankle_pitch')>=0) v=-0.363; if (n.indexOf('elbow')>=0) v=0.6;
+      if (n==='left_shoulder_roll_joint') v=0.2; if (n==='left_shoulder_pitch_joint') v=0.2;
+      if (n==='right_shoulder_roll_joint') v=-0.2; if (n==='right_shoulder_pitch_joint') v=0.2; return v; });
+    var SCALE=MJ31.map(function(_,i){ return KP[i]>0 ? 0.25*EFFR[i]/KP[i] : 0; });
+    var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand' };
+    var mS=null, dS=null, r=null, sess=null, clip=null, simT=0, lastWall=-1, nextCtrl=0, frame=0, fallT=-1;
+    var last=new Float64Array(31), hist={av:[],jp:[],jv:[],ac:[],g:[]};
+    var OFF={x:7.4,y:2.85};
+    function qmul(a,b){ return [a[0]*b[0]-a[1]*b[1]-a[2]*b[2]-a[3]*b[3], a[0]*b[1]+a[1]*b[0]+a[2]*b[3]-a[3]*b[2], a[0]*b[2]-a[1]*b[3]+a[2]*b[0]+a[3]*b[1], a[0]*b[3]+a[1]*b[2]-a[2]*b[1]+a[3]*b[0]]; }
+    function qmat(q){ var w=q[0],x=q[1],y=q[2],z=q[3]; return [1-2*(y*y+z*z),2*(x*y-z*w),2*(x*z+y*w), 2*(x*y+z*w),1-2*(x*x+z*z),2*(y*z-x*w), 2*(x*z-y*w),2*(y*z+x*w),1-2*(x*x+y*y)]; }
+    function qrot(q,v){ var m=qmat(q); return [m[0]*v[0]+m[1]*v[1]+m[2]*v[2], m[3]*v[0]+m[4]*v[1]+m[5]*v[2], m[6]*v[0]+m[7]*v[1]+m[8]*v[2]]; }
+    function obs1670(){
+      var q=dS.qpos, v=dS.qvel, quat=[q[3],q[4],q[5],q[6]];
+      var g=qrot([quat[0],-quat[1],-quat[2],-quat[3]],[0,0,-1]);
+      var jp=[], jv=[];
+      for (var m=0;m<31;m++){ var j=XJ[m]; jp.push(j>=0 ? q[7+j]-DEFV[m] : 0); jv.push(j>=0 ? v[6+j] : 0); }
+      var cur={av:[v[3],v[4],v[5]], jp:jp, jv:jv, ac:Array.from(last), g:g};
+      ['av','jp','jv','ac','g'].forEach(function(k){ hist[k].push(cur[k]); if (hist[k].length>10) hist[k].shift(); while (hist[k].length<10) hist[k].unshift(hist[k][0]); });
+      var out=new Float32Array(1670), o=0, n=clip.frames, f, k2;
+      for (k2=0;k2<10;k2++){ f=Math.min(frame+k2*5,n-1); out.set(clip.dof(f),o); o+=31; }
+      for (k2=0;k2<10;k2++){ f=Math.min(frame+k2*5,n-1); out.set(clip.dofv(f),o); o+=31; }
+      var fw=qrot(quat,[1,0,0]), yaw=Math.atan2(fw[1],fw[0]), hq=[Math.cos(yaw/2),0,0,Math.sin(yaw/2)];
+      for (k2=0;k2<10;k2++){ f=Math.min(frame+k2*5,n-1);
+        var mm=qmat(qmul([hq[0],-hq[1],-hq[2],-hq[3]],Array.from(clip.rq(f))));
+        out.set([mm[0],mm[1],mm[3],mm[4],mm[6],mm[7]],o); o+=6; }
+      ['av','jp','jv','ac','g'].forEach(function(k){ hist[k].forEach(function(h){ out.set(h,o); o+=h.length; }); });
+      return out;
+    }
+    var infer=false;
+    function policyTick(){
+      if (!sess || infer) return;
+      infer=true;
+      try { var ob=obs1670();
+        sess.run({obs_dict: new ort.Tensor('float32', ob, [1,1670])}).then(function(res){
+          var a=res[sess.outputNames[0]].data;
+          for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
+            var j=XJ[m]; if (j>=0) dS.ctrl[j]=DEFV[m]+cl*SCALE[m]; }
+          infer=false;
+        }).catch(function(){ infer=false; });
+      } catch(e){ infer=false; }
+    }
+    function reset(){
+      try { r.mj_resetData(mS,dS); } catch(e){}
+      var rp=clip.rp(0), rq=clip.rq(0);
+      dS.qpos[0]=rp[0]+OFF.x; dS.qpos[1]=rp[1]+OFF.y; dS.qpos[2]=rp[2];
+      dS.qpos[3]=rq[0]; dS.qpos[4]=rq[1]; dS.qpos[5]=rq[2]; dS.qpos[6]=rq[3];
+      var d0=clip.dof(0), dv0=clip.dofv(0);
+      for (var m=0;m<31;m++){ var j=XJ[m]; if (j>=0){ dS.qpos[7+j]=d0[m]; dS.qvel[6+j]=dv0[m]; } }
+      for (var j2=0;j2<29;j2++){ var mm=j2<15?j2:j2+2; dS.ctrl[j2]=DEFV[mm]; }
+      last.fill(0); hist={av:[],jp:[],jv:[],ac:[],g:[]};
+      frame=0; fallT=-1; simT=0; nextCtrl=0;
+      r.mj_forward(mS,dS);
+    }
+    function tick(){
+      if (!S.active || !S.ready) return;
+      var now=performance.now()/1000;
+      if (lastWall<0) lastWall=now;
+      var adv=Math.min(0.1, Math.max(0, now-lastWall)); lastWall=now;
+      var target=simT+adv, sub=0;
+      while (simT<target && sub<40){ sub++;
+        if (simT>=nextCtrl){ nextCtrl+=0.02; policyTick(); frame=Math.min(frame+1, clip.frames-1); }
+        try { r.mj_step(mS,dS); } catch(e){ simT+=0.005; continue; }
+        simT+=0.005;
+      }
+      if (frame>=clip.frames-1){ reset(); return; }
+      var cz=clip.rp(frame)[2], up=dS.xmat[17];
+      if (fallT<0 && (dS.qpos[2]<cz-0.3 || up<0.5)){ fallT=simT; }
+      if (fallT>=0 && simT-fallT>1.5) reset();
+    }
+    function setBtn(t){ var b=document.getElementById('sonicbtn'); if (b) b.textContent=t; }
+    function activate(){
+      if (!S.ready || S.active) return;
+      S.active=true; lastWall=-1;
+      try { if (window.__MACHG) window.__MACHG.visible=false; if (window.__RACKET) window.__RACKET.visible=false; } catch(e){}
+      try { if (window.__CAM && window.__ORBIT){ window.__CAM.position.set(11.4,6.6,2.7); window.__ORBIT.target.set(7.4,2.85,1); window.__ORBIT.update(); } } catch(e){}
+      var cap=document.getElementById('soniccap'); if (cap) cap.style.display='block';
+      setBtn('SONIC: ON');
+      reset();
+    }
+    function deactivate(){
+      S.active=false;
+      try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__RACKET) window.__RACKET.visible=true; } catch(e){}
+      var cap=document.getElementById('soniccap'); if (cap) cap.style.display='none';
+      setBtn('SONIC DEMO');
+    }
+    async function load(){
+      if (S.loading || S.ready) return; S.loading=true; setBtn('SONIC: LOADING');
+      try {
+        var tries=0; while (!window.__MJ && tries<600){ await new Promise(function(rs){setTimeout(rs,250);}); tries++; }
+        r=window.__MJ; if (!r) throw new Error('mujoco runtime unavailable');
+        var base='./assets/unitree_h2/';
+        var xml=await (await fetch(base+'h2_ath.xml?t='+Date.now())).text();
+        var hdr=await (await fetch(base+'sonic_stand.json?t='+Date.now())).json();
+        var buf=await (await fetch(base+'sonic_stand.bin?t='+Date.now())).arrayBuffer();
+        var fa=new Float32Array(buf), F=hdr.frames, o1=0, o2=o1+F*3, o3=o2+F*4, o4=o3+F*31;
+        clip={ frames:F,
+          rp:function(i){return fa.subarray(o1+i*3,o1+i*3+3);}, rq:function(i){return fa.subarray(o2+i*4,o2+i*4+4);},
+          dof:function(i){return fa.subarray(o3+i*31,o3+i*31+31);}, dofv:function(i){return fa.subarray(o4+i*31,o4+i*31+31);} };
+        mS=r.MjModel.from_xml_string(xml, new r.MjVFS());
+        dS=new r.MjData(mS);
+        // runtime gain override (sonic_mj.py build()): fixed-gain PD per joint, effort from file ranges
+        try {
+          for (var j=0;j<29;j++){ var m=j<15?j:j+2;
+            mS.actuator_gaintype[j]=0; mS.actuator_biastype[j]=1;
+            mS.actuator_gainprm[j*10]=KP[m]; mS.actuator_biasprm[j*10+1]=-KP[m]; mS.actuator_biasprm[j*10+2]=-KD[m];
+            mS.actuator_forcerange[j*2]=-EFFR[m]; mS.actuator_forcerange[j*2+1]=EFFR[m];
+            mS.actuator_forcelimited[j]=1; mS.actuator_ctrllimited[j]=0;
+            mS.dof_armature[6+j]=ARM[m]; }
+          console.log('SONIC gains overridden (EFF=real from h2_ath.xml)');
+        } catch(e){ console.log('SONIC gain override failed', e); }
+        setBtn('SONIC: POLICY');
+        var spec=await (await fetch('https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/sonic/policy/spec.json',{cache:'no-store'})).json();
+        if (!spec || !spec.input || spec.input.dim!==1670) throw new Error('sonic spec gate failed');
+        var ob=await (await fetch('https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/sonic/policy/model_step_100000_g1.onnx',{cache:'no-store'})).arrayBuffer();
+        sess=await ort.InferenceSession.create(ob,{executionProviders:['wasm']});
+        var test=await sess.run({obs_dict:new ort.Tensor('float32',new Float32Array(1670),[1,1670])});
+        var ta=test[sess.outputNames[0]].data, ok=ta.length===31;
+        for (var i=0;i<31;i++) if (!isFinite(ta[i]) || Math.abs(ta[i])>20) ok=false;
+        if (!ok) throw new Error('sonic sanity gate failed');
+        S.u=dS; S.ready=true; S.loading=false;
+        setBtn('SONIC DEMO'); console.log('SONIC ready: h2_ath + model_step_100000_g1 (1670->31), clip='+hdr.name+' '+F+'f');
+        reset();
+      } catch(e){ S.err=String(e); S.loading=false; setBtn('SONIC: ERR'); console.log('SONIC load failed', e); }
+    }
+    // UI
+    var btn=document.createElement('button'); btn.id='sonicbtn'; btn.type='button'; btn.textContent='SONIC DEMO';
+    var cap=document.createElement('div'); cap.id='soniccap';
+    cap.textContent='SONIC motion-tracking demo · new Unitree-exact H2 body · reference: STAND (Federer forehand clip coming) · trained ball policy runs unchanged on the original body';
+    var st=document.createElement('style');
+    st.textContent='#sonicbtn{position:fixed;right:18px;bottom:96px;z-index:60;background:rgba(12,14,18,.88);color:#e8e8e8;border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer;font-family:inherit}'+
+      '#soniccap{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:64px;z-index:60;max-width:82vw;text-align:center;background:rgba(10,12,16,.85);color:#cfd4da;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:5px 10px;font-size:10px;letter-spacing:.06em;font-family:inherit}';
+    document.head.appendChild(st); document.body.appendChild(btn); document.body.appendChild(cap);
+    btn.onclick=function(){ if (S.active) deactivate(); else if (S.ready) activate(); else load(); };
+    (function loop(){ tick(); requestAnimationFrame(loop); })();
+  } catch(e){ console.log('SONIC mode init failed', e); }
+})();
