@@ -29738,7 +29738,7 @@ const XE = document.querySelector("#app"),
   wc = document.querySelector("#loading"),
   bc = document.querySelector("#loadmsg"),
   Fn = new R_();
-Fn.background = new pt(8893910);
+Fn.background = new pt(6390412);
 Fn.fog = new Do(8893910, 30, 90);
 const sr = new mn(43, innerWidth / innerHeight, 0.05, 100);
 sr.up.set(0, 0, 1);
@@ -29806,7 +29806,7 @@ const Da = "./assets/unitree_h2/",
     "right_ankle_roll_link.stl",
     "right_ankle_pitch_link.stl",
     "tennis/entire_visual.STL",
-    "tennis/tennis_court_red_blue.png"
+    "tennis/tennis_court_clay.png"
   ];
 async function $E(r) {
   const e = await fetch(r);
@@ -30667,11 +30667,11 @@ async function ZE() {
     } catch (e) {}
     const J = new ln(
       new br(0.033, 20, 14),
-      new jc({ color: 13434624 }),
+      new jc({ color: 14745408 }),
     );
     (J.material.fog = !1, (J.castShadow = !0),
       Fn.add(J),
-      KE(Da + "assets/tennis/tennis_court_red_blue.png?t=" + Date.now()),
+      KE(Da + "assets/tennis/tennis_court_clay.png?t=" + Date.now()),
       __buildFeedUI(),
       (document.querySelector("#pause").onclick = (ie) => {
         ((M = !M), (ie.target.textContent = M ? "Resume" : "Pause"));
@@ -30723,5 +30723,5 @@ if(!window.__GRASSTEX){var cv=document.createElement("canvas");cv.width=1024;cv.
 var cv2=document.createElement("canvas");cv2.width=512;cv2.height=512;var c2=cv2.getContext("2d");c2.fillStyle="#b86542";c2.fillRect(0,0,512,512);var img2=c2.getImageData(0,0,512,512),d2=img2.data;for(var p2=0;p2<d2.length;p2+=4){var n2=(Math.random()-0.5)*22;d2[p2]+=n2;d2[p2+1]+=n2*0.9;d2[p2+2]+=n2*0.8;}c2.putImageData(img2,0,0);var at=new Tex(cv2);at.needsUpdate=true;at.colorSpace=court.material.map.colorSpace;at.wrapS=at.wrapT=1000;at.repeat.set(8,4);at.anisotropy=8;window.__AProntEX=at;}
 if(!lawn){lawn=new Msh(new PG(200,200),new BM({map:window.__GRASSTEX}));lawn.position.set(0,0,-0.02);lawn.receiveShadow=true;sc.add(lawn);}else if(lawn.material.map!==window.__GRASSTEX){lawn.material=new BM({map:window.__GRASSTEX});}
 if(!apron){apron=new Msh(new PG(35.77,17.97),new SM({map:window.__AProntEX,roughness:0.85}));apron.position.set(0,0,0.001);apron.receiveShadow=true;sc.add(apron);}
-if(!ball.getObjectByName("__halo")){var halo=new Msh(new ball.geometry.constructor(0.058,18,12),new BM({color:0xCCFF00,transparent:true,opacity:0.22,blending:2,depthWrite:false,fog:false}));halo.name="__halo";ball.add(halo);}
+
 clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
