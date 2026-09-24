@@ -30841,7 +30841,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     }
     function deactivate(){
       S.active=false;
-      try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__RACKET) window.__RACKET.visible=true; } catch(e){}
+      try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__RACKET) window.__RACKET.visible=true; if (window.__BALLM) window.__BALLM.visible=true; } catch(e){}
       var cap=document.getElementById('soniccap'); if (cap) cap.style.display='none';
       setBtn('SONIC DEMO');
     }
@@ -30889,12 +30889,13 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     // UI
     var btn=document.createElement('button'); btn.id='sonicbtn'; btn.type='button'; btn.textContent='SONIC DEMO';
     var cap=document.createElement('div'); cap.id='soniccap';
-    cap.textContent='SONIC motion-tracking demo · new Unitree-exact H2 body · reference: STAND (Federer forehand clip coming) · trained ball policy runs unchanged on the original body';
+    cap.textContent='SONIC motion-tracking checkpoint · Unitree-exact H2 body · skill: STAND (Federer forehand clip coming) · toggle off for the trained ball policy (old body)';
     var st=document.createElement('style');
     st.textContent='#sonicbtn{position:fixed;right:18px;bottom:96px;z-index:60;background:rgba(12,14,18,.88);color:#e8e8e8;border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer;font-family:inherit}'+
       '#soniccap{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:64px;z-index:60;max-width:82vw;text-align:center;background:rgba(10,12,16,.85);color:#cfd4da;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:5px 10px;font-size:10px;letter-spacing:.06em;font-family:inherit}';
     document.head.appendChild(st); document.body.appendChild(btn); document.body.appendChild(cap);
     btn.onclick=function(){ if (S.active) deactivate(); else if (S.ready) activate(); else load(); };
+    var __auto=setInterval(function(){ try { if (window.__MJ && !S.ready && !S.loading) load(); if (S.ready && !S.active){ clearInterval(__auto); activate(); } if (S.err) clearInterval(__auto); } catch(e){} }, 1000);
     (function loop(){ tick(); requestAnimationFrame(loop); })();
   } catch(e){ console.log('SONIC mode init failed', e); }
 })();
