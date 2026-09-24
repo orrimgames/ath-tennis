@@ -30747,8 +30747,6 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     var ISA31 = ["left_hip_pitch_joint", "right_hip_pitch_joint", "waist_yaw_joint", "left_hip_roll_joint", "right_hip_roll_joint", "waist_roll_joint", "left_hip_yaw_joint", "right_hip_yaw_joint", "waist_pitch_joint", "left_knee_joint", "right_knee_joint", "head_pitch_joint", "left_shoulder_pitch_joint", "right_shoulder_pitch_joint", "left_ankle_roll_joint", "right_ankle_roll_joint", "head_yaw_joint", "left_shoulder_roll_joint", "right_shoulder_roll_joint", "left_ankle_pitch_joint", "right_ankle_pitch_joint", "left_shoulder_yaw_joint", "right_shoulder_yaw_joint", "left_elbow_joint", "right_elbow_joint", "left_wrist_roll_joint", "right_wrist_roll_joint", "left_wrist_pitch_joint", "right_wrist_pitch_joint", "left_wrist_yaw_joint", "right_wrist_yaw_joint"]; // policy obs/action order (pipeline training order - ORDER=mj permutation FALLS at 0.22s locally, ISA stands)
     var PERM = ISA31.map(function(n){ return MJ31.indexOf(n); });
     var XJp = PERM.map(function(m){ return m<15 ? m : (m>16 ? m-2 : -1); });
-    var DEFVp = PERM.map(function(m){ return DEFV[m]; });
-    var SCALEp = PERM.map(function(m){ return SCALE[m]; });
     var EFFR = [360,360,360,360,19,66.88,360,360,360,360,19,66.88,120,180,180,0,0,120,54,54,54,54,25,25,120,54,54,54,54,25,25]; // EFF=real per published harness: actuatorfrcrange of its /tmp/h2.xml (validated locally: stand rmse 0.133, no fall)
     var AA = {A5020:0.003609725, A7520_14:0.010177520, A7520_22:0.025101925, A4010:0.00425};
     var WW = 10*2*Math.PI, ZZ = 2.0;
@@ -30766,6 +30764,8 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       if (n==='left_shoulder_roll_joint') v=0.2; if (n==='left_shoulder_pitch_joint') v=0.2;
       if (n==='right_shoulder_roll_joint') v=-0.2; if (n==='right_shoulder_pitch_joint') v=0.2; return v; });
     var SCALE=MJ31.map(function(_,i){ return KP[i]>0 ? 0.25*EFFR[i]/KP[i] : 0; });
+    var DEFVp = PERM.map(function(m){ return DEFV[m]; });
+    var SCALEp = PERM.map(function(m){ return SCALE[m]; });
     var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand', stepCount:0, lastErr:null };
     var mS=null, dS=null, r=null, sess=null, clip=null, simT=0, lastWall=-1, nextCtrl=0, frame=0, fallT=-1;
     var last=new Float64Array(31), hist={av:[],jp:[],jv:[],ac:[],g:[]};
