@@ -30863,8 +30863,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
             mS.actuator_gaintype[j]=0; mS.actuator_biastype[j]=1;
             mS.actuator_gainprm[j*10]=KP[m]; mS.actuator_biasprm[j*10+1]=-KP[m]; mS.actuator_biasprm[j*10+2]=-KD[m];
             mS.actuator_forcerange[j*2]=-EFFR[m]; mS.actuator_forcerange[j*2+1]=EFFR[m];
-            mS.actuator_forcelimited[j]=1; mS.actuator_ctrllimited[j]=0;
-            mS.dof_armature[6+j]=ARM[m]; }
+            mS.dof_armature[6+j]=ARM[m]; } // forcelimited/ctrllimited stay as the MJCF declares (forcelimited=true via actuatorfrcrange; no ctrlrange)
           console.log('SONIC gains overridden (EFF=real from h2_ath.xml)');
         } catch(e){ console.log('SONIC gain override failed', e); }
         setBtn('SONIC: POLICY');
