@@ -30752,7 +30752,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     var ISA31 = ["left_hip_pitch_joint", "right_hip_pitch_joint", "waist_yaw_joint", "left_hip_roll_joint", "right_hip_roll_joint", "waist_roll_joint", "left_hip_yaw_joint", "right_hip_yaw_joint", "waist_pitch_joint", "left_knee_joint", "right_knee_joint", "head_pitch_joint", "left_shoulder_pitch_joint", "right_shoulder_pitch_joint", "left_ankle_roll_joint", "right_ankle_roll_joint", "head_yaw_joint", "left_shoulder_roll_joint", "right_shoulder_roll_joint", "left_ankle_pitch_joint", "right_ankle_pitch_joint", "left_shoulder_yaw_joint", "right_shoulder_yaw_joint", "left_elbow_joint", "right_elbow_joint", "left_wrist_roll_joint", "right_wrist_roll_joint", "left_wrist_pitch_joint", "right_wrist_pitch_joint", "left_wrist_yaw_joint", "right_wrist_yaw_joint"]; // policy obs/action order (pipeline training order - ORDER=mj permutation FALLS at 0.22s locally, ISA stands)
     var PERM = ISA31.map(function(n){ return MJ31.indexOf(n); });
     var XJp = PERM.map(function(m){ return m<15 ? m : (m>16 ? m-2 : -1); });
-    var EFFR = [360,360,360,360,19,66.88,360,360,360,360,19,66.88,120,180,180,0,0,130,60,60,60,60,10,10,130,60,60,60,60,10,10]; // EFF=real per published harness: actuatorfrcrange of its /tmp/h2.xml (validated locally: stand rmse 0.133, no fall)
+    var EFFR = [360,360,360,360,19,66.88,360,360,360,360,19,66.88,120,180,180,0,0,120,54,54,54,54,25,25,120,54,54,54,54,25,25]; // EFF=real per published harness: actuatorfrcrange of its /tmp/h2.xml (validated locally: stand rmse 0.133, no fall)
     var AA = {A5020:0.003609725, A7520_14:0.010177520, A7520_22:0.025101925, A4010:0.00425};
     var WW = 10*2*Math.PI, ZZ = 2.0;
     function gn(n){ var K=function(a){return a*WW*WW;}, D=function(a){return 2*ZZ*a*WW;};
@@ -30799,14 +30799,14 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     function policyTick(){ /* retired: synchronous-apply loop below (tracking policy falls with >=1 tick action delay) */ }
     function reset(){
       try { r.mj_resetData(mS,dS); } catch(e){}
-      var rp=clip.rp(50), rq=clip.rq(50);
+      var rp=clip.rp(0), rq=clip.rq(0);
       dS.qpos[0]=rp[0]+OFF.x; dS.qpos[1]=rp[1]+OFF.y; dS.qpos[2]=rp[2];
       dS.qpos[3]=rq[0]; dS.qpos[4]=rq[1]; dS.qpos[5]=rq[2]; dS.qpos[6]=rq[3];
-      var d0=clip.dof(50), dv0=clip.dofv(50);
+      var d0=clip.dof(0), dv0=clip.dofv(0);
       for (var m=0;m<31;m++){ var j=XJp[m]; if (j>=0){ dS.qpos[7+j]=d0[m]; dS.qvel[6+j]=dv0[m]; } }
       for (var j2=0;j2<29;j2++){ var mm=j2<15?j2:j2+2; dS.ctrl[j2]=DEFV[mm]; }
       last.fill(0); hist={av:[],jp:[],jv:[],ac:[],g:[]};
-      frame=50; fallT=-1; simT=0; nextCtrl=0; // harness lead-in: skip first 50 frames, warm-start from reference state
+      frame=0; fallT=-1; simT=0; nextCtrl=0;
       r.mj_forward(mS,dS);
     }
     var looping=false;
@@ -30821,7 +30821,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
           for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
             var j=XJp[m]; if (j>=0) dS.ctrl[j]=DEFVp[m]+cl*SCALEp[m]; }
         } catch(e){}
-        frame=Math.min(frame+1, clip.frames-1); if (frame>=110){ S.lastReset='loop@'+simT.toFixed(2); reset(); }
+        frame=Math.min(frame+1, clip.frames-1);
         for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); S.stepCount++; } catch(e){ S.lastErr=String(e); } simT+=0.005; }
         if (frame>=clip.frames-1){ S.lastReset='clip_end@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         var cz=clip.rp(frame)[2], up=dS.xmat[17];
@@ -30867,7 +30867,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
         clip={ frames:F,
           rp:function(i){return fa.subarray(o1+i*3,o1+i*3+3);}, rq:function(i){return fa.subarray(o2+i*4,o2+i*4+4);},
           dof:function(i){return fa.subarray(o3+i*31,o3+i*31+31);}, dofv:function(i){return fa.subarray(o4+i*31,o4+i*31+31);} };
-        (function(){ var tmp=new Float32Array(31); for (var i=0;i<F;i++){ var d=clip.dof(i); tmp.set(d); for (var k=0;k<31;k++) d[k]=tmp[PERM[k]]; var v=clip.dofv(i); tmp.set(v); for (var k2=0;k2<31;k2++) v[k2]=tmp[PERM[k2]]; } })(); // clip now in ISA (policy) order window.__SONIC.clipName=hdr.name||'clip';
+        (function(){ var tmp=new Float32Array(31); for (var i=0;i<F;i++){ var d=clip.dof(i); tmp.set(d); for (var k=0;k<31;k++) d[k]=tmp[PERM[k]]; var v=clip.dofv(i); tmp.set(v); for (var k2=0;k2<31;k2++) v[k2]=tmp[PERM[k2]]; } })(); // clip now in ISA (policy) order
         mS=r.MjModel.from_xml_string(xml, new r.MjVFS());
         if(!window.__SONICDBG) window.__SONICDBG={}; window.__SONICDBG.m=mS;
         dS=new r.MjData(mS);
@@ -30898,7 +30898,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     // UI
     var btn=document.createElement('button'); btn.id='sonicbtn'; btn.type='button'; btn.textContent='SONIC DEMO';
     var cap=document.createElement('div'); cap.id='soniccap';
-    cap.textContent='SONIC motion-tracking checkpoint · Unitree-exact H2 body · skill: RODDICK SERVE (reference tracking) · toggle off for the trained ball policy (old body)';
+    cap.textContent='SONIC motion-tracking checkpoint · Unitree-exact H2 body · skill: STAND (Federer forehand clip coming) · toggle off for the trained ball policy (old body)';
     var st=document.createElement('style');
     st.textContent='#sonicbtn{position:fixed;right:18px;bottom:96px;z-index:60;background:rgba(12,14,18,.88);color:#e8e8e8;border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer;font-family:inherit}'+
       '#soniccap{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:64px;z-index:60;max-width:82vw;text-align:center;background:rgba(10,12,16,.85);color:#cfd4da;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:5px 10px;font-size:10px;letter-spacing:.06em;font-family:inherit}';
