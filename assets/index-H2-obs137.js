@@ -30401,6 +30401,8 @@ async function ZE() {
         __HIST.length = 0;
         for (let i = 0; i < 5; i++) __HIST.push([F[o13], F[o13+1], F[o13+2], F[o13+3], F[o13+4], F[o13+5]]);
         __HORIZON = Math.ceil((F[o13+12] + 0.2) / 0.02);
+        window.__FEEDIDX = o13 / 13;
+        try { if (window.__MACHG) { const __p0x = F[o13], __p0y = F[o13+1], __p0z = F[o13+2]; let __dx = F[o13+9] - __p0x, __dy = F[o13+10] - __p0y, __dz = F[o13+11] - __p0z; const __dl = Math.sqrt(__dx*__dx + __dy*__dy + __dz*__dz) || 1; __dx /= __dl; __dy /= __dl; __dz /= __dl; const __q = new Ci(); __q.setFromUnitVectors(new K(1, 0, 0), new K(__dx, __dy, __dz)); window.__MACHG.quaternion.copy(__q); const __off = new K(0.94, 0, 0.78).applyQuaternion(__q); window.__MACHG.position.set(__p0x - __off.x, __p0y - __off.y, Math.max(__p0z - __off.z, -0.05)); } } catch (e) {}
       } try { if (u.qacc_warmstart && u.qacc_warmstart.fill) u.qacc_warmstart.fill(0); } catch (e) {}
       r.mj_forward(a, u);
     }
@@ -30541,10 +30543,11 @@ async function ZE() {
         const m = new ln(__stl(ab), __mat); m.castShadow = !0; Fn.add(m);
         __SKIN.push({ bi: __bidx["right_wrist_yaw_link"], mesh: m, op: [0.0415, -0.003, 0], oq: [0.5, -0.5, 0.5, -0.5] }); window.__RACKET = m;;
       } catch (e) {}
-      const __mach = new ln(new ar(1.1, 0.96, 1.04), new xr({ color: 0xff5905 })); __mach.position.set(-7.8, 3.0, 0.52); __mach.castShadow = !0; Fn.add(__mach);
-      const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(-7.32, 3.0, 0.78); Fn.add(__tube);
-      const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(-7.8, 2.62, 0.15); Fn.add(__wheel);
-      const __wheel2 = __wheel.clone(); __wheel2.position.set(-7.8, 3.38, 0.15); Fn.add(__wheel2);
+      const __mach = new ln(new ar(1.1, 0.96, 1.04), new xr({ color: 0xff5905 })); __mach.position.set(0, 0, 0.52); __mach.castShadow = !0;
+      const __tube = new ln(new Ps(0.16, 0.16, 0.92, 20), new xr({ color: 0x1a1a1a })); __tube.rotation.z = Math.PI / 2; __tube.position.set(0.48, 0, 0.78);
+      const __wheel = new ln(new Ps(0.18, 0.18, 0.09, 20), new xr({ color: 0x0d0d0d })); __wheel.rotation.x = Math.PI / 2; __wheel.position.set(0, -0.38, 0.15);
+      const __wheel2 = __wheel.clone(); __wheel2.position.set(0, 0.38, 0.15);
+      const __MACHG = new ms(); __MACHG.add(__mach); __MACHG.add(__tube); __MACHG.add(__wheel); __MACHG.add(__wheel2); __MACHG.position.set(-7.8, 3.0, 0); Fn.add(__MACHG); window.__MACHG = __MACHG;
       // === lawn setting: plain grass, stadium removed (display-only) ===       try {         const __ground = new ln(new Di(200, 200), new jc({ color: 0x35772f }));         __ground.position.set(0, 0, -0.02); __ground.receiveShadow = !0; Fn.add(__ground);       } catch (e) {}
 
       let __feedLastCy = -1, __feedLastEp = -1, __feedP = null, __feedV = null, __feedAge = 0, __prevSimT = -1;
