@@ -30833,6 +30833,10 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       if (!S.ready || S.active) return;
       S.active=true; lastWall=-1;
       try { if (window.__MACHG) window.__MACHG.visible=false; if (window.__RACKET) window.__RACKET.visible=false; } catch(e){}
+      try {
+        S.__hb = function(on){ var sc=window.__BALLM; if(!sc) return; var root=sc; while(root.parent) root=root.parent; root.traverse(function(o){ if(o.isMesh && o.geometry && o.geometry.type==='SphereGeometry' && o.geometry.parameters && o.geometry.parameters.radius<0.1) o.visible=!on; }); };
+        S.__hb(true); clearInterval(S.__hideIv); S.__hideIv=setInterval(function(){ if (S.active) S.__hb(true); }, 400);
+      } catch(e){}
       try { if (window.__CAM && window.__ORBIT){ window.__CAM.position.set(11.4,6.6,2.7); window.__ORBIT.target.set(7.4,2.85,1); window.__ORBIT.update(); } } catch(e){}
       var cap=document.getElementById('soniccap'); if (cap) cap.style.display='block';
       setBtn('SONIC: ON');
@@ -30841,7 +30845,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     }
     function deactivate(){
       S.active=false;
-      try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__RACKET) window.__RACKET.visible=true; if (window.__BALLM) window.__BALLM.visible=true; } catch(e){}
+      try { clearInterval(S.__hideIv); S.__hideIv=null; if (window.__MACHG) window.__MACHG.visible=true; if (window.__RACKET) window.__RACKET.visible=true; if (S.__hb) S.__hb(false); if (window.__BALLM) window.__BALLM.visible=true; } catch(e){}
       var cap=document.getElementById('soniccap'); if (cap) cap.style.display='none';
       setBtn('SONIC DEMO');
     }
