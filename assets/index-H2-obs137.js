@@ -30744,6 +30744,11 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     var MJ31 = ["left_hip_pitch_joint","left_hip_roll_joint","left_hip_yaw_joint","left_knee_joint","left_ankle_roll_joint","left_ankle_pitch_joint","right_hip_pitch_joint","right_hip_roll_joint","right_hip_yaw_joint","right_knee_joint","right_ankle_roll_joint","right_ankle_pitch_joint","waist_yaw_joint","waist_roll_joint","waist_pitch_joint","head_pitch_joint","head_yaw_joint","left_shoulder_pitch_joint","left_shoulder_roll_joint","left_shoulder_yaw_joint","left_elbow_joint","left_wrist_roll_joint","left_wrist_pitch_joint","left_wrist_yaw_joint","right_shoulder_pitch_joint","right_shoulder_roll_joint","right_shoulder_yaw_joint","right_elbow_joint","right_wrist_roll_joint","right_wrist_pitch_joint","right_wrist_yaw_joint"];
     // welded-out of the ath body: slots 15 (head_pitch), 16 (head_yaw) stay inert
     var XJ = MJ31.map(function(_,m){ return m<15 ? m : (m>16 ? m-2 : -1); }); // MJ31 slot -> model joint index (0..28) or -1
+    var ISA31 = ["left_hip_pitch_joint", "right_hip_pitch_joint", "waist_yaw_joint", "left_hip_roll_joint", "right_hip_roll_joint", "waist_roll_joint", "left_hip_yaw_joint", "right_hip_yaw_joint", "waist_pitch_joint", "left_knee_joint", "right_knee_joint", "head_pitch_joint", "left_shoulder_pitch_joint", "right_shoulder_pitch_joint", "left_ankle_roll_joint", "right_ankle_roll_joint", "head_yaw_joint", "left_shoulder_roll_joint", "right_shoulder_roll_joint", "left_ankle_pitch_joint", "right_ankle_pitch_joint", "left_shoulder_yaw_joint", "right_shoulder_yaw_joint", "left_elbow_joint", "right_elbow_joint", "left_wrist_roll_joint", "right_wrist_roll_joint", "left_wrist_pitch_joint", "right_wrist_pitch_joint", "left_wrist_yaw_joint", "right_wrist_yaw_joint"]; // policy obs/action order (pipeline training order - ORDER=mj permutation FALLS at 0.22s locally, ISA stands)
+    var PERM = ISA31.map(function(n){ return MJ31.indexOf(n); });
+    var XJp = PERM.map(function(m){ return m<15 ? m : (m>16 ? m-2 : -1); });
+    var DEFVp = PERM.map(function(m){ return DEFV[m]; });
+    var SCALEp = PERM.map(function(m){ return SCALE[m]; });
     var EFFR = [360,360,360,360,19,66.88,360,360,360,360,19,66.88,120,180,180,0,0,120,54,54,54,54,25,25,120,54,54,54,54,25,25]; // EFF=real per published harness: actuatorfrcrange of its /tmp/h2.xml (validated locally: stand rmse 0.133, no fall)
     var AA = {A5020:0.003609725, A7520_14:0.010177520, A7520_22:0.025101925, A4010:0.00425};
     var WW = 10*2*Math.PI, ZZ = 2.0;
@@ -30772,7 +30777,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       var q=dS.qpos, v=dS.qvel, quat=[q[3],q[4],q[5],q[6]];
       var g=qrot([quat[0],-quat[1],-quat[2],-quat[3]],[0,0,-1]);
       var jp=[], jv=[];
-      for (var m=0;m<31;m++){ var j=XJ[m]; jp.push(j>=0 ? q[7+j]-DEFV[m] : 0); jv.push(j>=0 ? v[6+j] : 0); }
+      for (var m=0;m<31;m++){ var j=XJp[m]; jp.push(j>=0 ? q[7+j]-DEFVp[m] : 0); jv.push(j>=0 ? v[6+j] : 0); }
       var cur={av:[v[3],v[4],v[5]], jp:jp, jv:jv, ac:Array.from(last), g:g};
       ['av','jp','jv','ac','g'].forEach(function(k){ hist[k].push(cur[k]); if (hist[k].length>10) hist[k].shift(); while (hist[k].length<10) hist[k].unshift(hist[k][0]); });
       var out=new Float32Array(1670), o=0, n=clip.frames, f, k2;
@@ -30793,7 +30798,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       dS.qpos[0]=rp[0]+OFF.x; dS.qpos[1]=rp[1]+OFF.y; dS.qpos[2]=rp[2];
       dS.qpos[3]=rq[0]; dS.qpos[4]=rq[1]; dS.qpos[5]=rq[2]; dS.qpos[6]=rq[3];
       var d0=clip.dof(0), dv0=clip.dofv(0);
-      for (var m=0;m<31;m++){ var j=XJ[m]; if (j>=0){ dS.qpos[7+j]=d0[m]; dS.qvel[6+j]=dv0[m]; } }
+      for (var m=0;m<31;m++){ var j=XJp[m]; if (j>=0){ dS.qpos[7+j]=d0[m]; dS.qvel[6+j]=dv0[m]; } }
       for (var j2=0;j2<29;j2++){ var mm=j2<15?j2:j2+2; dS.ctrl[j2]=DEFV[mm]; }
       last.fill(0); hist={av:[],jp:[],jv:[],ac:[],g:[]};
       frame=0; fallT=-1; simT=0; nextCtrl=0;
@@ -30809,7 +30814,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
           var res=await sess.run({obs_dict:new ort.Tensor('float32', ob, [1,1670])});
           var a=res[sess.outputNames[0]].data;
           for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
-            var j=XJ[m]; if (j>=0) dS.ctrl[j]=DEFV[m]+cl*SCALE[m]; }
+            var j=XJp[m]; if (j>=0) dS.ctrl[j]=DEFVp[m]+cl*SCALEp[m]; }
         } catch(e){}
         frame=Math.min(frame+1, clip.frames-1);
         for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); S.stepCount++; } catch(e){ S.lastErr=String(e); } simT+=0.005; }
@@ -30853,6 +30858,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
         clip={ frames:F,
           rp:function(i){return fa.subarray(o1+i*3,o1+i*3+3);}, rq:function(i){return fa.subarray(o2+i*4,o2+i*4+4);},
           dof:function(i){return fa.subarray(o3+i*31,o3+i*31+31);}, dofv:function(i){return fa.subarray(o4+i*31,o4+i*31+31);} };
+        (function(){ var tmp=new Float32Array(31); for (var i=0;i<F;i++){ var d=clip.dof(i); tmp.set(d); for (var k=0;k<31;k++) d[k]=tmp[PERM[k]]; var v=clip.dofv(i); tmp.set(v); for (var k2=0;k2<31;k2++) v[k2]=tmp[PERM[k2]]; } })(); // clip now in ISA (policy) order
         mS=r.MjModel.from_xml_string(xml, new r.MjVFS());
         if(!window.__SONICDBG) window.__SONICDBG={}; window.__SONICDBG.m=mS;
         dS=new r.MjData(mS);
@@ -30869,7 +30875,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
         setBtn('SONIC: POLICY');
         var spec=await (await fetch('https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/sonic/policy/spec.json',{cache:'no-store'})).json();
         if (!spec || !spec.input || spec.input.dim!==1670) throw new Error('sonic spec gate failed');
-        var ob=await (await fetch('https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/sonic/policy/model_step_100000_g1.onnx',{cache:'no-store'})).arrayBuffer();
+        var ob=await (await fetch('https://huggingface.co/danielharkin21/ath-h2-policies/resolve/main/sonic/policy/model_step_100000_g1.onnx')).arrayBuffer();
         sess=await ort.InferenceSession.create(ob,{executionProviders:['wasm']});
         var test=await sess.run({obs_dict:new ort.Tensor('float32',new Float32Array(1670),[1,1670])});
         var ta=test[sess.outputNames[0]].data, ok=ta.length===31;
