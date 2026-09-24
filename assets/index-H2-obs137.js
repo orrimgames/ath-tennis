@@ -29983,6 +29983,11 @@ async function ZE() {
             if (m[ie][Ke]) m[ie][Ke].visible = !1;
             continue;
           }
+          // SONIC view: hide the model ball geom (r~0.033 sphere) - the sync loop re-shows it every frame from geom rgba.
+          if (window.__SONIC && window.__SONIC.active && Number(Ee.geom_type[Ke]) === 2 && Math.abs(Ee.geom_size[Ke * 3] - 0.033) < 0.004) {
+            if (m[ie][Ke]) m[ie][Ke].visible = !1;
+            continue;
+          }
           const tt = Number(Ee.geom_type[Ke]),
             Qe = Number(Ee.geom_dataid[Ke]),
             se = [
