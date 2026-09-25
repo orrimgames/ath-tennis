@@ -30584,7 +30584,10 @@ async function ZE() {
       let __feedLastCy = -1, __feedLastEp = -1, __feedP = null, __feedV = null, __feedAge = 0, __prevSimT = -1;
       (function __skinTick() {
         try {
+          const __son = !!(window.__SONIC && window.__SONIC.active && window.__SONIC.u);
           for (const s2 of __SKIN) {
+            if (!__son) { if (s2.mesh.visible) s2.mesh.visible = false; continue; }
+            if (!s2.mesh.visible) s2.mesh.visible = true;
             const __sd = (window.__SONIC && window.__SONIC.active && window.__SONIC.u) || u, i3 = s2.bi * 3, i4 = s2.bi * 4;
             const bq = [__sd.xquat[i4], __sd.xquat[i4+1], __sd.xquat[i4+2], __sd.xquat[i4+3]];
             if (s2.op) {
@@ -30837,7 +30840,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     function activate(){
       if (!S.ready || S.active) return;
       S.active=true; lastWall=-1;
-      try { if (window.__MACHG) window.__MACHG.visible=false; if (window.__RACKET) window.__RACKET.visible=false; } catch(e){}
+      try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__RACKET) window.__RACKET.visible=true; } catch(e){}
       try {
         S.__hb = function(on){ var sc=window.__BALLM; if(!sc) return; var root=sc; while(root.parent) root=root.parent; root.traverse(function(o){ if(o.isMesh && o.geometry && o.geometry.type==='SphereGeometry' && o.geometry.parameters && o.geometry.parameters.radius<0.1) o.visible=!on; }); };
         S.__hb(true); clearInterval(S.__hideIv); S.__hideIv=setInterval(function(){ if (S.active) S.__hb(true); }, 400);
@@ -30905,7 +30908,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     document.head.appendChild(st); document.body.appendChild(cap);
     btn.onclick=function(){ if (S.active) deactivate(); else if (S.ready) activate(); else load(); };
     var __auto=setInterval(function(){ try { if (window.__MJ && !S.ready && !S.loading) load(); if (S.ready && !S.active){ clearInterval(__auto); activate(); } if (S.err) clearInterval(__auto); } catch(e){} }, 1000);
-    var __hideDef=setInterval(function(){ try { if (window.__MACHG) window.__MACHG.visible=false; if (window.__RACKET) window.__RACKET.visible=false; if (window.__BALLM) window.__BALLM.visible=false; if (S.__hb) S.__hb(true); } catch(e){} }, 400);
+    var __hideDef=setInterval(function(){ try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__BALLM) window.__BALLM.visible=false; if (S.__hb) S.__hb(true); } catch(e){} }, 400);
     (function loop(){ tick(); requestAnimationFrame(loop); })();
   } catch(e){ console.log('SONIC mode init failed', e); }
 })();
