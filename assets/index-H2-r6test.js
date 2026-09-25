@@ -30409,7 +30409,7 @@ async function ZE() {
         for (let i = 0; i < 5; i++) __HIST.push([F[o13], F[o13+1], F[o13+2], F[o13+3], F[o13+4], F[o13+5]]);
         __HORIZON = Math.ceil((F[o13+12] + 0.2) / 0.02);
         window.__FEEDIDX = o13 / 13;
-        try { if (window.__MACHG) { const __p0x = F[o13], __p0y = F[o13+1], __p0z = F[o13+2]; let __dx = F[o13+9] - __p0x, __dy = F[o13+10] - __p0y, __dz = F[o13+11] - __p0z; const __dl = Math.sqrt(__dx*__dx + __dy*__dy + __dz*__dz) || 1; __dx /= __dl; __dy /= __dl; __dz /= __dl; const __q = new Ci(); __q.setFromUnitVectors(new K(1, 0, 0), new K(__dx, __dy, __dz)); window.__MACHG.quaternion.copy(__q); const __off = new K(0.94, 0, 0.78).applyQuaternion(__q); window.__MACHG.position.set(__p0x - __off.x, __p0y - __off.y, Math.max(__p0z - __off.z, -0.05)); } } catch (e) {}
+        try { if (window.__MACHG && !(window.__SONIC && window.__SONIC.active)) { const __p0x = F[o13], __p0y = F[o13+1], __p0z = F[o13+2]; let __dx = F[o13+9] - __p0x, __dy = F[o13+10] - __p0y, __dz = F[o13+11] - __p0z; const __dl = Math.sqrt(__dx*__dx + __dy*__dy + __dz*__dz) || 1; __dx /= __dl; __dy /= __dl; __dz /= __dl; const __q = new Ci(); __q.setFromUnitVectors(new K(1, 0, 0), new K(__dx, __dy, __dz)); window.__MACHG.quaternion.copy(__q); const __off = new K(0.94, 0, 0.78).applyQuaternion(__q); window.__MACHG.position.set(__p0x - __off.x, __p0y - __off.y, Math.max(__p0z - __off.z, -0.05)); } } catch (e) {}
         if (__FEED.custom) {
           const __cp0x = F[o13], __cp0y = F[o13+1], __cp0z = F[o13+2];
           const __caz = Math.atan2(F[o13+10] - __cp0y, F[o13+9] - __cp0x);
@@ -30600,6 +30600,7 @@ async function ZE() {
               s2.mesh.quaternion.set(bq[1], bq[2], bq[3], bq[0]);
             }
           }
+          try { const __mg2 = window.__MACHG; if (__mg2 && __son) { __mg2.position.set(7.0, 1.0, -0.05); __mg2.quaternion.set(0, 0, 0.5891448, 0.8080275); } } catch (e) {}
           try {
             const __pst = window.__PHYS_STATE();
             const sT = __pst.simT;
