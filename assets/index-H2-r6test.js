@@ -30908,7 +30908,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       '#soniccap{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:64px;z-index:60;max-width:82vw;text-align:center;background:rgba(10,12,16,.85);color:#cfd4da;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:5px 10px;font-size:10px;letter-spacing:.06em;font-family:inherit}';
     document.head.appendChild(st); document.body.appendChild(cap);
     btn.onclick=function(){ if (S.active) deactivate(); else if (S.ready) activate(); else load(); };
-    var __auto=setInterval(function(){ try { if (window.__MJ && !S.ready && !S.loading) load(); if (S.ready && !S.active){ clearInterval(__auto); activate(); } if (S.err) clearInterval(__auto); } catch(e){} }, 1000);
+    var __auto=setInterval(function(){ try { if (window.__MJ && !S.ready && !S.loading) load(); if (S.ready && !S.active){ clearInterval(__auto); activate(); } if (S.err && !S.loading && (!S.__errT || Date.now()-S.__errT > 6000)) { S.__errT=Date.now(); S.err=null; } } catch(e){} }, 1000);
     var __hideDef=setInterval(function(){ try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__BALLM) window.__BALLM.visible=false; if (S.__hb) S.__hb(true); } catch(e){} }, 400);
     (function loop(){ tick(); requestAnimationFrame(loop); })();
   } catch(e){ console.log('SONIC mode init failed', e); }
