@@ -1,0 +1,8 @@
+{
+  "name": "ath-model-army",
+  "main": "worker.js",
+  "compatibility_date": "2026-09-25",
+  "workers_dev": true,
+  "observability": {"enabled": false},
+  "kv_namespaces": [{"binding": "ARMY_MESSAGES", "id": "32bc2ce9a83545bd8ca55de94affcb86"}]
+}
