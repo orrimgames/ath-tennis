@@ -30051,7 +30051,7 @@ async function ZE() {
       ae = function (ie) {
         if ((requestAnimationFrame(ae), Dr.update(), !M)) {
           const Q = (ie - z) / 1e3;
-          if (!window.__SONIC || !window.__SONIC.active) __PHYS(Q);
+          __PHYS(Q);
           he(0, Q);
           const Ee = ((Q % 4.0) + 4.0) % 4.0 / 4.0;
           // feed ball follows the real MuJoCo body (aero forces + contacts)
@@ -30409,7 +30409,7 @@ async function ZE() {
         for (let i = 0; i < 5; i++) __HIST.push([F[o13], F[o13+1], F[o13+2], F[o13+3], F[o13+4], F[o13+5]]);
         __HORIZON = Math.ceil((F[o13+12] + 0.2) / 0.02);
         window.__FEEDIDX = o13 / 13;
-        try { if (window.__MACHG && !(window.__SONIC && window.__SONIC.active)) { const __p0x = F[o13], __p0y = F[o13+1], __p0z = F[o13+2]; let __dx = F[o13+9] - __p0x, __dy = F[o13+10] - __p0y, __dz = F[o13+11] - __p0z; const __dl = Math.sqrt(__dx*__dx + __dy*__dy + __dz*__dz) || 1; __dx /= __dl; __dy /= __dl; __dz /= __dl; const __q = new Ci(); __q.setFromUnitVectors(new K(1, 0, 0), new K(__dx, __dy, __dz)); window.__MACHG.quaternion.copy(__q); const __off = new K(0.94, 0, 0.78).applyQuaternion(__q); window.__MACHG.position.set(__p0x - __off.x, __p0y - __off.y, Math.max(__p0z - __off.z, -0.05)); } } catch (e) {}
+        try { if (window.__MACHG) { const __p0x = F[o13], __p0y = F[o13+1], __p0z = F[o13+2]; let __dx = F[o13+9] - __p0x, __dy = F[o13+10] - __p0y, __dz = F[o13+11] - __p0z; const __dl = Math.sqrt(__dx*__dx + __dy*__dy + __dz*__dz) || 1; __dx /= __dl; __dy /= __dl; __dz /= __dl; const __q = new Ci(); __q.setFromUnitVectors(new K(1, 0, 0), new K(__dx, __dy, __dz)); window.__MACHG.quaternion.copy(__q); const __off = new K(0.94, 0, 0.78).applyQuaternion(__q); window.__MACHG.position.set(__p0x - __off.x, __p0y - __off.y, Math.max(__p0z - __off.z, -0.05)); } } catch (e) {}
         if (__FEED.custom) {
           const __cp0x = F[o13], __cp0y = F[o13+1], __cp0z = F[o13+2];
           const __caz = Math.atan2(F[o13+10] - __cp0y, F[o13+9] - __cp0x);
@@ -30456,7 +30456,7 @@ async function ZE() {
       while (__simT < target) { if (__BALLMODE && (__sub & 7) === 0 && performance.now() - __pt0 > 10) break; __sub++;
         if (__simT >= __nextCtrl) {
           __nextCtrl += __CTRL_DT;
-          if (__sess && !__infer) {
+          if (__sess && !__infer && !(window.__SONIC && window.__SONIC.active)) {
             __infer = true;
             try { __fillOBS(u);
                             __sess.run({ [__sess.inputNames[0]]: new ort.Tensor("float32", __OBS, [1, __OBS.length]) })
@@ -30465,7 +30465,7 @@ async function ZE() {
             } catch (e) { __infer = false; }
           }
           if (__BALLMODE) { __epStep++; __histPush(u); }
-          const aa = window.__ACT;
+          const aa = (window.__SONIC && window.__SONIC.active) ? null : window.__ACT;
           try {
             const cr = a.actuator_ctrlrange;
             for (let i = 0; i < __NA; i++) {
@@ -30600,7 +30600,6 @@ async function ZE() {
               s2.mesh.quaternion.set(bq[1], bq[2], bq[3], bq[0]);
             }
           }
-          try { const __mg2 = window.__MACHG; if (__mg2 && __son) { __mg2.position.set(7.0, 1.0, -0.05); __mg2.quaternion.set(0, 0, 0.5891448, 0.8080275); } } catch (e) {}
           try {
             const __pst = window.__PHYS_STATE();
             const sT = __pst.simT;
@@ -30667,8 +30666,8 @@ async function ZE() {
               if (__feedP[2] <= RB2 + 0.003 && __feedV[2] === 0) { const fr = Math.max(0, 1 - 1.4 * sdt); __feedV[0] *= fr; __feedV[1] *= fr; }
               if (__feedAge > 12 || __feedP[0] > 13 || Math.abs(__feedP[1]) > 7) __feedP = null;
             }
-            if (__BALLMODE) { J.visible = !(window.__SONIC && window.__SONIC.active); J.position.set(u.xpos[__BALLB*3], u.xpos[__BALLB*3+1], Math.max(u.xpos[__BALLB*3+2], 0.033)); } else if (__feedP) { J.visible = !(window.__SONIC && window.__SONIC.active); J.position.set(__feedP[0], __feedP[1], Math.max(__feedP[2], 0.033)); }
-            else { J.visible = !(window.__SONIC && window.__SONIC.active); J.position.set(__mach.position.x, __mach.position.y, 1.08); }
+            if (__BALLMODE) { J.visible = true; J.position.set(u.xpos[__BALLB*3], u.xpos[__BALLB*3+1], Math.max(u.xpos[__BALLB*3+2], 0.033)); } else if (__feedP) { J.visible = true; J.position.set(__feedP[0], __feedP[1], Math.max(__feedP[2], 0.033)); }
+            else { J.visible = true; J.position.set(__mach.position.x, __mach.position.y, 1.08); }
           } catch (fe) {}
         } catch (e) {}
         requestAnimationFrame(__skinTick);
@@ -30844,7 +30843,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
       try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__RACKET) window.__RACKET.visible=true; } catch(e){}
       try {
         S.__hb = function(on){ var sc=window.__BALLM; if(!sc) return; var root=sc; while(root.parent) root=root.parent; root.traverse(function(o){ if(o.isMesh && o.geometry && o.geometry.type==='SphereGeometry' && o.geometry.parameters && o.geometry.parameters.radius<0.1) o.visible=!on; }); };
-        S.__hb(true); clearInterval(S.__hideIv); S.__hideIv=setInterval(function(){ if (S.active) S.__hb(true); }, 400);
+        S.__hb(false); clearInterval(S.__hideIv); S.__hideIv=null;
       } catch(e){}
       try { if (window.__CAM && window.__ORBIT){ window.__CAM.position.set(11.4,6.6,2.7); window.__ORBIT.target.set(7.4,2.85,1); window.__ORBIT.update(); } } catch(e){}
       var cap=document.getElementById('soniccap'); if (cap) cap.style.display='block';
@@ -30909,7 +30908,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     document.head.appendChild(st); document.body.appendChild(cap);
     btn.onclick=function(){ if (S.active) deactivate(); else if (S.ready) activate(); else load(); };
     var __auto=setInterval(function(){ try { if (window.__MJ && !S.ready && !S.loading) load(); if (S.ready && !S.active){ clearInterval(__auto); activate(); } if (S.err && !S.loading && (!S.__errT || Date.now()-S.__errT > 6000)) { S.__errT=Date.now(); S.err=null; } } catch(e){} }, 1000);
-    var __hideDef=setInterval(function(){ try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__BALLM) window.__BALLM.visible=false; if (S.__hb) S.__hb(true); } catch(e){} }, 400);
+    var __hideDef=setInterval(function(){ try { if (window.__MACHG) window.__MACHG.visible=true; if (window.__BALLM) window.__BALLM.visible=true; if (S.__hb) S.__hb(false); } catch(e){} }, 400);
     (function loop(){ tick(); requestAnimationFrame(loop); })();
   } catch(e){ console.log('SONIC mode init failed', e); }
 })();
