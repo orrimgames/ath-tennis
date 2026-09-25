@@ -30774,7 +30774,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     var SCALE=MJ31.map(function(_,i){ return KP[i]>0 ? 0.25*EFFR[i]/KP[i] : 0; });
     var DEFVp = PERM.map(function(m){ return DEFV[m]; });
     var SCALEp = PERM.map(function(m){ return SCALE[m]; });
-    var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand', stepCount:0, lastErr:null };
+    var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand', stepCount:0, lastErr:null, noReset:false };
     var mS=null, dS=null, r=null, sess=null, clip=null, simT=0, lastWall=-1, nextCtrl=0, frame=0, fallT=-1;
     var last=new Float64Array(31), hist={av:[],jp:[],jv:[],ac:[],g:[]};
     var OFF={x:7.4,y:2.85};
@@ -30824,12 +30824,12 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
           for (var m=0;m<31;m++){ var cl=Math.max(-20,Math.min(20,a[m])); last[m]=cl;
             var j=XJp[m]; if (j>=0) dS.ctrl[j]=DEFVp[m]+cl*SCALEp[m]; }
         } catch(e){}
-        frame=Math.min(frame+1, clip.frames-1); if (frame>=110){ S.lastReset='loop@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
+        frame=Math.min(frame+1, clip.frames-1); if (frame>=110 && !S.noReset){ S.lastReset='loop@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         for (var k=0;k<4;k++){ try { r.mj_step(mS,dS); S.stepCount++; } catch(e){ S.lastErr=String(e); } simT+=0.005; }
-        if (frame>=clip.frames-1){ S.lastReset='clip_end@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
+        if (frame>=clip.frames-1 && !S.noReset){ S.lastReset='clip_end@'+simT.toFixed(2); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         var cz=clip.rp(frame)[2], up=dS.xmat[17];
         if (fallT<0 && (dS.qpos[2]<cz-0.3 || up<0.5)){ fallT=simT; }
-        if (fallT>=0 && simT-fallT>1.5){ S.lastReset='fall@'+simT.toFixed(2)+' z='+dS.qpos[2].toFixed(3); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
+        if (fallT>=0 && simT-fallT>1.5 && !S.noReset){ S.lastReset='fall@'+simT.toFixed(2)+' z='+dS.qpos[2].toFixed(3); reset(); wall0=performance.now()/1000; sim0=simT; continue; }
         var wallNow=performance.now()/1000, target=wall0+(simT-sim0);
         if (target>wallNow) await new Promise(function(rs){ setTimeout(rs, Math.min(250,(target-wallNow)*1000)); });
       }
@@ -30912,3 +30912,5 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     (function loop(){ tick(); requestAnimationFrame(loop); })();
   } catch(e){ console.log('SONIC mode init failed', e); }
 })();
+
+;(function __noResetToggle(){var __tries=0;var __iv=setInterval(function(){__tries++;try{var b=document.getElementById('norest'),S=window.__SONIC;if(!b||!S){if(__tries>600)clearInterval(__iv);return;}clearInterval(__iv);b.onclick=function(){S.noReset=!S.noReset;b.textContent=S.noReset?'No reset: on':'No reset: off';};}catch(e){}},250);})();
