@@ -47,3 +47,9 @@ Record GPU remaining, next observed reset time, active notebook and owner by acc
 - **Hugging Face**: use a repository-scoped read token for checkpoint and dataset reads. Check the exact repo, revision and license before pulling; log immutable identifiers. No uploads, visibility changes or full-access token in SWARM.
 - **Browser**: Instinct and Iggy use it for logged-in work and pixel verification when an endpoint cannot do the job. Check the account, page and exact action before submitting. Model workers do not inherit browser sessions.
 - **Source and artifacts**: version experiments and save logs, config, seeds, metrics and video links. Cite external research precisely. Do not equate a model recommendation, a board ping, a queued kernel or a raised EXIT flag with measured completion.
+
+## Research and recursive improvement
+
+Start with known external work before inventing a new approach: read the current LATENT paper and release, NVIDIA SONIC/GR00T papers or official technical notes, and relevant independent benchmarks. Cite exact versions and URLs on the mission. Compare the claim to our H2 embodiment, task and data before adopting it. A paper is a hypothesis source, not evidence that our implementation passed.
+
+Improve the team on the same evidence loop as the tennis project: identify a bottleneck, define a measurable process change, run it on a small mission, compare latency/quality/cost against the previous method, then keep or revert. Instinct and Iggy can change internal roles and workflows under Daniel's grant, but no change bypasses user authority, money gates, account verification or the anti-slop bar.
