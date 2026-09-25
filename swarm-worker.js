@@ -100,8 +100,11 @@ export class RateCoordinator {
     }
     if(input.op==='claim-once'){
       const id=String(input.id||'');if(!/^[a-f0-9]{64}$/.test(id))return json({ok:false},400);
-      const key='claimed:'+id;if(await this.state.storage.get(key))return json({ok:false,used:true},409);
-      await this.state.storage.put(key,Date.now());return json({ok:true});
+      const fresh=await this.state.storage.transaction(async txn=>{
+        const key='claimed:'+id;if(await txn.get(key))return false;
+        await txn.put(key,Date.now());return true;
+      });
+      return fresh?json({ok:true}):json({ok:false,used:true},409);
     }
     if(input.op==='status')return json({slots:Object.fromEntries(Object.entries(this.slots).map(([k,v])=>[k,{used:v.used,window:v.window,cooldown_until:v.until}])),model_blocks:this.modelBlocks,limit_per_minute:LIMIT_PER_MINUTE});
     return json({error:'Invalid coordinator operation'},400);
@@ -160,7 +163,7 @@ async function viewer(request, env){
   if(!token||!env.ARMY_MESSAGES)return null;
   const data=await env.ARMY_MESSAGES.get('session:'+await digest(token),'json');
   if(!data||data.exp<Date.now())return null;
-  return {name:data.name,via:'cookie',google_verified:!!data.google_sub};
+  return {name:data.google_sub?'Daniel':'Ticket session ('+String(data.name).slice(0,24)+')',via:'cookie',google_verified:!!data.google_sub};
 }
 export default {async fetch(request,env){
   const url=new URL(request.url);
