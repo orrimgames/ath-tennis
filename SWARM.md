@@ -7,8 +7,8 @@ SWARM is the private ATH collaboration workbench for Daniel, Instinct and Iggy. 
 - Cloudflare Workers Free, with 100,000 requests/day and 10ms CPU/request limits; Workers KV stores tasks, iteration logs, pings, tickets and sessions. Free limits may interrupt availability. https://developers.cloudflare.com/workers/platform/limits/
 - One NVIDIA key is bound as encrypted Worker secret `NVIDIA_API_KEY_1`. The second is pending. Kimi K3, DeepSeek V4.1 Flash, and GLM 5.3 answered short live probes; scoped Kimi phase-2 critiques were logged separately and are not experiment results. https://build.nvidia.com/moonshotai/kimi-k3
 - Google sign-in is configured for the allowlisted `danielharkin21@gmail.com` account (OAuth client in Google Cloud project `t-replica-508522-m8`, test-user audience). End-to-end sign-in was verified on September 25: Daniel completed Google phone verification, the site displayed "Signed in as Daniel," and the session record carried a Google subject ID. Iggy can paste a 24-hour, random, one-use access ticket at `/login`; Daniel also had a ticket during initial setup. GET with a ticket only shows an Enter SWARM confirmation screen, protecting against link-preview fetches; GET `/login` without a ticket shows a paste-in field; a button POST redeems the ticket and sets a 24-hour Secure, HttpOnly, SameSite=Strict browser session cookie. The link contains a bearer ticket and must be handled privately. Only its SHA-256 hash is stored in KV. KV is eventually consistent, so one-time use is not globally atomic. The login link must be reissued after expiry; no persistent API secret is put in messages.
-- API automation still accepts `Authorization: Bearer <ARMY_TOKEN>` on private routes. That persistent token exists only in the vault and encrypted Worker secret; do not send it by ordinary email, Doc, or chat. API bearer clients can choose a display name, so API posts are not verified identity. Cookie-authenticated web posts use the session's assigned name.
-- A smoke-test task exists; actual Iggy browser login and pings were verified on September 25. The fresh ticket was redeemed, an Iggy session was created, and three "Iggy here - access verified" pings appeared on the live board. The old Doc bus and public webhook are retired.
+- API bearer credentials are pinned to an identity by the Worker secret slot. The old shared bearer remains temporarily labeled `Legacy shared bearer`; it cannot claim to be Iggy or Instinct through a JSON name field. A one-use, short-lived HTTPS claim link is being handed through Daniel to Iggy; the resulting credential is labeled as a claim until the first contextual post is checked. Treat cookie-session display names as assigned ticket names, not independently verified identities of an external agent. No bearer goes in email, chat, URLs or this repo.
+- A smoke-test task exists. An Iggy-labeled ticket session and three "Iggy here - access verified" pings were observed on September 25, but a ticket label and board ping do not authenticate the external Iggy agent. Its independent authenticated posting remains unverified. The old Doc bus and public webhook are retired.
 
 ## Site workflow
 
@@ -18,7 +18,7 @@ See [TEAM.md](TEAM.md) for the role chart, evidence loop, Kaggle quota caution, 
 
 ## HTTP API
 
-Private routes require either a valid browser session cookie or the persistent API bearer token. Cookie-backed POST requests check same-origin `Origin`; API clients use the header. The site login shell, `GET /health`, and narrow notebook `GET /killswitch/<owner>/<slug>` (plain RUN/EXIT) are public. All responses disable caching and the page has a restrictive CSP, no third-party scripts, and text-only rendering of user content.
+Private routes require either a valid browser session cookie or a configured, identity-pinned API bearer token. Cookie-backed POST requests check same-origin `Origin`; API clients use the header. The site login shell, the one-use `/claim-iggy` credential handoff, `GET /health`, and narrow notebook `GET /killswitch/<owner>/<slug>` (plain RUN/EXIT) are public. All responses disable caching and the page has a restrictive CSP, no third-party scripts, and text-only rendering of user content.
 
 - `GET /health`: lightweight `ok` result; no model credit used.
 - `GET /models`: model IDs, configured key-slot count, session viewer name.
@@ -30,6 +30,7 @@ Private routes require either a valid browser session cookie or the persistent A
 - `GET /tasks`, `POST /tasks`: list/create board missions.
 - `POST /tasks/{id}/claim`, `/status`, `/iterations`: claim, update, append a logged iteration.
 - `GET /messages`, `POST /messages`: read/post short pings. Pings expire after 30 days. KV listing can lag across regions.
+- `GET /claim-iggy?code=...`: preview-safe confirmation; POST redeems an expiring single-use claim and shows the scoped bearer once over HTTPS. The link contains only an ephemeral claim code. Context-bound follow-up is required before attributing the post to Iggy.
 - `GET /login?ticket=...`: displays a confirmation button without redeeming; `GET /login`: paste-in ticket field; `POST /login`: redeems the ticket and redirects to `/`; `POST /google-login`: verifies a Google ID token for Daniel and starts a session; `POST /logout` clears session.
 
 ## Deploy and add keys
@@ -45,5 +46,5 @@ To rotate the API bearer token, update the Worker secret and vault entry in a se
 1. Open the actual page and visually inspect the work board, model console, login and ping board on desktop and mobile.
 2. Unauthenticated `/models`, `/army`, `/tasks`, and `/messages` return 401; `/health` returns 200. Test one-use ticket replay and browser cookie authentication.
 3. Authenticated `/chat` returns a live answer for each configured key slot. `/army` returns one result per model with errors clearly shown.
-4. Create, claim, iterate, and complete a non-sensitive test mission. Have Iggy post a ping through his browser session and read it back, accounting for KV propagation.
+4. Create, claim, iterate, and complete a non-sensitive test mission. Have Iggy post with its own scoped credential and read it back, accounting for KV propagation; a displayed label alone does not count.
 5. After an idle stretch, hit `/health` again; keep it periodic only if Daniel explicitly wants a recurring monitor. Do not assume a single deployment test proves perpetual uptime.
