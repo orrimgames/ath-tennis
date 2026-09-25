@@ -30774,7 +30774,7 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     var SCALE=MJ31.map(function(_,i){ return KP[i]>0 ? 0.25*EFFR[i]/KP[i] : 0; });
     var DEFVp = PERM.map(function(m){ return DEFV[m]; });
     var SCALEp = PERM.map(function(m){ return SCALE[m]; });
-    var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand', stepCount:0, lastErr:null }, noReset:false };
+    var S = window.__SONIC = { active:false, u:null, ready:false, loading:false, err:null, clipName:'stand', stepCount:0, lastErr:null, noReset:false };
     var mS=null, dS=null, r=null, sess=null, clip=null, simT=0, lastWall=-1, nextCtrl=0, frame=0, fallT=-1;
     var last=new Float64Array(31), hist={av:[],jp:[],jv:[],ac:[],g:[]};
     var OFF={x:7.4,y:2.85};
