@@ -29844,11 +29844,11 @@ function qE(r, e, t) {
     : r === t.mjtGeom.mjGEOM_SPHERE.value
       ? new br(e[0], 24, 16)
       : r === t.mjtGeom.mjGEOM_CAPSULE.value
-        ? new Fo(e[0], 2 * e[2], 8, 16).rotateX(Math.PI / 2)
+        ? new Fo(e[0], 2 * e[1], 8, 16).rotateX(Math.PI / 2)
         : r === t.mjtGeom.mjGEOM_BOX.value
           ? new ar(2 * e[0], 2 * e[1], 2 * e[2])
           : r === t.mjtGeom.mjGEOM_CYLINDER.value
-            ? new Ps(e[0], e[0], 2 * e[2], 20).rotateX(Math.PI / 2)
+            ? new Ps(e[0], e[0], 2 * e[1], 20).rotateX(Math.PI / 2)
             : r === t.mjtGeom.mjGEOM_ELLIPSOID.value
               ? new br(1, 20, 14).scale(e[0], e[1], e[2])
               : new gn();
@@ -30898,13 +30898,14 @@ clearInterval(__iv);}catch(e){if(__tries>600)clearInterval(__iv);}},100);})();
     // UI
     var btn=document.createElement('button'); btn.id='sonicbtn'; btn.type='button'; btn.textContent='SONIC DEMO';
     var cap=document.createElement('div'); cap.id='soniccap';
-    cap.textContent='SONIC motion-tracking checkpoint · Unitree-exact H2 body · skill: RODDICK SERVE (reference tracking) · toggle off for the trained ball policy (old body)';
+    cap.textContent='SONIC motion-tracking checkpoint · Unitree-exact H2 body · skill: RODDICK SERVE (reference tracking)';
     var st=document.createElement('style');
     st.textContent='#sonicbtn{position:fixed;right:18px;bottom:96px;z-index:60;background:rgba(12,14,18,.88);color:#e8e8e8;border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer;font-family:inherit}'+
       '#soniccap{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:64px;z-index:60;max-width:82vw;text-align:center;background:rgba(10,12,16,.85);color:#cfd4da;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:5px 10px;font-size:10px;letter-spacing:.06em;font-family:inherit}';
-    document.head.appendChild(st); document.body.appendChild(btn); document.body.appendChild(cap);
+    document.head.appendChild(st); document.body.appendChild(cap);
     btn.onclick=function(){ if (S.active) deactivate(); else if (S.ready) activate(); else load(); };
     var __auto=setInterval(function(){ try { if (window.__MJ && !S.ready && !S.loading) load(); if (S.ready && !S.active){ clearInterval(__auto); activate(); } if (S.err) clearInterval(__auto); } catch(e){} }, 1000);
+    var __hideDef=setInterval(function(){ try { if (window.__MACHG) window.__MACHG.visible=false; if (window.__RACKET) window.__RACKET.visible=false; if (window.__BALLM) window.__BALLM.visible=false; if (S.__hb) S.__hb(true); } catch(e){} }, 400);
     (function loop(){ tick(); requestAnimationFrame(loop); })();
   } catch(e){ console.log('SONIC mode init failed', e); }
 })();
