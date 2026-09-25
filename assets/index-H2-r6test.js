@@ -29844,11 +29844,11 @@ function qE(r, e, t) {
     : r === t.mjtGeom.mjGEOM_SPHERE.value
       ? new br(e[0], 24, 16)
       : r === t.mjtGeom.mjGEOM_CAPSULE.value
-        ? new Fo(e[0], 2 * e[2], 8, 16).rotateX(Math.PI / 2)
+        ? new Fo(e[0], 2 * e[1], 8, 16).rotateX(Math.PI / 2)
         : r === t.mjtGeom.mjGEOM_BOX.value
           ? new ar(2 * e[0], 2 * e[1], 2 * e[2])
           : r === t.mjtGeom.mjGEOM_CYLINDER.value
-            ? new Ps(e[0], e[0], 2 * e[2], 20).rotateX(Math.PI / 2)
+            ? new Ps(e[0], e[0], 2 * e[1], 20).rotateX(Math.PI / 2)
             : r === t.mjtGeom.mjGEOM_ELLIPSOID.value
               ? new br(1, 20, 14).scale(e[0], e[1], e[2])
               : new gn();
