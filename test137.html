@@ -68,7 +68,7 @@
       var nm = shortName(bestMeta.name) || 'unknown';
       var val = /f64-validated/i.test(bestMeta.status || '') ? ' (f64-validated)' : '';
       var simNote = (bestObs !== null && bestObs !== 93) ? ' &middot; live sim: <b>obs-137 ball-contact v8</b> (f64: 0% contact, 67% falls)' : '';
-      bestEl.innerHTML = 'best: <b>SONIC motion-tracking checkpoint</b> &middot; Unitree-exact H2 &middot; skill: RODDICK SERVE &middot; ball policy: <b>' + nm + val + '</b>' + (a ? ' &middot; set ' + a : '') + ' (secondary)';
+      bestEl.innerHTML = 'best: <b>SONIC motion-tracking checkpoint</b> &middot; Unitree-exact H2 &middot; skill: RODDICK SERVE &middot; ball policy: <b>' + nm + val + '</b>' + (a ? ' &middot; set ' + a : '');
       bestEl.style.whiteSpace = 'normal';
     } else if (bestFailed) {
       bestEl.textContent = 'best: metadata unavailable';
