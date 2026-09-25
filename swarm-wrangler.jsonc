@@ -4,5 +4,7 @@
   "compatibility_date": "2026-09-25",
   "workers_dev": true,
   "observability": {"enabled": false},
+  "durable_objects": {"bindings": [{"name":"RATE_COORDINATOR","class_name":"RateCoordinator"}]},
+  "migrations": [{"tag":"v1-rate-coordinator","new_sqlite_classes":["RateCoordinator"]}],
   "kv_namespaces": [{"binding": "ARMY_MESSAGES", "id": "32bc2ce9a83545bd8ca55de94affcb86"}]
 }
