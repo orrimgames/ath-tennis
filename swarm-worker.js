@@ -288,7 +288,7 @@ export default {async fetch(request,env){
   if(taskRoute && request.method==='POST'){
     if(!env.ARMY_MESSAGES)return json({error:'Task storage unavailable'},503);
     const id=taskRoute[1],action=taskRoute[2];
-    try{const raw=await request.text();if(raw.length>4000)return json({error:'Too large'},413);const data=JSON.parse(raw);const agent=identity.name;if(!/^[a-zA-Z0-9 ._-]{1,32}$/.test(agent))return json({error:'Agent name required'},400);
+    try{const raw=await request.text();if(raw.length>4000)return json({error:'Too large'},413);const data=JSON.parse(raw);const agent=identity.name;if(typeof agent!=='string'||agent.length<1||agent.length>80)return json({error:'Invalid server identity'},400);
       if(action==='iterations'){
         const kind=String(data.kind||'').trim(),text=String(data.text||'').trim(),link=String(data.link||'').trim();if(!['proposal','thought','finding','experiment','critique','variant','test','result','correction','handoff'].includes(kind)||!text||text.length>3000||(link && (!/^https:\/\/[^\s]+$/.test(link)||link.length>500)))return json({error:'Invalid iteration'},400);
         const keys=await env.ARMY_MESSAGES.list({prefix:'task:',limit:100});if(!keys.keys.some(x=>x.name.endsWith(':'+id)))return json({error:'Task not found'},404);
@@ -328,7 +328,7 @@ export default {async fetch(request,env){
   }
   if(url.pathname==='/messages' && request.method==='POST'){
     if(!env.ARMY_MESSAGES)return json({error:'Message storage unavailable'},503);
-    try{const raw=await request.text();if(raw.length>2000)return json({error:'Message too long'},413);const data=JSON.parse(raw);const from=identity.name,text=String(data.text||'').trim();if(!/^[a-zA-Z0-9 ._-]{1,32}$/.test(from)||!text||text.length>1500)return json({error:'Invalid name or message'},400);const ts=new Date().toISOString(),id=crypto.randomUUID();const entry={id,ts,from,text};await env.ARMY_MESSAGES.put('ping:'+ts+':'+id,JSON.stringify(entry),{expirationTtl:2592000});return json(entry,201)}catch(e){return json({error:'Invalid message'},400)}
+    try{const raw=await request.text();if(raw.length>2000)return json({error:'Message too long'},413);const data=JSON.parse(raw);const from=identity.name,text=String(data.text||'').trim();if(typeof from!=='string'||from.length<1||from.length>80||!text||text.length>1500)return json({error:'Invalid name or message'},400);const ts=new Date().toISOString(),id=crypto.randomUUID();const entry={id,ts,from,text};await env.ARMY_MESSAGES.put('ping:'+ts+':'+id,JSON.stringify(entry),{expirationTtl:2592000});return json(entry,201)}catch(e){return json({error:'Invalid message'},400)}
   }
   if(url.pathname==='/models' && request.method==='GET')return json({viewer:identity.name,google_verified:!!identity.google_verified,models:CATALOG,keys_available:configuredSlots(env).length,rate_limit_per_key:LIMIT_PER_MINUTE});
   if(url.pathname==='/key-health' && request.method==='GET')return json(await coordinator(env,{op:'status'}));
