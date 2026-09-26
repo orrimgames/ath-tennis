@@ -46,6 +46,7 @@ function bearerIdentity(request, env) {
   const actual=supplied.startsWith('Bearer ') ? supplied.slice(7) : '';
   const candidates=[
     ['Instinct','ARMY_TOKEN_INSTINCT'],
+    ['Catalog auditor','ARMY_TOKEN_AUDITOR'],
     ['Claimed via Daniel handoff for Iggy (unverified)','ARMY_TOKEN_IGGY'],
     ['Legacy shared bearer','ARMY_TOKEN']
   ];
@@ -167,6 +168,26 @@ async function viewer(request, env){
 }
 export default {async fetch(request,env){
   const url=new URL(request.url);
+  if(url.pathname==='/claim-auditor' && request.method==='GET'){
+    const code=url.searchParams.get('code')||'';
+    if(!/^[a-f0-9]{64}$/.test(code)||!env.ARMY_MESSAGES)return new Response('Invalid claim link',{status:400,headers:{'cache-control':'no-store'}});
+    const record=await env.ARMY_MESSAGES.get('claim-auditor:'+await digest(code),'json');
+    if(!record||record.exp<Date.now())return new Response('Claim link expired or used',{status:410,headers:{'cache-control':'no-store'}});
+    const html='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SWARM auditor claim</title><style>body{font:18px system-ui;background:#10151b;color:#eef2f6;max-width:600px;margin:9vh auto;padding:2rem}button{font:inherit;padding:.9rem;background:#3569a9;color:#fff;border:0;border-radius:7px}</style><h1>Claim read-only SWARM auditor access</h1><p>Only the catalog auditor should claim this. The persistent credential appears once after the button; save it privately, never in a message or URL. This link works once and expires shortly.</p><form method="post" action="/claim-auditor"><input type="hidden" name="code" value="'+code+'"><button type="submit">Claim access</button></form>';
+    return new Response(html,{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",'referrer-policy':'no-referrer','x-content-type-options':'nosniff'}});
+  }
+  if(url.pathname==='/claim-auditor' && request.method==='POST'){
+    if(Number(request.headers.get('content-length')||0)>150)return json({error:'Invalid claim'},400);
+    const form=await request.formData(),code=String(form.get('code')||'');
+    if(!/^[a-f0-9]{64}$/.test(code)||!env.ARMY_MESSAGES||!env.ARMY_TOKEN_AUDITOR)return json({error:'Claim unavailable'},400);
+    const key='claim-auditor:'+await digest(code),record=await env.ARMY_MESSAGES.get(key,'json');
+    if(!record||record.exp<Date.now())return new Response('Claim link expired or used',{status:410,headers:{'cache-control':'no-store'}});
+    const claimed=await coordinator(env,{op:'claim-once',id:await digest(code)});
+    if(!claimed.ok)return new Response('Claim link expired or used',{status:410,headers:{'cache-control':'no-store'}});
+    await env.ARMY_MESSAGES.delete(key);
+    const html='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SWARM auditor credential</title><style>body{font:17px system-ui;background:#10151b;color:#eef2f6;max-width:700px;margin:7vh auto;padding:2rem}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#273340;padding:1rem}</style><h1>Save the read-only credential now</h1><p>Shown once; store privately and close the page. Never paste in chat, email, board or URL.</p><pre id="credential"></pre><p>GET /models and GET /key-health only, with Authorization: Bearer header. Other routes deny this key.</p><script>document.getElementById("credential").textContent='+JSON.stringify(env.ARMY_TOKEN_AUDITOR)+'</script>';
+    return new Response(html,{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",'referrer-policy':'no-referrer','x-content-type-options':'nosniff'}});
+  }
   if(url.pathname==='/claim-iggy' && request.method==='GET'){
     const code=url.searchParams.get('code')||'';
     if(!/^[a-f0-9]{64}$/.test(code)||!env.ARMY_MESSAGES)return new Response('Invalid claim link',{status:400,headers:{'cache-control':'no-store'}});
@@ -246,6 +267,7 @@ export default {async fetch(request,env){
   if(url.pathname==='/health' && request.method==='GET')return json({ok:true,service:'ath-model-army'});
   if(url.pathname==='/' && request.method==='GET')return new Response(page,{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'none'; script-src 'unsafe-inline' https://accounts.google.com; style-src 'unsafe-inline'; connect-src 'self' https://accounts.google.com; frame-src https://accounts.google.com; img-src https://accounts.google.com data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none';",'referrer-policy':'no-referrer','x-content-type-options':'nosniff'}});
   const identity=await viewer(request,env);if(!identity)return json({error:'Unauthorized'},401);
+  if(identity.name==='Catalog auditor' && !(request.method==='GET' && ['/models','/key-health'].includes(url.pathname)))return json({error:'Auditor read scope only'},403);
   if(identity.via==='cookie'&&request.method==='POST'&&request.headers.get('Origin')!==url.origin)return json({error:'Origin mismatch'},403);
   if(url.pathname==='/tasks' && request.method==='GET'){
     if(!env.ARMY_MESSAGES)return json({error:'Task storage unavailable'},503);
