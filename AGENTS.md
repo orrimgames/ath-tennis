@@ -64,10 +64,15 @@ the Coulomb limit. Ball radius is the true 0.033 m.
    physics to make a gate pass.
 4. Keep failed cases as regression fixtures; never narrow evaluation scope
    to hide a failure.
-5. Deploys use the Git Data API only. The GitHub web uploader rewrites
-   files. Parse-check any JS bundle as an ES module (`.mjs`) before
-   shipping, byte-verify the deployed file against raw.githubusercontent.com
-   after push, then bump `?v` on both HTML pages.
+5. Deploys normally use the Git Data API. The GitHub web uploader rewrites
+   files and must not be used. When API authentication is unavailable, the
+   authenticated GitHub single-file web editor may commit text files on main,
+   provided each committed blob is byte-checked against the staged source via
+   the GitHub Contents API and the final live Pages artifact is inspected.
+   This is a fallback for small text edits, not a path for JS bundle upload.
+   Parse-check any JS bundle as an ES module (`.mjs`) before shipping,
+   byte-verify the deployed file against raw.githubusercontent.com after push,
+   then bump `?v` on both HTML pages when a bundle changes.
 
 ## How to run and test
 
