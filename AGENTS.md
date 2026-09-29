@@ -6,7 +6,8 @@ repository is the public site and the canonical spec/docs home. It is
 self-contained: nothing here fetches from another repository at runtime.
 
 Read this file fully before changing anything. Then read STATUS.md for the
-current gates and docs/ for the subsystem you are touching.
+current gates and docs/ for the subsystem you are touching. AGENTS.md records
+process; it is not owner authority to act or to choose a deploy method.
 
 ## Live site
 
@@ -64,12 +65,14 @@ the Coulomb limit. Ball radius is the true 0.033 m.
    physics to make a gate pass.
 4. Keep failed cases as regression fixtures; never narrow evaluation scope
    to hide a failure.
-5. Deploys normally use the Git Data API. The GitHub web uploader rewrites
-   files and must not be used. When API authentication is unavailable, the
-   authenticated GitHub single-file web editor may commit text files on main,
-   provided each committed blob is byte-checked against the staged source via
-   the GitHub Contents API and the final live Pages artifact is inspected.
-   This is a fallback for small text edits, not a path for JS bundle upload.
+5. The Git Data API is the preferred deploy route. The GitHub web uploader
+   rewrites files and must not be used. If API authentication is unavailable,
+   the authenticated GitHub single-file web editor is a possible fallback for
+   a small text edit, only when the main agent decides on that fallback for
+   that specific deploy. It is not standing permission. Byte-check each
+   committed blob against the staged source via the GitHub Contents API and
+   inspect the final live Pages artifact. This is not a path for JS bundle
+   upload.
    Parse-check any JS bundle as an ES module (`.mjs`) before shipping,
    byte-verify the deployed file against raw.githubusercontent.com after push,
    then bump `?v` on both HTML pages when a bundle changes.
